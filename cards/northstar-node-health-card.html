@@ -1,0 +1,228 @@
+<section class="northstar-health-card" aria-labelledby="northstar-health-title">
+  <header class="northstar-health-card__header">
+    <div>
+      <p class="northstar-health-card__eyebrow">MCSMANAGER · OVERVIEW API</p>
+      <h2 id="northstar-health-title">节点与实例健康</h2>
+    </div>
+    <span class="northstar-health-card__state" data-state="loading">读取中</span>
+  </header>
+
+  <div class="northstar-health-card__metrics" aria-live="polite">
+    <div class="northstar-health-card__metric">
+      <span>节点</span>
+      <strong data-value="nodes">--</strong>
+      <small data-detail="nodes">等待数据</small>
+    </div>
+    <div class="northstar-health-card__metric">
+      <span>运行实例</span>
+      <strong data-value="instances">--</strong>
+      <small data-detail="instances">等待数据</small>
+    </div>
+    <div class="northstar-health-card__metric">
+      <span>平均 CPU</span>
+      <strong data-value="cpu">--</strong>
+      <small data-detail="cpu">节点平均值</small>
+    </div>
+    <div class="northstar-health-card__metric">
+      <span>平均内存</span>
+      <strong data-value="memory">--</strong>
+      <small data-detail="memory">节点平均值</small>
+    </div>
+  </div>
+
+  <p class="northstar-health-card__message" data-message role="status">正在连接仪表盘数据。</p>
+</section>
+
+<style>
+  .northstar-health-card {
+    min-height: 158px;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    color: var(--ns-text, #292b2f);
+    background: var(--ns-surface, #fffdfa);
+    border: 1px solid var(--ns-border, #ddd9d0);
+    border-radius: 10px;
+    font-family: var(--ns-font-mono, "Maple Mono", Consolas, monospace);
+  }
+
+  .northstar-health-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--ns-border, #ddd9d0);
+  }
+
+  .northstar-health-card__eyebrow {
+    margin: 0 0 5px;
+    color: var(--ns-text-muted, #6e716f);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+  }
+
+  .northstar-health-card h2 {
+    margin: 0;
+    color: var(--ns-accent, #5086a1);
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  .northstar-health-card__state {
+    flex: 0 0 auto;
+    padding: 5px 8px;
+    color: var(--ns-text-muted, #6e716f);
+    background: var(--ns-surface-soft, #f5f1e8);
+    border-radius: 999px;
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  .northstar-health-card__state[data-state="ready"] {
+    color: var(--ns-success, #3d7f63);
+    background: var(--ns-success-soft, #e7f2ec);
+  }
+
+  .northstar-health-card__state[data-state="error"] {
+    color: var(--ns-danger, #ad4f4b);
+    background: var(--ns-danger-soft, #f7e8e5);
+  }
+
+  .northstar-health-card__metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    padding-top: 16px;
+  }
+
+  .northstar-health-card__metric { min-width: 0; }
+  .northstar-health-card__metric span,
+  .northstar-health-card__metric small {
+    display: block;
+    overflow: hidden;
+    color: var(--ns-text-muted, #6e716f);
+    font-size: 11px;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .northstar-health-card__metric strong {
+    display: block;
+    margin: 7px 0 4px;
+    overflow: hidden;
+    color: var(--ns-text, #292b2f);
+    font-size: 19px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .northstar-health-card__metric small { color: var(--ns-text-faint, #92958f); }
+  .northstar-health-card__message { margin: 15px 0 0; color: var(--ns-text-faint, #767a76); font-size: 11px; line-height: 1.4; }
+
+  @media (max-width: 620px) {
+    .northstar-health-card__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 13px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .northstar-health-card * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<script>
+  (() => {
+    const root = document.querySelector(".northstar-health-card");
+    if (!root) return;
+
+    const state = root.querySelector("[data-state]");
+    const message = root.querySelector("[data-message]");
+    const value = (name) => root.querySelector(`[data-value="${name}"]`);
+    const detail = (name) => root.querySelector(`[data-detail="${name}"]`);
+    const setText = (name, text) => { if (value(name)) value(name).textContent = text; };
+
+    const percent = (number) => `${Math.max(0, Math.min(100, number * 100)).toFixed(1)}%`;
+    const memory = (number) => {
+      if (!Number.isFinite(number)) return "--";
+      const gb = number / 1024 / 1024 / 1024;
+      return `${gb.toFixed(gb >= 10 ? 1 : 2)} GB`;
+    };
+
+    const setState = (kind, label, copy) => {
+      state.dataset.state = kind;
+      state.textContent = label;
+      message.textContent = copy;
+    };
+
+    const render = (payload) => {
+      const list = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.remote)
+          ? payload.remote
+          : Array.isArray(payload?.data)
+            ? payload.data
+            : Array.isArray(payload?.data?.remote)
+              ? payload.data.remote
+              : [];
+      if (!list.length) {
+        setState("ready", "暂无节点", "仪表盘暂未返回可用节点数据。");
+        setText("nodes", "0");
+        setText("instances", "0");
+        setText("cpu", "--");
+        setText("memory", "--");
+        detail("nodes").textContent = "在线节点";
+        detail("instances").textContent = "运行 / 总数";
+        return;
+      }
+
+      const valid = list.filter((node) => node && (node.system || node.process || node.instance));
+      const nodes = valid.length;
+      const running = valid.reduce((sum, node) => sum + Number(node.instance?.running || 0), 0);
+      const total = valid.reduce((sum, node) => sum + Number(node.instance?.total || 0), 0);
+      const cpuValues = valid.map((node) => Number(node.system?.cpuUsage)).filter(Number.isFinite);
+      const memoryValues = valid.map((node) => Number(node.system?.memUsage)).filter(Number.isFinite);
+      const cpu = cpuValues.length ? cpuValues.reduce((a, b) => a + b, 0) / cpuValues.length : NaN;
+      const mem = memoryValues.length ? memoryValues.reduce((a, b) => a + b, 0) / memoryValues.length : NaN;
+      const totalMemory = valid.map((node) => Number(node.system?.totalmem)).filter(Number.isFinite);
+
+      setState("ready", "已连接", `最近更新：${new Date().toLocaleTimeString("zh-CN", { hour12: false })}`);
+      setText("nodes", String(nodes));
+      setText("instances", String(running));
+      setText("cpu", Number.isFinite(cpu) ? percent(cpu) : "--");
+      setText("memory", Number.isFinite(mem) ? percent(mem) : "--");
+      detail("nodes").textContent = "已返回节点";
+      detail("instances").textContent = `${running} / ${total}`;
+      detail("cpu").textContent = "节点平均值";
+      detail("memory").textContent = totalMemory.length ? `总计 ${memory(totalMemory.reduce((a, b) => a + b, 0))}` : "节点平均值";
+    };
+
+    const fetchData = () => {
+      if (typeof window.$axios !== "function" || !window.$axios.get) {
+        setState("error", "不可用", "当前 MCSM 运行时没有提供 $axios。");
+        return Promise.resolve();
+      }
+      setState("loading", "读取中", "正在连接仪表盘数据。");
+      return window.$axios.get("/api/overview", {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "Content-Type": "application/json; charset=utf-8"
+        }
+      }).then((response) => render(response?.data)).catch(() => {
+        setState("error", "读取失败", "无法读取仪表盘数据，请检查当前账号权限或节点连接。");
+      });
+    };
+
+    let timer;
+    const mount = () => {
+      fetchData();
+      timer = window.setInterval(fetchData, 30000);
+    };
+    const unmount = () => window.clearInterval(timer);
+    if (typeof window.$onMounted === "function") window.$onMounted(mount);
+    else mount();
+    if (typeof window.$onUnmounted === "function") window.$onUnmounted(unmount);
+  })();
+</script>

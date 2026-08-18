@@ -1,0 +1,55 @@
+<section class="northstar-runtime-card" aria-labelledby="northstar-card-title">
+  <header class="northstar-runtime-card__header">
+    <div>
+      <p class="northstar-runtime-card__eyebrow">MCSMANAGER · NORTHSTAR</p>
+      <h2 id="northstar-card-title">面板运行状态</h2>
+    </div>
+    <span class="northstar-runtime-card__dot" aria-label="面板运行中"></span>
+  </header>
+  <div class="northstar-runtime-card__grid">
+    <div>
+      <span>当前时间</span>
+      <strong id="northstar-card-time">--:--:--</strong>
+    </div>
+    <div>
+      <span>外观模式</span>
+      <strong id="northstar-card-theme">正在读取</strong>
+    </div>
+    <div>
+      <span>页面路径</span>
+      <strong id="northstar-card-path">/</strong>
+    </div>
+  </div>
+</section>
+
+<style>
+  .northstar-runtime-card { height: 100%; min-height: 158px; padding: 20px; color: var(--ns-text, #292b2f); background: var(--ns-surface, #fffdfa); border: 1px solid var(--ns-border, #ddd9d0); border-radius: 10px; box-sizing: border-box; font-family: "Maple Mono", Consolas, monospace; }
+  .northstar-runtime-card__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--ns-border, #ddd9d0); }
+  .northstar-runtime-card__eyebrow { margin: 0 0 5px; color: var(--ns-text-muted, #5c6166); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+  .northstar-runtime-card h2 { margin: 0; font-size: 15px; line-height: 1.3; }
+  .northstar-runtime-card__dot { width: 9px; height: 9px; margin-top: 5px; background: var(--ns-success, #3d7f63); border-radius: 50%; box-shadow: 0 0 0 4px var(--ns-success-soft, #e7f2ec); }
+  .northstar-runtime-card__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-top: 17px; }
+  .northstar-runtime-card__grid span { display: block; margin-bottom: 7px; color: var(--ns-text-muted, #5c6166); font-size: 12px; }
+  .northstar-runtime-card__grid strong { display: block; overflow: hidden; color: var(--ns-text, #292b2f); font-size: 13px; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+  @media (max-width: 520px) { .northstar-runtime-card__grid { grid-template-columns: 1fr; gap: 12px; } }
+</style>
+
+<script>
+  (() => {
+    let timer;
+    const update = () => {
+      const now = new Date();
+      const time = document.getElementById("northstar-card-time");
+      const theme = document.getElementById("northstar-card-theme");
+      const path = document.getElementById("northstar-card-path");
+      if (time) time.textContent = now.toLocaleTimeString("zh-CN", { hour12: false });
+      if (theme) theme.textContent = String(window.$theme || "跟随面板");
+      if (path) path.textContent = window.$realWindow?.location?.hash || "/";
+    };
+    const mount = () => { update(); timer = window.setInterval(update, 1000); };
+    const unmount = () => window.clearInterval(timer);
+    if (typeof window.$onMounted === "function") window.$onMounted(mount);
+    else mount();
+    if (typeof window.$onUnmounted === "function") window.$onUnmounted(unmount);
+  })();
+</script>

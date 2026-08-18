@@ -1,0 +1,778 @@
+/* Runtime shell rewrite for compiled MCSManager pages. */
+:root {
+  --ns-font-body: var(--ns-font-ui);
+  --ns-sidebar-width: 244px;
+  --ns-page-width: min(1500px, calc(100vw - var(--ns-sidebar-width) - 48px));
+  --ns-page-gutter: clamp(20px, 2.4vw, 44px);
+}
+
+:root[data-typography="heavy"] { --ns-font-body: var(--ns-font-ui); }
+
+body[data-ns-layout="northstar"] .app,
+body[data-ns-layout="northstar"] #app {
+  min-height: 100dvh;
+  background: var(--ns-bg) !important;
+}
+
+/* App shell: deliberately detached from the legacy Vivid pill navigation. */
+body[data-ns-layout="northstar"] #app > .el-container {
+  align-items: stretch;
+  min-height: 100dvh;
+}
+
+body[data-ns-layout="northstar"] #app-menu {
+  position: sticky;
+  top: 0;
+  flex: 0 0 var(--ns-sidebar-width) !important;
+  width: var(--ns-sidebar-width) !important;
+  height: 100dvh;
+  overflow: auto;
+  padding: 22px 12px 18px;
+  background: var(--ns-surface) !important;
+  border-right: 1px solid var(--ns-border) !important;
+}
+
+body[data-ns-layout="northstar"] #app-menu .el-aside {
+  width: 100% !important;
+  overflow: visible;
+}
+
+body[data-ns-layout="northstar"] #app-menu .logo-wrapper {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  margin: 0 10px 24px !important;
+  text-align: left;
+}
+
+body[data-ns-layout="northstar"] #app-menu .logo-img { display: none; }
+
+body[data-ns-layout="northstar"] #app-menu .logo-wrapper::before {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  color: var(--ns-accent-contrast);
+  background: var(--ns-action);
+  border-radius: 8px;
+  content: "M";
+  font: 700 14px/1 var(--ns-font-mono);
+  place-items: center;
+}
+
+body[data-ns-layout="northstar"] #app-menu .logo-wrapper::after {
+  color: var(--ns-text);
+  content: "MCSManager";
+  font: 700 15px/1 var(--ns-font-mono);
+  letter-spacing: 0;
+}
+
+body[data-ns-layout="northstar"] #app-menu .page-el-menu {
+  padding-bottom: 16px;
+  background: transparent !important;
+}
+
+body[data-ns-layout="northstar"] #app-menu .el-menu-item-group__title {
+  height: auto;
+  padding: 20px 12px 8px !important;
+  color: var(--ns-text-faint) !important;
+  font: 600 10px/1.2 var(--ns-font-mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+body[data-ns-layout="northstar"] #app-menu .el-menu-item,
+body[data-ns-layout="northstar"] #app-menu .el-submenu__title {
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 42px;
+  min-height: 42px;
+  margin: 3px 0 !important;
+  padding: 0 12px !important;
+  color: var(--ns-text-muted) !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font: 600 12px/1 var(--ns-font-mono);
+  transition: color var(--ns-speed) var(--ns-ease), background-color var(--ns-speed) var(--ns-ease), transform var(--ns-speed) var(--ns-ease) !important;
+}
+
+body[data-ns-layout="northstar"] #app-menu .el-menu-item:hover,
+body[data-ns-layout="northstar"] #app-menu .el-submenu__title:hover {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-soft) !important;
+  transform: translateX(2px) !important;
+}
+
+body[data-ns-layout="northstar"] #app-menu .el-menu-item.is-active {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft-strong) !important;
+  box-shadow: inset 2px 0 0 var(--ns-accent) !important;
+}
+
+/* The icon font is suppressed: every nav item uses a consistent drawn glyph. */
+body[data-ns-layout="northstar"] #app-menu .el-menu-item > i,
+body[data-ns-layout="northstar"] #app-menu .el-submenu__title > i:first-child {
+  position: relative;
+  display: inline-grid;
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  color: currentColor;
+  border: 1.8px solid currentColor;
+  border-radius: 4px;
+  font-size: 0 !important;
+  place-items: center;
+}
+
+body[data-ns-layout="northstar"] #app-menu .el-menu-item > i::before,
+body[data-ns-layout="northstar"] #app-menu .el-submenu__title > i:first-child::before {
+  width: 5px;
+  height: 5px;
+  content: "";
+  border: 1.8px solid currentColor;
+  border-radius: 50%;
+}
+
+body[data-ns-layout="northstar"] #app-menu .el-menu-item[data-ns-nav-index="0"] > i { border-radius: 50%; }
+body[data-ns-layout="northstar"] #app-menu .el-menu-item[data-ns-nav-index="0"] > i::before { width: 0; height: 0; border-width: 0 0 0 1.8px; box-shadow: 3px -5px 0 -1px currentColor; }
+body[data-ns-layout="northstar"] #app-menu .el-menu-item[data-ns-nav-index="1"] > i::before { width: 9px; height: 1px; border-width: 1.8px 0; border-radius: 0; }
+body[data-ns-layout="northstar"] #app-menu .el-menu-item[data-ns-nav-index="2"] > i::before { width: 9px; height: 7px; border-radius: 1px; }
+body[data-ns-layout="northstar"] #app-menu .el-menu-item[data-ns-nav-index="3"] > i { border-radius: 2px; }
+body[data-ns-layout="northstar"] #app-menu .el-menu-item[data-ns-nav-index="3"] > i::before { width: 8px; height: 0; border-width: 1.8px 0 0; border-radius: 0; }
+body[data-ns-layout="northstar"] #app-menu .el-menu-item[data-ns-nav-index="4"] > i { border-radius: 50%; }
+body[data-ns-layout="northstar"] #app-menu .el-menu-item[data-ns-nav-index="4"] > i::before { width: 0; height: 8px; border-width: 0 1.8px; border-radius: 0; }
+
+body[data-ns-layout="northstar"] #app-menu .el-submenu__icon-arrow {
+  margin-left: auto;
+  color: var(--ns-text-faint);
+  font-size: 11px !important;
+}
+
+body[data-ns-layout="northstar"] #app-menu .home-copyright,
+body[data-ns-layout="northstar"] #app-menu .el-menu-item-group__title[data-ns-credit] {
+  font-size: 0;
+  padding: 18px 12px 0;
+  color: var(--ns-text-faint);
+}
+
+body[data-ns-layout="northstar"] #app-menu .home-copyright a,
+body[data-ns-layout="northstar"] #app-menu .el-menu-item-group__title[data-ns-credit] a { display: none; }
+
+body[data-ns-layout="northstar"] #app-menu .home-copyright::after,
+body[data-ns-layout="northstar"] #app-menu .el-menu-item-group__title[data-ns-credit]::after {
+  color: var(--ns-text-faint);
+  content: "Northstar · MCSManager";
+  font: 500 10px/1.5 var(--ns-font-mono);
+  letter-spacing: .03em;
+}
+
+body[data-ns-layout="northstar"] #app > .el-container > .el-container {
+  min-width: 0;
+  background: var(--ns-bg);
+}
+
+body[data-ns-layout="northstar"] #app .el-main {
+  padding: 0 !important;
+  overflow: visible;
+  background: var(--ns-bg) !important;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div {
+  width: min(var(--ns-page-width), 100%);
+  margin: 0 auto;
+  padding: 0 var(--ns-page-gutter) 56px;
+}
+
+/* The app's built-in Header component becomes a quiet, sticky workspace bar. */
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  margin: 0 calc(var(--ns-page-gutter) * -1) 28px;
+  padding: 14px var(--ns-page-gutter);
+  background: color-mix(in srgb, var(--ns-bg) 92%, transparent);
+  border-bottom: 1px solid var(--ns-border);
+  backdrop-filter: blur(12px);
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .box-card {
+  min-height: 40px;
+  margin: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-card__body {
+  padding: 0 !important;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child [style*="font-size"] {
+  color: var(--ns-text) !important;
+  font: 700 16px/40px var(--ns-font-mono) !important;
+  letter-spacing: 0;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link {
+  display: none !important;
+  width: 40px;
+  height: 40px;
+  padding: 0 !important;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border);
+  border-radius: 8px;
+  place-items: center;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link.northstar-native-control {
+  display: inline-grid !important;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  margin-left: 0;
+  padding: 0 !important;
+  overflow: hidden;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px;
+  box-shadow: none !important;
+  transition: color var(--ns-speed) var(--ns-ease), background-color var(--ns-speed) var(--ns-ease), border-color var(--ns-speed) var(--ns-ease), transform var(--ns-speed) var(--ns-ease);
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link.northstar-native-control .el-link,
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link.northstar-native-control .el-link--inner {
+  display: grid !important;
+  width: 100%;
+  height: 100%;
+  color: inherit !important;
+  place-items: center;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link.northstar-native-control:hover {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+  transform: translateY(-1px);
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link.northstar-native-control:active { transform: scale(.97); }
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link.northstar-native-control:focus-within { outline: 2px solid var(--ns-accent); outline-offset: 2px; }
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link.northstar-native-control--hidden {
+  display: none !important;
+}
+
+/* The legacy header menu is replaced by the single Northstar appearance control.
+   Keeping it in the header's action column prevents a second floating control. */
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-card__body > .el-row > .el-col:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 40px;
+  padding-right: 0;
+  color: var(--ns-text-muted) !important;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .item-group-wrapper,
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .item-responsive-group-only-lr {
+  color: var(--ns-text-muted) !important;
+}
+
+body[data-ns-layout="northstar"] #app .northstar-tools--header {
+  position: relative;
+  top: auto;
+  right: auto;
+  z-index: 22;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+/* Native account actions share the same 40px box, border, and feedback as
+   the Northstar controls. The theme switch keeps its pill shape by design. */
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .northstar-native-control,
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .northstar-icon-button {
+  transition: color var(--ns-speed) var(--ns-ease), background-color var(--ns-speed) var(--ns-ease), border-color var(--ns-speed) var(--ns-ease), transform var(--ns-speed) var(--ns-ease) !important;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .northstar-native-control:active,
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .northstar-icon-button:active {
+  transform: scale(.97);
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .northstar-native-control:focus-visible,
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .northstar-icon-button:focus-visible {
+  outline: 2px solid var(--ns-accent);
+  outline-offset: 2px;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link:hover {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+}
+
+/* Replace header icon-font glyphs with restrained, independent line symbols. */
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link i {
+  position: relative;
+  display: inline-grid;
+  width: 18px;
+  height: 18px;
+  color: currentColor;
+  border: 1.8px solid currentColor;
+  border-radius: 5px;
+  font-family: initial !important;
+  font-size: 0 !important;
+  place-items: center;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link i::before {
+  width: 6px;
+  height: 6px;
+  content: "";
+  border: 1.8px solid currentColor;
+  border-radius: 50%;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link .el-icon-brush {
+  border-radius: 50%;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link .el-icon-brush::before {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  box-shadow: 0 -7px 0 -1px currentColor, 0 7px 0 -1px currentColor, 7px 0 0 -1px currentColor, -7px 0 0 -1px currentColor;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link .el-icon-shopping-bag-1::before {
+  width: 8px;
+  height: 7px;
+  border-radius: 1px 1px 3px 3px;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link .el-icon-user {
+  border-radius: 50%;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link .el-icon-user::before {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  box-shadow: 0 7px 0 -1px currentColor;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link .el-icon-switch-button {
+  border-radius: 50%;
+}
+
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-dropdown-link .el-icon-switch-button::before {
+  width: 0;
+  height: 8px;
+  border-width: 0 0 0 1.8px;
+  border-radius: 0;
+}
+
+/* Stable, semantic SVG navigation marks replace the generic legacy icon font. */
+body[data-ns-layout="northstar"] #app-menu .el-menu-item > i.northstar-nav-icon,
+body[data-ns-layout="northstar"] #app-menu .el-submenu__title > i.northstar-nav-icon {
+  display: inline-flex !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin-right: 10px !important;
+  color: currentColor !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+  place-items: initial !important;
+}
+
+body[data-ns-layout="northstar"] #app-menu .el-menu-item > i.northstar-nav-icon::before,
+body[data-ns-layout="northstar"] #app-menu .el-submenu__title > i.northstar-nav-icon::before {
+  display: none !important;
+  content: none !important;
+}
+
+body[data-ns-layout="northstar"] #app-menu .northstar-nav-icon svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Router content has a clear 4/8 based vertical rhythm. */
+body[data-ns-layout="northstar"] .system-index-block { margin: 0 0 18px !important; }
+body[data-ns-layout="northstar"] .system-index-block > .el-card,
+body[data-ns-layout="northstar"] .system-index-block .el-card {
+  overflow: hidden;
+}
+
+body[data-ns-layout="northstar"] .box-card-title-wrapper {
+  align-items: center;
+  margin-bottom: 16px !important;
+}
+
+body[data-ns-layout="northstar"] .box-card-title,
+body[data-ns-layout="northstar"] .box-card-title-more,
+body[data-ns-layout="northstar"] .quick-title {
+  font: 700 15px/1.35 var(--ns-font-mono) !important;
+}
+
+body[data-ns-layout="northstar"] .box-card-title::before,
+body[data-ns-layout="northstar"] .quick-title::before {
+  display: inline-block;
+  width: 5px;
+  height: 16px;
+  margin: 0 9px -3px 0;
+  content: "";
+  background: var(--ns-accent);
+  border-radius: 3px;
+}
+
+body[data-ns-layout="northstar"] .left-tip { display: none !important; }
+
+body[data-ns-layout="northstar"] .overview-info-title,
+body[data-ns-layout="northstar"] .line-label-title {
+  color: var(--ns-text-muted) !important;
+  font-family: var(--ns-font-mono);
+}
+
+body[data-ns-layout="northstar"] .overview-info-value,
+body[data-ns-layout="northstar"] .guser-top-info-text > div > p {
+  color: var(--ns-text) !important;
+  font-family: var(--ns-font-mono) !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body[data-ns-layout="northstar"] .value-card-wrapper {
+  min-height: 164px;
+  padding: 18px !important;
+  border: 1px solid var(--ns-border);
+  border-radius: 10px;
+  background: var(--ns-surface);
+}
+
+body[data-ns-layout="northstar"] .guser-top-info-text > i {
+  display: none !important;
+}
+
+body[data-ns-layout="northstar"] .el-card,
+body[data-ns-layout="northstar"] .box-card,
+body[data-ns-layout="northstar"] .select-block,
+body[data-ns-layout="northstar"] .components-block-button-warpper {
+  border-color: var(--ns-border) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+body[data-ns-layout="northstar"] .el-card__body { padding: 20px !important; }
+body[data-ns-layout="northstar"] .el-row { row-gap: 0; }
+body[data-ns-layout="northstar"] .el-table th.el-table__cell { height: 42px; }
+body[data-ns-layout="northstar"] .el-table td.el-table__cell { height: 48px; }
+
+/* Empty states use a calm token-drawn mark instead of the legacy truck art. */
+body[data-ns-layout="northstar"] .notAnyInstanceTip > .el-icon-truck { display: none !important; }
+
+body[data-ns-layout="northstar"] .notAnyInstanceTip::before {
+  display: block;
+  position: relative;
+  width: 62px !important;
+  height: 62px !important;
+  margin: 0 auto 16px;
+  content: "";
+  border: 2px dashed var(--ns-border-strong);
+  border-radius: 14px;
+}
+
+body[data-ns-layout="northstar"] .notAnyInstanceTip {
+  position: relative;
+}
+
+body[data-ns-layout="northstar"] .notAnyInstanceTip::after {
+  position: absolute;
+  top: 25px;
+  left: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  content: "";
+  background: var(--ns-accent);
+  border-radius: 50%;
+  box-shadow: 16px 16px 0 -1px var(--ns-accent);
+}
+
+body[data-ns-layout="northstar"] .el-button,
+body[data-ns-layout="northstar"] .el-input__inner,
+body[data-ns-layout="northstar"] .el-select .el-input__inner {
+  min-height: 38px;
+  border-radius: 8px !important;
+}
+
+body[data-ns-layout="northstar"] .el-button:focus-visible,
+body[data-ns-layout="northstar"] .el-input__inner:focus {
+  outline: 0 !important;
+  border: 2px solid var(--ns-accent) !important;
+  box-shadow: none !important;
+}
+
+body[data-ns-layout="northstar"] #ShowMenu {
+  position: fixed;
+  z-index: 45;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  left: 18px;
+  width: 44px;
+  height: 44px;
+  color: var(--ns-accent-contrast);
+  background: var(--ns-action);
+  border-radius: 8px;
+  box-shadow: var(--ns-shadow-float);
+}
+
+@media (min-width: 901px) {
+  body[data-ns-layout="northstar"] #ShowMenu { display: none !important; }
+}
+
+@media (max-width: 900px) {
+  body[data-ns-layout="northstar"] #app-menu {
+    position: fixed;
+    z-index: 50;
+    display: block !important;
+    transform: translateX(-102%);
+    transition: transform 220ms var(--ns-ease), box-shadow 220ms var(--ns-ease) !important;
+  }
+  body[data-ns-layout="northstar"].ns-nav-open #app-menu {
+    transform: translateX(0);
+    box-shadow: var(--ns-shadow-float);
+  }
+  body[data-ns-layout="northstar"] .northstar-nav-scrim {
+    position: fixed;
+    z-index: 49;
+    inset: 0;
+    display: block;
+    background: var(--ns-overlay);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 160ms var(--ns-ease) !important;
+  }
+  body[data-ns-layout="northstar"].ns-nav-open .northstar-nav-scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  body[data-ns-layout="northstar"] #app .el-main > div { padding-right: 14px; padding-left: 14px; }
+  body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child {
+    margin-right: -14px;
+    margin-left: -14px;
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+  body[data-ns-layout="northstar"] .value-card-wrapper { min-height: 132px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-ns-layout="northstar"] #app-menu,
+  body[data-ns-layout="northstar"] .northstar-nav-scrim,
+  body[data-ns-layout="northstar"] .el-menu-item,
+  body[data-ns-layout="northstar"] .el-button { transition: none !important; }
+}
+
+/* The compiled dark/auto rules use blue literals for explanatory copy. Keep
+   body copy muted and reserve the active accent for links and states. */
+body[data-ns-layout="northstar"] .sub-title-info,
+body[data-ns-layout="northstar"] .line-info,
+body[data-ns-layout="northstar"] .overview-info-title,
+body[data-ns-layout="northstar"] .overview-info-hr,
+body[data-ns-layout="northstar"] .line-label-title,
+body[data-ns-layout="northstar"] .task-container,
+body[data-ns-layout="northstar"] .el-form-item__label,
+body[data-ns-layout="northstar"] .el-empty__description,
+body[data-ns-layout="northstar"] .sub-title-title {
+  color: var(--ns-text-muted) !important;
+}
+
+/* MCSM uses these labels as primary, informational copy. Keep them distinct
+   from long-form descriptions so changing the accent does not flatten the
+   page into one white text layer. */
+body[data-ns-layout="northstar"] .sub-title-title,
+body[data-ns-layout="northstar"] .line-label-title,
+body[data-ns-layout="northstar"] .overview-info-title,
+body[data-ns-layout="northstar"] .components-block-title,
+body[data-ns-layout="northstar"] .components-block-button-link,
+body[data-ns-layout="northstar"] .page-header-title,
+body[data-ns-layout="northstar"] .page-header-title a,
+body[data-ns-layout="northstar"] .sub-title a,
+body[data-ns-layout="northstar"] .line-label-link {
+  color: var(--ns-accent) !important;
+}
+
+/* Preserve the meaningful success, warning, danger and disabled states used
+   by configuration controls and instance status panels. */
+body[data-ns-layout="northstar"] .el-form-item.is-success .el-form-item__label,
+body[data-ns-layout="northstar"] .el-form-item.is-success .el-input__inner,
+body[data-ns-layout="northstar"] .is-success,
+body[data-ns-layout="northstar"] .color-green {
+  color: var(--ns-success) !important;
+}
+body[data-ns-layout="northstar"] .is-warning,
+body[data-ns-layout="northstar"] .color-yellow {
+  color: var(--ns-warning) !important;
+}
+body[data-ns-layout="northstar"] .is-error,
+body[data-ns-layout="northstar"] .is-danger,
+body[data-ns-layout="northstar"] .color-red,
+body[data-ns-layout="northstar"] .color-red-2 {
+  color: var(--ns-danger) !important;
+}
+
+body[data-ns-layout="northstar"] .pointer,
+body[data-ns-layout="northstar"] .line-label-link,
+body[data-ns-layout="northstar"] .page-pagination,
+body[data-ns-layout="northstar"] .selectedForwardMode,
+body[data-ns-layout="northstar"] .color-blue {
+  color: var(--ns-accent) !important;
+}
+
+body[data-ns-layout="northstar"] .color-red,
+body[data-ns-layout="northstar"] .color-red-2,
+body[data-ns-layout="northstar"] .title-tip-danger::before { color: var(--ns-danger) !important; }
+body[data-ns-layout="northstar"] .color-green,
+body[data-ns-layout="northstar"] .title-tip-success::before { color: var(--ns-success) !important; }
+body[data-ns-layout="northstar"] .color-yellow,
+body[data-ns-layout="northstar"] .title-tip-warning::before { color: var(--ns-warning) !important; }
+body[data-ns-layout="northstar"] .color-gray { color: var(--ns-text-muted) !important; }
+body[data-ns-layout="northstar"] .title-tip-danger::before { background: var(--ns-danger) !important; }
+body[data-ns-layout="northstar"] .title-tip-success::before { background: var(--ns-success) !important; }
+body[data-ns-layout="northstar"] .title-tip-warning::before { background: var(--ns-warning) !important; }
+body[data-ns-layout="northstar"] .title-tip-primary::before { color: var(--ns-accent) !important; background: var(--ns-accent) !important; }
+
+/* All header actions use one square control rhythm. The theme switch keeps
+   its icons but adopts the same box as the account actions. */
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-card__body > .el-row > .el-col:last-child {
+  gap: 8px !important;
+}
+
+/* Flatten the header actions so legacy Element wrappers cannot alter the
+   spacing between the account and sign-out controls. */
+body[data-ns-layout="northstar"] #app .northstar-actions-bar {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px !important;
+  width: max-content;
+  min-height: 40px;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body[data-ns-layout="northstar"] #app .northstar-actions-bar > .northstar-tools--header {
+  display: contents;
+  margin: 0 !important;
+}
+
+body[data-ns-layout="northstar"] #app .northstar-actions-bar > .northstar-native-control {
+  flex: 0 0 40px !important;
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+}
+
+/* The action bar is the only owner of spacing. Direct children are normalized
+   so compiled Element wrappers cannot create a visibly uneven final pair. */
+body[data-ns-layout="northstar"] #app .northstar-actions-bar > .northstar-tools--header,
+body[data-ns-layout="northstar"] #app .northstar-actions-bar > .northstar-native-control {
+  align-self: center;
+}
+
+body[data-ns-layout="northstar"] #app .northstar-actions-bar > .northstar-tools--header {
+  display: contents;
+}
+
+/* Keep the accent picker in the same interaction family as the two native
+   actions. Opening the picker changes its state, not its border thickness. */
+body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-accent-trigger,
+body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-native-control {
+  border-width: 1px !important;
+  transition: color var(--ns-speed) var(--ns-ease), background-color var(--ns-speed) var(--ns-ease), border-color var(--ns-speed) var(--ns-ease), transform var(--ns-speed) var(--ns-ease) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-accent-trigger:hover,
+  body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-native-control:hover {
+    color: var(--ns-accent) !important;
+    background: var(--ns-accent-soft) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+}
+
+body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-accent-trigger:active,
+body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-native-control:active {
+  transform: scale(.97);
+}
+
+body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-accent-trigger:focus-visible,
+body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-native-control:focus-visible {
+  outline: 2px solid var(--ns-accent);
+  outline-offset: 2px;
+}
+
+body[data-ns-layout="northstar"] #app .northstar-tools--header {
+  gap: 8px !important;
+}
+
+body[data-ns-layout="northstar"] #app .northstar-tools--header .northstar-color-picker,
+body[data-ns-layout="northstar"] #app .northstar-tools--header .northstar-accent-trigger,
+body[data-ns-layout="northstar"] #app .northstar-tools--header .northstar-theme-switch,
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .northstar-native-control {
+  flex: 0 0 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  margin: 0 !important;
+}
+
+body[data-ns-layout="northstar"] #app .northstar-tools--header .northstar-theme-switch {
+  flex: 0 0 86px !important;
+  width: 86px !important;
+  min-width: 86px !important;
+  height: 40px !important;
+  padding: 3px !important;
+  border-width: 2px !important;
+  border-radius: 99px !important;
+}
+
+body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-color-picker,
+body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-color-picker > .northstar-icon-button,
+body[data-ns-layout="northstar"] #app .northstar-actions-bar > .northstar-native-control {
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+}
+
+body[data-ns-layout="northstar"] #app .northstar-actions-bar .northstar-color-picker > .northstar-icon-button,
+body[data-ns-layout="northstar"] #app .northstar-actions-bar > .northstar-native-control {
+  border-radius: 8px !important;
+}
+
+/* Neutralize legacy action wrappers. The action column owns the only gap. */
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-card__body > .el-row > .el-col:last-child .item-group-wrapper,
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-card__body > .el-row > .el-col:last-child .item-responsive-group-only-lr,
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-card__body > .el-row > .el-col:last-child .function-group,
+body[data-ns-layout="northstar"] #app .el-main > div > .el-row:first-child .el-card__body > .el-row > .el-col:last-child .function-group-component {
+  margin: 0 !important;
+}

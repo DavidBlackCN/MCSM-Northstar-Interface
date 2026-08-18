@@ -1,0 +1,9 @@
+{
+  "name": "northstar-mcsm-theme",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Northstar theme and local preview for MCSManager",
+  "scripts": {
+    "preview": "node tools/preview-server.mjs"
+  }
+}

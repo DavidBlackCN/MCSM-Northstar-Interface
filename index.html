@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-mode="auto" data-accent="cyan" data-typography="heavy">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="MCSManager Panel · Northstar Theme">
+    <meta name="theme-color" content="#fffcf5">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <title>MCSManager · Northstar</title>
+
+    <script>
+      (() => {
+        const root = document.documentElement;
+        const mode = ["auto", "light", "dark"].includes(localStorage.getItem("theme"))
+          ? localStorage.getItem("theme")
+          : "auto";
+        const accent = ["cyan", "vermillion", "lotus", "gold"].includes(localStorage.getItem("northstarAccent"))
+          ? localStorage.getItem("northstarAccent")
+          : "cyan";
+        root.dataset.themeMode = mode;
+        root.dataset.theme = mode === "auto"
+          ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+          : mode;
+        root.dataset.accent = accent;
+        root.dataset.typography = "heavy";
+      })();
+    </script>
+
+    <link href="/css/vendor.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+    <link href="/css/northstar.css?v=20260818-24" rel="stylesheet">
+    <link href="/css/northstar-layout.css?v=20260818-24" rel="stylesheet">
+  </head>
+  <body class="auto">
+    <noscript>
+      <div class="northstar-noscript">
+        <strong>需要启用 JavaScript</strong>
+        <p>MCSManager 必须在支持 JavaScript 的现代浏览器中运行。</p>
+      </div>
+    </noscript>
+
+    <div id="before-app-mount" data-component-type="loading" role="status" aria-live="polite">
+      <div class="northstar-loader" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="northstar-loader-copy">
+        <strong>MCSManager</strong>
+        <span>正在连接控制面板…</span>
+      </div>
+    </div>
+    <div id="app" class="app" data-component-type="vue-root"></div>
+
+    <script>
+      window.removeLoadingPage = () => {
+        const loading = document.getElementById("before-app-mount");
+        if (loading) loading.setAttribute("data-hidden", "true");
+      };
+    </script>
+    <script src="/js/vendor.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/static/editor/ace.js" charset="utf-8"></script>
+    <script src="/js/northstar.js?v=20260818-24"></script>
+    <script src="/js/northstar-layout.js?v=20260818-24"></script>
+  </body>
+</html>
