@@ -2,6 +2,9 @@
   "use strict";
 
   const root = document.documentElement;
+  const scriptUrl = new URL(document.currentScript?.src || "./northstar-v10.js", document.baseURI);
+  const assetVersion = scriptUrl.searchParams.get("v") || "current";
+  const repositoryUrl = "https://github.com/DavidBlackCN/MCSM-Northstar-Interface";
   const accents = ["cyan", "vermillion", "lotus", "gold"];
   const icons = {
     overview: '<path d="M4 19V10M10 19V5M16 19v-7M22 19H2"/>',
@@ -9,6 +12,10 @@
     market: '<path d="M4 9h16l-1 11H5L4 9Z"/><path d="M8 9V7a4 4 0 0 1 8 0v2"/>',
     user: '<circle cx="12" cy="8" r="3"/><path d="M5 21a7 7 0 0 1 14 0"/>',
     node: '<rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/>',
+    file: '<path d="M3 7h7l2 2h9v10H3z"/><path d="M3 7V5h7l2 2"/>',
+    terminal: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/>',
+    quickstart: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
+    image: '<path d="M4 5h16v5H4zM5 10h14v9H5z"/><path d="M9 14h6"/>',
     setting: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/>',
     link: '<path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"/>',
     default: '<path d="M4 6h16M4 12h16M4 18h10"/>'
@@ -82,6 +89,84 @@
         return addColorStop.call(this, offset, mapChartColor(color));
       };
       return gradient;
+    };
+  };
+
+  const installBackgroundConfigBridge = () => {
+    if (window.__northstarBackgroundConfigBridge) return;
+    window.__northstarBackgroundConfigBridge = true;
+
+    let pendingBackgroundValue;
+    let pendingBackgroundAt = 0;
+    const backgroundFormItem = () => [...document.querySelectorAll(".ant-form-item")].find((item) =>
+      /界面背景图片|interface background image/i.test(item.textContent || "")
+    );
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest?.("button");
+      const formItem = button?.closest?.(".ant-form-item");
+      if (!button || formItem !== backgroundFormItem()) return;
+      const buttons = [...formItem.querySelectorAll("button")];
+      const actionIndex = buttons.indexOf(button);
+      if (actionIndex < 1) return;
+      pendingBackgroundValue = actionIndex === buttons.length - 1
+        ? ""
+        : (formItem.querySelector("input")?.value || "").trim();
+      pendingBackgroundAt = Date.now();
+    }, true);
+
+    const originalOpen = XMLHttpRequest.prototype.open;
+    const originalSend = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.open = function (method, url, ...args) {
+      this.__northstarRequest = {
+        method: String(method || "GET").toUpperCase(),
+        url: String(url || "")
+      };
+      return originalOpen.call(this, method, url, ...args);
+    };
+    XMLHttpRequest.prototype.send = function (body) {
+      const request = this.__northstarRequest;
+      const isLayoutSave = request?.method === "POST" && /\/api\/overview\/layout(?:\?|$)/.test(request.url);
+      const hasPendingValue = pendingBackgroundValue !== undefined && Date.now() - pendingBackgroundAt < 120000;
+      if (isLayoutSave && hasPendingValue && typeof body === "string") {
+        try {
+          const layout = JSON.parse(body);
+          const settings = Array.isArray(layout)
+            ? layout.find((entry) => entry?.page === "__settings__")
+            : null;
+          if (settings) {
+            settings.theme ||= {};
+            settings.theme.backgroundImage = pendingBackgroundValue;
+            body = JSON.stringify(layout);
+            pendingBackgroundValue = undefined;
+            pendingBackgroundAt = 0;
+          }
+        } catch {}
+      }
+      return originalSend.call(this, body);
+    };
+
+    const originalFetch = window.fetch;
+    window.fetch = function (input, init = {}) {
+      const requestUrl = typeof input === "string" ? input : input?.url || "";
+      const requestMethod = String(init.method || (typeof input !== "string" ? input?.method : "GET") || "GET").toUpperCase();
+      const hasPendingValue = pendingBackgroundValue !== undefined && Date.now() - pendingBackgroundAt < 120000;
+      if (requestMethod === "POST" && /\/api\/overview\/layout(?:\?|$)/.test(requestUrl) && hasPendingValue && typeof init.body === "string") {
+        try {
+          const layout = JSON.parse(init.body);
+          const settings = Array.isArray(layout)
+            ? layout.find((entry) => entry?.page === "__settings__")
+            : null;
+          if (settings) {
+            settings.theme ||= {};
+            settings.theme.backgroundImage = pendingBackgroundValue;
+            init = { ...init, body: JSON.stringify(layout) };
+            pendingBackgroundValue = undefined;
+            pendingBackgroundAt = 0;
+          }
+        } catch {}
+      }
+      return originalFetch.call(this, input, init);
     };
   };
 
@@ -235,6 +320,10 @@
   const iconForLabel = (label) => {
     if (/概览|overview|仪表/i.test(label)) return icons.overview;
     if (/实例|instance/i.test(label)) return icons.instance;
+    if (/文件|file/i.test(label)) return icons.file;
+    if (/终端|terminal|console/i.test(label)) return icons.terminal;
+    if (/快速|quick/i.test(label)) return icons.quickstart;
+    if (/镜像|image|docker/i.test(label)) return icons.image;
     if (/市场|market|应用商店/i.test(label)) return icons.market;
     if (/用户|user|成员/i.test(label)) return icons.user;
     if (/节点|node|守护/i.test(label)) return icons.node;
@@ -243,15 +332,63 @@
     return icons.default;
   };
 
+  const currentRoute = () => location.hash.replace(/^#/, "").split("?")[0] || "/";
+  const routeMatches = (path, route) => {
+    if (!path) return false;
+    if (path === "/settings") return route === path || route.startsWith(`${path}/`);
+    return route === path;
+  };
+  const selectedDaemonId = () => {
+    try {
+      const selected = JSON.parse(localStorage.getItem("pageSelectedRemote") || "null");
+      if (selected?.uuid && selected.uuid !== "ALL_DAEMON_MODE") return selected.uuid;
+    } catch {}
+    const nodeMenuItem = [...document.querySelectorAll(".app-header-content .ant-dropdown-menu-item")]
+      .find((item) => item.getAttribute("data-menu-id")?.includes("node") || item.getAttribute("data-uuid"));
+    return nodeMenuItem?.getAttribute("data-uuid") || "";
+  };
+  const openImageManager = () => {
+    const daemonId = selectedDaemonId();
+    if (!daemonId) {
+      location.hash = "/node";
+      return;
+    }
+    location.hash = `/node/image?${new URLSearchParams({ daemonId }).toString()}`;
+  };
+
   const buildSidebar = () => {
     const nativeNav = document.querySelector(".app-header-content > .btns:first-child");
     if (!nativeNav) return;
     const nativeItems = [...nativeNav.querySelectorAll(":scope > .nav-button")];
-    const orderedItems = [...nativeItems].sort((left, right) => {
-      const leftMonitor = /数据监控|overview|monitor/i.test(left.textContent.trim());
-      const rightMonitor = /数据监控|overview|monitor/i.test(right.textContent.trim());
-      return Number(rightMonitor) - Number(leftMonitor);
-    });
+    const findNative = (pattern) => nativeItems.find((item) => pattern.test(item.textContent.trim()));
+    const usedNativeItems = new Set();
+    const nativeEntry = (pattern, path) => {
+      const item = findNative(pattern);
+      if (!item) return null;
+      usedNativeItems.add(item);
+      return { label: item.textContent.trim(), path, nativeItem: item };
+    };
+    const compact = (items) => items.filter(Boolean);
+    const sections = [
+      {
+        label: "WORKSPACE",
+        items: compact([
+          nativeEntry(/数据监控|overview|monitor/i, "/overview"),
+          nativeEntry(/应用实例|实例|instance/i, "/instances"),
+          { label: "快速开始", path: "/quickstart", action: () => { location.hash = "/quickstart"; } }
+        ])
+      },
+      {
+        label: "MANAGE",
+        items: compact([
+          nativeEntry(/用户管理|用户|user/i, "/users"),
+          nativeEntry(/节点管理|节点|node/i, "/node"),
+          { label: "容器镜像", path: "/node/image", action: openImageManager },
+          nativeEntry(/设置|setting|配置/i, "/settings"),
+          ...nativeItems.filter((item) => !usedNativeItems.has(item)).map((item) => ({ label: item.textContent.trim(), nativeItem: item }))
+        ])
+      }
+    ].filter((section) => section.items.length);
     let sidebar = document.querySelector(".northstar-sidebar");
     if (nativeItems.length === 0) {
       sidebar?.remove();
@@ -262,32 +399,56 @@
       sidebar = document.createElement("aside");
       sidebar.className = "northstar-sidebar";
       sidebar.setAttribute("aria-label", "主导航");
-      sidebar.innerHTML = '<a class="northstar-sidebar__brand" href="."><span>MCSManager</span></a><div class="northstar-sidebar__label">Workspace</div><nav class="northstar-sidebar__nav"></nav><div class="northstar-sidebar__footer">MCSManager 10.18<br>Northstar Interface</div>';
+      sidebar.innerHTML = `<a class="northstar-sidebar__brand" href="."><span>MCSManager</span></a><nav class="northstar-sidebar__nav"></nav><div class="northstar-sidebar__footer"><a href="${repositoryUrl}" target="_blank" rel="noreferrer"><span class="northstar-sidebar__footer-brand"><span class="northstar-sidebar__footer-icon" aria-hidden="true"><i></i><i></i><i></i></span><span>Northstar Interface</span></span>${svg(icons.link)}</a></div>`;
       document.body.appendChild(sidebar);
     }
     const brand = sidebar.querySelector(".northstar-sidebar__brand");
-    const logoPath = new URL("./img/logo.png", document.baseURI).href;
+    const logoPath = new URL(`./img/logo.png?v=${encodeURIComponent(assetVersion)}`, document.baseURI).href;
     const brandLogo = brand.querySelector("img");
     if (!brandLogo || brandLogo.src !== logoPath) {
       brand.innerHTML = `<img src="${logoPath}" width="142" height="22" alt="MCSManager">`;
     }
     const nav = sidebar.querySelector(".northstar-sidebar__nav");
-    const signature = orderedItems.map((item) => item.textContent.trim()).join("|");
+    const signature = `${assetVersion}|${sections.map((section) => `${section.label}:${section.items.map((item) => item.label).join(",")}`).join("|")}`;
     if (nav.dataset.signature !== signature) {
       nav.dataset.signature = signature;
-      nav.replaceChildren(...orderedItems.map((nativeItem) => {
-        const label = nativeItem.textContent.trim();
+      const nodes = [];
+      sections.forEach((section) => {
+        const heading = document.createElement("div");
+        heading.className = "northstar-sidebar__label";
+        heading.textContent = section.label;
+        nodes.push(heading);
+        section.items.forEach((entry) => {
+          const label = entry.label;
         const button = document.createElement("button");
         button.type = "button";
         button.className = "northstar-sidebar__item";
+          button.dataset.path = entry.path || "";
         button.innerHTML = `${svg(iconForLabel(label))}<span></span>`;
         button.querySelector("span").textContent = label;
-        button.addEventListener("click", () => nativeItem.click());
-        return button;
-      }));
+          button.addEventListener("click", entry.action || (() => entry.nativeItem.click()));
+          nodes.push(button);
+        });
+      });
+      nav.replaceChildren(...nodes);
     }
-    [...nav.children].forEach((item, index) => item.setAttribute("aria-current", orderedItems[index]?.classList.contains("nav-button-active") ? "page" : "false"));
-    document.body.classList.add("northstar-shell-ready");
+    const route = currentRoute();
+    [...nav.querySelectorAll(".northstar-sidebar__item")].forEach((item) => {
+      const path = item.dataset.path;
+      const entryLabel = item.textContent.trim();
+      const nativeItem = findNative(new RegExp(entryLabel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+      const active = path
+        ? routeMatches(path, route)
+        : nativeItem?.classList.contains("nav-button-active");
+      item.setAttribute("aria-current", active ? "page" : "false");
+    });
+    const footer = sidebar.querySelector(".northstar-sidebar__footer");
+    if (footer && !footer.querySelector("a")) {
+      footer.innerHTML = `<a href="${repositoryUrl}" target="_blank" rel="noreferrer"><span class="northstar-sidebar__footer-brand"><span class="northstar-sidebar__footer-icon" aria-hidden="true"><i></i><i></i><i></i></span><span>Northstar Interface</span></span>${svg(icons.link)}</a>`;
+    }
+    if (!document.body.classList.contains("northstar-shell-ready")) {
+      document.body.classList.add("northstar-shell-ready");
+    }
   };
 
   const redirectAfterLogin = () => {
@@ -424,16 +585,27 @@
     scheduled = true;
     requestAnimationFrame(() => {
       scheduled = false;
-      applyTheme();
-      mountTools();
-      buildSidebar();
-      redirectAfterLogin();
-      decorateInstanceControls();
-      decorateMetricCards();
+      try {
+        window.__northstarSidebarDebug = "theme";
+        applyTheme();
+        window.__northstarSidebarDebug = "tools";
+        mountTools();
+        window.__northstarSidebarDebug = "sidebar";
+        buildSidebar();
+        window.__northstarSidebarDebug = "redirect";
+        redirectAfterLogin();
+        decorateInstanceControls();
+        decorateMetricCards();
+        window.__northstarSidebarDebug = "ready";
+      } catch (error) {
+        window.__northstarSidebarDebug = `error: ${error?.stack || error}`;
+        console.error("Northstar reconcile failed", error);
+      }
     });
   };
 
   installChartColorBridge();
+  installBackgroundConfigBridge();
   applyTheme();
   const start = () => {
     reconcile();
