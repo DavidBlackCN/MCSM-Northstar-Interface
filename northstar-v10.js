@@ -559,10 +559,14 @@
       const running = /^(?:运行中|running)$/i.test(label);
       const idle = /^(?:未运行|idle|not running)$/i.test(label);
       const stopped = /^(?:已停止|stopped)$/i.test(label);
+      const enabled = /^(?:已启用|enabled)$/i.test(label);
+      const disabled = /^(?:已禁用|disabled)$/i.test(label);
       tag.classList.toggle("northstar-running-badge", running);
       tag.classList.toggle("northstar-idle-badge", idle);
       tag.classList.toggle("northstar-stopped-badge", stopped);
-      const state = running ? "success" : idle ? "idle" : stopped ? "stopped" : "";
+      tag.classList.toggle("northstar-enabled-badge", enabled);
+      tag.classList.toggle("northstar-disabled-badge", disabled);
+      const state = running || enabled ? "success" : idle ? "idle" : stopped || disabled ? "stopped" : "";
       if (state) {
         tag.style.setProperty("color", `var(--ns-${state})`, "important");
         tag.style.setProperty("background", `var(--ns-${state}-soft)`, "important");
@@ -578,6 +582,33 @@
         tag.style.removeProperty("transition");
         tag.style.removeProperty("border-color");
       }
+    });
+  };
+
+  const decorateManagementSurfaces = () => {
+    const route = currentRoute();
+    const mountPoint = document.getElementById("app-mount-point");
+    if (!mountPoint) return;
+
+    const isFilePage = /\/instances\/terminal\/files(?:[/?]|$)/i.test(route);
+    const isModPage = /\/instances\/terminal\/mods(?:[/?]|$)/i.test(route);
+    const isSourceEditorPage = isFilePage || /\/serverConfig\/fileEdit(?:[/?]|$)/i.test(route);
+    mountPoint.classList.toggle("northstar-file-page", isFilePage);
+    mountPoint.classList.toggle("northstar-mod-page", isModPage);
+    mountPoint.classList.toggle("northstar-source-editor-page", isSourceEditorPage);
+
+    mountPoint.querySelectorAll(".ant-table-wrapper").forEach((table) => {
+      table.classList.toggle("northstar-file-table", isFilePage);
+      table.classList.toggle("northstar-mod-table", isModPage);
+    });
+    if (isFilePage || isModPage) {
+      mountPoint.querySelectorAll(".ant-pagination").forEach((pagination) => {
+        const scope = pagination.closest(".ant-table-wrapper") || pagination.parentElement;
+        scope?.classList.add(isFilePage ? "northstar-file-table" : "northstar-mod-table");
+      });
+    }
+    document.querySelectorAll(".cm-editor").forEach((editor) => {
+      editor.classList.add("northstar-code-editor");
     });
   };
 
@@ -698,6 +729,7 @@
         window.__northstarSidebarDebug = "redirect";
         redirectAfterLogin();
         decorateInstanceControls();
+        decorateManagementSurfaces();
         decorateRunningBadges();
         decorateMetricCards();
         window.__northstarSidebarDebug = "ready";
@@ -716,7 +748,12 @@
     reconcile();
     const mountPoint = document.getElementById("app-mount-point") || document.body;
     new MutationObserver(reconcile).observe(mountPoint, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
-    new MutationObserver(reconcile).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+    new MutationObserver(reconcile).observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class"]
+    });
     matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
       if (Number(localStorage.getItem("THEME_KEY")) === 0) reconcile();
     });
