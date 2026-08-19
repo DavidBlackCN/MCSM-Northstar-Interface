@@ -1,0 +1,9 @@
+# Local editor and browser artifacts
+.DS_Store
+Thumbs.db
+*.log
+
+# Local preview output, if created during development
+preview.html
+preview.ps1
+preview.cmd
