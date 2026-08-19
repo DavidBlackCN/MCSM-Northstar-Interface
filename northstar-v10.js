@@ -438,6 +438,28 @@
     return ids;
   };
 
+  const imageManagerNodeOptions = async () => {
+    const options = [];
+    const add = (id, label) => {
+      if (!id || id === "ALL_DAEMON_MODE" || options.some((item) => item.id === id)) return;
+      options.push({ id, label: (label || id).trim() });
+    };
+    document.querySelectorAll(".app-header-content .ant-dropdown-menu-item[data-uuid]").forEach((item) => {
+      add(item.getAttribute("data-uuid"), item.textContent);
+    });
+    if (options.length) return options;
+    const trigger = [...document.querySelectorAll("button.ant-dropdown-trigger")]
+      .find((button) => /节点|node|localhost/i.test(button.textContent || ""));
+    if (!trigger) return options;
+    trigger.click();
+    await new Promise((resolve) => window.setTimeout(resolve, 80));
+    document.querySelectorAll(".ant-dropdown-menu-item[data-uuid]").forEach((item) => {
+      add(item.getAttribute("data-uuid"), item.textContent);
+    });
+    trigger.click();
+    return options;
+  };
+
   const canReadImageManager = async (daemonId) => {
     try {
       const url = new URL("/api/environment/image", location.href);
@@ -450,12 +472,17 @@
   };
 
   const openImageManager = async () => {
-    const candidates = imageManagerCandidates();
+    const options = await imageManagerNodeOptions();
+    const candidates = options.length ? options.map((item) => item.id) : imageManagerCandidates();
     for (const daemonId of candidates) {
       if (await canReadImageManager(daemonId)) {
         location.hash = `/node/image?${new URLSearchParams({ daemonId }).toString()}`;
         return;
       }
+    }
+    if (candidates[0]) {
+      location.hash = `/node/image?${new URLSearchParams({ daemonId: candidates[0] }).toString()}`;
+      return;
     }
     location.hash = "/node";
   };
@@ -609,27 +636,40 @@
     switchButton.className = "northstar-image-node-switch ant-btn ant-btn-default";
     switchButton.title = "切换节点";
     switchButton.innerHTML = `${svg(icons.node)}<span>切换节点</span>`;
-    switchButton.addEventListener("click", () => {
-      const nativeNodeTrigger = [...document.querySelectorAll("button.ant-dropdown-trigger")]
-        .find((button) => /节点|node|localhost/i.test(button.textContent || ""));
-      if (nativeNodeTrigger) {
-        nativeNodeTrigger.click();
-        window.setTimeout(() => {
-          document.querySelectorAll(".ant-dropdown-menu-item[data-uuid]").forEach((item) => {
-            if (item.dataset.northstarImageSwitchBound === "true") return;
-            item.dataset.northstarImageSwitchBound = "true";
-            item.addEventListener("click", () => {
-              const daemonId = item.getAttribute("data-uuid");
-              if (!daemonId || daemonId === "ALL_DAEMON_MODE") return;
-              window.setTimeout(() => {
-                location.hash = `/node/image?${new URLSearchParams({ daemonId }).toString()}`;
-              }, 0);
-            });
-          });
-        }, 0);
+    switchButton.addEventListener("click", async () => {
+      const existing = document.querySelector(".northstar-image-node-menu");
+      if (existing) {
+        existing.remove();
         return;
       }
-      location.hash = "/node";
+      const options = await imageManagerNodeOptions();
+      if (!options.length) return;
+      const menu = document.createElement("div");
+      menu.className = "northstar-image-node-menu";
+      options.forEach(({ id, label }) => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "northstar-image-node-menu__item";
+        item.dataset.daemonId = id;
+        item.textContent = label;
+        item.addEventListener("click", () => {
+          localStorage.setItem("pageSelectedRemote", JSON.stringify({ uuid: id }));
+          location.hash = `/node/image?${new URLSearchParams({ daemonId: id }).toString()}`;
+          menu.remove();
+        });
+        menu.appendChild(item);
+      });
+      document.body.appendChild(menu);
+      const buttonRect = switchButton.getBoundingClientRect();
+      menu.style.left = `${Math.max(12, buttonRect.left)}px`;
+      menu.style.top = `${buttonRect.bottom + 8}px`;
+      const close = (event) => {
+        if (!menu.contains(event.target) && event.target !== switchButton) {
+          menu.remove();
+          document.removeEventListener("pointerdown", close, true);
+        }
+      };
+      document.addEventListener("pointerdown", close, true);
     });
     anchor.appendChild(switchButton);
   };
