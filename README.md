@@ -25,6 +25,8 @@
 
 更新 MCSManager 后需要重新执行第 3 至第 5 步。不要删除或覆盖新版本自带的 `assets`。
 
+加载页由主题 CSS 兼容覆盖，无需手动替换 `#before-app-mounted` 的 HTML。若页面仍显示旧加载器，请确认 `northstar-v10.css` 位于 `</head>` 前，并使用 `Ctrl+F5` 清除旧缓存。
+
 ## 自定义卡片
 
 `cards` 目录中的 HTML 文件可在“自定义布局”中作为扩展页面卡片上传。

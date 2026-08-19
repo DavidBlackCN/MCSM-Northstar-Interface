@@ -1777,8 +1777,15 @@ svg[style*="#1890ff"], svg[style*="#1677ff"],
 }
 #before-app-mounted .loading-title {
   margin: 0 0 2px;
+  font-size: 0 !important;
   color: var(--ns-text-muted, #5c6166) !important;
-  font: 500 18px/1.4 "Maple Mono", ui-monospace, monospace;
+  font-family: "Maple Mono", ui-monospace, monospace;
+  font-weight: 500;
+  line-height: 1.4;
+}
+#before-app-mounted .loading-title::after {
+  content: "正在加载页面...";
+  font-size: 18px;
 }
 #before-app-mounted .error-title {
   color: var(--ns-text, #292b2f) !important;
@@ -1798,8 +1805,63 @@ svg[style*="#1890ff"], svg[style*="#1677ff"],
   transform: translateY(-1px);
 }
 #before-app-mounted .error-button:active { transform: scale(.98); }
+
+/* MCSM 10.18.0 still ships the startup fallback as one circular `.loading`
+   element. The themed three-bar markup is used by newer packaged indexes, but
+   this fallback keeps README-only installs visually consistent as well. */
+#before-app-mounted .loading:not(.loading-bars) {
+  position: relative;
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 0 0 4px;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  animation: none !important;
+}
+#before-app-mounted .loading:not(.loading-bars)::before,
+#before-app-mounted .loading:not(.loading-bars)::after {
+  position: absolute;
+  top: 50%;
+  display: block;
+  width: 8px;
+  border-radius: 5px;
+  background: var(--ns-accent, #5086a1);
+  content: "";
+  transform: translateY(-50%);
+  animation: ns-loading-bars 980ms ease-in-out infinite;
+}
+#before-app-mounted .loading:not(.loading-bars)::before {
+  left: 14px;
+  height: 42px;
+}
+#before-app-mounted .loading:not(.loading-bars)::after {
+  right: 14px;
+  height: 32px;
+  animation-delay: 280ms;
+}
+#before-app-mounted .loading:not(.loading-bars) {
+  box-shadow: inset 0 0 0 0 transparent;
+}
+#before-app-mounted .loading:not(.loading-bars)::marker { display: none; }
+@supports (background: color-mix(in srgb, black 10%, white)) {
+  #before-app-mounted .loading:not(.loading-bars) {
+    background:
+      linear-gradient(var(--ns-accent, #5086a1), var(--ns-accent, #5086a1))
+      center / 8px 56px no-repeat !important;
+    animation: ns-loading-bars 980ms ease-in-out infinite !important;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  #before-app-mounted .loading-bars span { animation: none; transform: none; opacity: 1; }
+  #before-app-mounted .loading-bars span,
+  #before-app-mounted .loading:not(.loading-bars),
+  #before-app-mounted .loading:not(.loading-bars)::before,
+  #before-app-mounted .loading:not(.loading-bars)::after {
+    animation: none !important;
+    transform: none;
+    opacity: 1;
+  }
 }
 
 /* Replace every native circular LoadingOutlined / Ant Spin indicator with the
