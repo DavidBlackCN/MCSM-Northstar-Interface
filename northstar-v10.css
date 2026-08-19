@@ -909,6 +909,36 @@ body.app-light-extend-theme #app-mount-point .main-content .breadcrumbs {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.northstar-image-node-switch {
+  display: inline-flex !important;
+  min-height: 38px;
+  margin-inline-start: 12px;
+  padding: 0 12px !important;
+  align-items: center;
+  gap: 8px;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  font: 600 13px/1 "Maple Mono", ui-monospace, monospace !important;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+.northstar-image-node-switch svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.northstar-image-node-switch:hover {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+  transform: translateY(-1px);
+}
+.northstar-image-node-switch:active { transform: scale(.97); }
 .between-menus-container .menus-item-right .ant-pagination-item-active {
   min-width: 40px;
   height: 40px;
@@ -2431,6 +2461,80 @@ svg[style*="#1890ff"], svg[style*="#1677ff"],
   }
 }
 #app-mount-point :is(.northstar-file-table, .northstar-mod-table) :is(.ant-pagination-prev, .ant-pagination-next).ant-pagination-disabled .ant-pagination-item-link {
+  color: var(--ns-text-faint) !important;
+  opacity: .72;
+}
+
+/* Image management has two independent Ant tables. Keep both pagers aligned
+   with the instance, node, file, and mod management pagers. */
+#app-mount-point .northstar-image-table .ant-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#app-mount-point .northstar-image-table .ant-pagination-item {
+  min-width: 40px;
+  height: 40px;
+  margin: 0 !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  line-height: 38px;
+}
+#app-mount-point .northstar-image-table .ant-pagination-item a {
+  height: 38px;
+  color: var(--ns-text-muted) !important;
+  font-size: 15px;
+  line-height: 38px;
+}
+#app-mount-point .northstar-image-table .ant-pagination-item-active {
+  color: var(--ns-accent) !important;
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-accent) !important;
+}
+#app-mount-point .northstar-image-table .ant-pagination-item-active a {
+  color: var(--ns-accent) !important;
+  font-weight: 600;
+}
+#app-mount-point .northstar-image-table .ant-pagination-prev,
+#app-mount-point .northstar-image-table .ant-pagination-next {
+  width: 40px;
+  height: 40px;
+  margin: 0 !important;
+}
+#app-mount-point .northstar-image-table .ant-pagination-prev .ant-pagination-item-link,
+#app-mount-point .northstar-image-table .ant-pagination-next .ant-pagination-item-link {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  place-items: center;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease);
+}
+#app-mount-point .northstar-image-table .ant-pagination-options {
+  height: 40px;
+  margin-left: 8px;
+}
+#app-mount-point .northstar-image-table .ant-pagination-options .ant-select-selector {
+  height: 40px !important;
+  align-items: center;
+  border-radius: 8px !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .northstar-image-table .ant-pagination-item:not(.ant-pagination-item-active):hover,
+  #app-mount-point .northstar-image-table .ant-pagination-prev:not(.ant-pagination-disabled) .ant-pagination-item-link:hover,
+  #app-mount-point .northstar-image-table .ant-pagination-next:not(.ant-pagination-disabled) .ant-pagination-item-link:hover {
+    color: var(--ns-accent) !important;
+    background: var(--ns-accent-soft) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+}
+#app-mount-point .northstar-image-table :is(.ant-pagination-prev, .ant-pagination-next).ant-pagination-disabled .ant-pagination-item-link {
   color: var(--ns-text-faint) !important;
   opacity: .72;
 }

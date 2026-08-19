@@ -423,13 +423,41 @@
       .find((item) => item.getAttribute("data-menu-id")?.includes("node") || item.getAttribute("data-uuid"));
     return nodeMenuItem?.getAttribute("data-uuid") || "";
   };
-  const openImageManager = () => {
-    const daemonId = selectedDaemonId();
-    if (!daemonId) {
-      location.hash = "/node";
-      return;
+  const imageManagerCandidates = () => {
+    const ids = [];
+    const add = (value) => {
+      if (typeof value === "string" && value && value !== "ALL_DAEMON_MODE" && !ids.includes(value)) ids.push(value);
+    };
+    try {
+      const selected = JSON.parse(localStorage.getItem("pageSelectedRemote") || "null");
+      add(selected?.uuid);
+    } catch {}
+    document.querySelectorAll(".app-header-content .ant-dropdown-menu-item[data-uuid]").forEach((item) => {
+      add(item.getAttribute("data-uuid"));
+    });
+    return ids;
+  };
+
+  const canReadImageManager = async (daemonId) => {
+    try {
+      const url = new URL("/api/environment/image", location.href);
+      url.searchParams.set("daemonId", daemonId);
+      const response = await fetch(url, { credentials: "include", headers: { Accept: "application/json" } });
+      return response.ok;
+    } catch {
+      return false;
     }
-    location.hash = `/node/image?${new URLSearchParams({ daemonId }).toString()}`;
+  };
+
+  const openImageManager = async () => {
+    const candidates = imageManagerCandidates();
+    for (const daemonId of candidates) {
+      if (await canReadImageManager(daemonId)) {
+        location.hash = `/node/image?${new URLSearchParams({ daemonId }).toString()}`;
+        return;
+      }
+    }
+    location.hash = "/node";
   };
 
   const buildSidebar = () => {
@@ -560,6 +588,50 @@
         button.classList.toggle("northstar-terminal-action--terminate", /终止|中止|terminate|kill/i.test(label));
       });
     }
+  };
+
+  const decorateImageManagerControls = () => {
+    if (!/\/node\/image(?:[/?]|$)/i.test(currentRoute())) return;
+    const toolbar = document.querySelector(".between-menus-container");
+    const mountPoint = document.getElementById("app-mount-point");
+    mountPoint?.classList.add("northstar-image-page");
+    mountPoint?.querySelectorAll(".ant-table-wrapper").forEach((table) => table.classList.add("northstar-image-table"));
+    mountPoint?.querySelectorAll(".ant-pagination").forEach((pagination) => {
+      const scope = pagination.closest(".ant-table-wrapper") || pagination.parentElement;
+      scope?.classList.add("northstar-image-table");
+    });
+    if (!toolbar || toolbar.querySelector(".northstar-image-node-switch")) return;
+    const title = [...toolbar.querySelectorAll("h1, h2, h3, h4, h5, .ant-typography")]
+      .find((element) => /镜像|image/i.test(element.textContent || ""));
+    const anchor = title?.parentElement || toolbar.querySelector(".menus-item-left") || toolbar;
+    const switchButton = document.createElement("button");
+    switchButton.type = "button";
+    switchButton.className = "northstar-image-node-switch ant-btn ant-btn-default";
+    switchButton.title = "切换节点";
+    switchButton.innerHTML = `${svg(icons.node)}<span>切换节点</span>`;
+    switchButton.addEventListener("click", () => {
+      const nativeNodeTrigger = [...document.querySelectorAll("button.ant-dropdown-trigger")]
+        .find((button) => /节点|node|localhost/i.test(button.textContent || ""));
+      if (nativeNodeTrigger) {
+        nativeNodeTrigger.click();
+        window.setTimeout(() => {
+          document.querySelectorAll(".ant-dropdown-menu-item[data-uuid]").forEach((item) => {
+            if (item.dataset.northstarImageSwitchBound === "true") return;
+            item.dataset.northstarImageSwitchBound = "true";
+            item.addEventListener("click", () => {
+              const daemonId = item.getAttribute("data-uuid");
+              if (!daemonId || daemonId === "ALL_DAEMON_MODE") return;
+              window.setTimeout(() => {
+                location.hash = `/node/image?${new URLSearchParams({ daemonId }).toString()}`;
+              }, 0);
+            });
+          });
+        }, 0);
+        return;
+      }
+      location.hash = "/node";
+    });
+    anchor.appendChild(switchButton);
   };
 
   const decorateRunningBadges = () => {
@@ -738,6 +810,7 @@
         window.__northstarSidebarDebug = "redirect";
         redirectAfterLogin();
         decorateInstanceControls();
+        decorateImageManagerControls();
         decorateManagementSurfaces();
         decorateRunningBadges();
         decorateMetricCards();
