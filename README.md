@@ -1,6 +1,10 @@
 # MCSM Northstar Interface
 
-适用于 MCSManager 10.18.0 的界面主题。主题只包含样式、脚本、字体和 Logo，不包含 MCSM 官方 `assets`。
+适用于 MCSManager v10+ 版本的界面主题。
+
+- 开发测试版本：`MCSManager 10.18.0`
+
+![](./screenshot.png)
 
 ## 安装
 
@@ -12,13 +16,11 @@
    ```html
    <link rel="stylesheet" href="./northstar-v10.css">
    ```
-
 5. 在 `</body>` 前加入：
 
    ```html
    <script src="./northstar-v10.js"></script>
    ```
-
 6. 重启 MCSManager Web 服务，并使用 `Ctrl+F5` 刷新页面。
 
 更新 MCSManager 后需要重新执行第 3 至第 5 步。不要删除或覆盖新版本自带的 `assets`。
@@ -34,3 +36,7 @@
 - `fonts`：Maple Mono 字体
 - `img/logo.png`：侧边栏 Logo
 - `cards`：可选自定义卡片
+
+## 鸣谢
+
+- [（MCSM 10主题）Vivid](https://blog.imlazy.ink:233/index.php/archives/335/)

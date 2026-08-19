@@ -268,50 +268,8 @@ body.app-light-extend-theme #app-mount-point .main-content .breadcrumbs {
 .northstar-v10-tools:not(.northstar-v10-tools--header) { position: fixed; top: 12px; right: 24px; }
 .northstar-v10-tools--header { position: static; order: -1; }
 .northstar-v10-button { position: relative; }
-.northstar-v10-button[data-tooltip]::after {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  z-index: 110;
-  padding: 7px 10px;
-  color: #fff !important;
-  content: attr(data-tooltip);
-  background: #292b2f !important;
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0,0,0,.18);
-  font: 13px/1.2 "Maple Mono", ui-monospace, monospace;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -3px);
-  transition: opacity 150ms var(--ns-ease), transform 150ms var(--ns-ease);
-  white-space: nowrap;
-}
-.northstar-v10-button[data-tooltip]::before {
-  position: absolute;
-  top: calc(100% + 2px);
-  left: 50%;
-  z-index: 111;
-  width: 8px;
-  height: 8px;
-  content: "";
-  background: #292b2f;
-  opacity: 0;
-  transform: translate(-50%, -3px) rotate(45deg);
-  transition: opacity 150ms var(--ns-ease), transform 150ms var(--ns-ease);
-}
-@media (hover: hover) and (pointer: fine) {
-  .northstar-v10-button[data-tooltip]:hover::after,
-  .northstar-v10-button[data-tooltip]:focus-visible::after {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-  .northstar-v10-button[data-tooltip]:hover::before,
-  .northstar-v10-button[data-tooltip]:focus-visible::before {
-    opacity: 1;
-    transform: translate(-50%, 0) rotate(45deg);
-  }
-}
+.northstar-v10-tooltip { position: absolute !important; z-index: 1070; display: block; width: max-content; max-width: 250px; margin: 0; opacity: 0; pointer-events: none; transform: translateX(-50%); transition: opacity 100ms var(--ns-ease); }
+.northstar-v10-tooltip--visible { opacity: 1; }
 .northstar-v10-button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .northstar-v10-mode { display: block; width: 86px; min-width: 86px; padding: 3px !important; overflow: hidden; border-radius: 999px !important; }
 .northstar-v10-mode__thumb { position: absolute; top: 3px; left: 3px; z-index: 3; display: block; width: 32px; height: 32px; background: var(--ns-surface-raised); border: 0; border-radius: 50%; box-shadow: 0 1px 3px rgba(20,25,28,.16); transform: translateX(0); transition: transform 220ms var(--ns-ease), background-color 180ms ease; }
@@ -777,7 +735,7 @@ body.app-light-extend-theme #app-mount-point .main-content .breadcrumbs {
 /* Instance page refinements: wider cards, larger type, square icon actions. */
 #app-mount-point .instance-card {
   position: relative;
-  height: 244px !important;
+  height: auto !important;
   min-height: 244px !important;
   background-color: var(--ns-surface) !important;
   border-color: var(--ns-border) !important;
@@ -789,6 +747,22 @@ body.app-light-extend-theme #app-mount-point .main-content .breadcrumbs {
     border-color 150ms var(--ns-ease),
     box-shadow 150ms var(--ns-ease),
     transform 150ms var(--ns-ease) !important;
+}
+#app-mount-point .instance-card > .card-panel,
+#app-mount-point .instance-card .instance-card-body {
+  height: auto !important;
+  min-height: 100%;
+}
+#app-mount-point .instance-card .card-panel-content {
+  overflow: visible !important;
+}
+#app-mount-point .instance-card .instance-card-body > .ant-typography {
+  flex: 1 0 auto;
+  margin-bottom: 14px;
+}
+#app-mount-point .instance-card .instance-card-body > .ant-space {
+  flex: 0 0 auto;
+  margin-top: auto;
 }
 /* Batch selection is persistent and deliberately stronger than pointer hover. */
 #app-mount-point .instance-card.selected {
@@ -931,6 +905,78 @@ body.app-light-extend-theme #app-mount-point .main-content .breadcrumbs {
 .between-menus-container .menus-item-right .ant-pagination-next.ant-pagination-disabled .ant-pagination-item-link {
   color: var(--ns-text-faint) !important;
   opacity: .72;
+}
+
+/* NodeList renders pagination below its description instead of in
+   BetweenMenus. Keep it visually identical to the instance list pager. */
+#app-mount-point .desc .pagination .ant-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#app-mount-point .desc .pagination .ant-pagination-item {
+  min-width: 40px;
+  height: 40px;
+  margin: 0 !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  line-height: 38px;
+}
+#app-mount-point .desc .pagination .ant-pagination-item a {
+  height: 38px;
+  color: var(--ns-text-muted) !important;
+  line-height: 38px;
+  font-size: 15px;
+}
+#app-mount-point .desc .pagination .ant-pagination-item-active {
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-accent) !important;
+}
+#app-mount-point .desc .pagination .ant-pagination-item-active a {
+  color: var(--ns-accent) !important;
+  font-weight: 600;
+}
+#app-mount-point .desc .pagination .ant-pagination-prev,
+#app-mount-point .desc .pagination .ant-pagination-next {
+  width: 40px;
+  height: 40px;
+  margin: 0 !important;
+}
+#app-mount-point .desc .pagination .ant-pagination-prev .ant-pagination-item-link,
+#app-mount-point .desc .pagination .ant-pagination-next .ant-pagination-item-link {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  place-items: center;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease);
+}
+#app-mount-point .desc .pagination .ant-pagination-prev:not(.ant-pagination-disabled) .ant-pagination-item-link:hover,
+#app-mount-point .desc .pagination .ant-pagination-next:not(.ant-pagination-disabled) .ant-pagination-item-link:hover,
+#app-mount-point .desc .pagination .ant-pagination-item:not(.ant-pagination-item-active):hover {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+  transform: translateY(-1px);
+}
+#app-mount-point .desc .pagination .ant-pagination-prev.ant-pagination-disabled .ant-pagination-item-link,
+#app-mount-point .desc .pagination .ant-pagination-next.ant-pagination-disabled .ant-pagination-item-link {
+  color: var(--ns-text-faint) !important;
+  opacity: .72;
+}
+#app-mount-point .desc .pagination .ant-pagination-options {
+  height: 40px;
+  margin-left: 8px;
+}
+#app-mount-point .desc .pagination .ant-pagination-options .ant-select-selector {
+  height: 40px !important;
+  align-items: center;
+  border-radius: 8px !important;
 }
 @media (max-width: 1199px) {
   #app-mount-point .ant-col:has(> .instance-card) {
@@ -1997,4 +2043,62 @@ svg[style*="#1890ff"], svg[style*="#1677ff"],
   color: var(--ns-on-action) !important;
   fill: currentColor !important;
   opacity: 1 !important;
+}
+
+/* The instance console must use Maple Mono across xterm's DOM and input layers. */
+#app-mount-point .terminal-container,
+#app-mount-point .terminal-container .xterm,
+#app-mount-point .terminal-container .xterm-screen,
+#app-mount-point .terminal-container .xterm-rows,
+#app-mount-point .terminal-container .xterm-helpers,
+#app-mount-point .terminal-container .xterm-helper-textarea,
+#app-mount-point .terminal-container .xterm-char-measure-element,
+#app-mount-point .terminal-container .xterm-accessibility,
+#app-mount-point .terminal-container .xterm-accessibility-tree,
+#app-mount-point .terminal-container .xterm-accessibility-tree * {
+  font-family: "Maple Mono", monospace !important;
+}
+
+/* Running-instance actions: warning for restart, danger for termination. */
+#app-mount-point .northstar-terminal-action--restart {
+  color: var(--ns-warning) !important;
+  background: var(--ns-warning-soft) !important;
+  border-color: color-mix(in srgb, var(--ns-warning) 58%, var(--ns-border-strong)) !important;
+}
+#app-mount-point .northstar-terminal-action--terminate {
+  color: var(--ns-danger) !important;
+  background: var(--ns-danger-soft) !important;
+  border-color: color-mix(in srgb, var(--ns-danger) 58%, var(--ns-border-strong)) !important;
+}
+#app-mount-point .northstar-terminal-action--restart .anticon,
+#app-mount-point .northstar-terminal-action--restart svg {
+  color: var(--ns-warning) !important;
+}
+#app-mount-point .northstar-terminal-action--terminate .anticon,
+#app-mount-point .northstar-terminal-action--terminate svg {
+  color: var(--ns-danger) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .northstar-terminal-action--restart:not(:disabled):hover {
+    color: var(--ns-on-action) !important;
+    background: color-mix(in srgb, var(--ns-warning) 78%, #4b3a18) !important;
+    border-color: var(--ns-warning) !important;
+    transform: translateY(-1px);
+  }
+  #app-mount-point .northstar-terminal-action--terminate:not(:disabled):hover {
+    color: var(--ns-on-action) !important;
+    background: color-mix(in srgb, var(--ns-danger) 62%, #651419) !important;
+    border-color: var(--ns-danger) !important;
+    transform: translateY(-1px);
+  }
+  #app-mount-point .northstar-terminal-action--restart:not(:disabled):hover .anticon,
+  #app-mount-point .northstar-terminal-action--restart:not(:disabled):hover svg,
+  #app-mount-point .northstar-terminal-action--terminate:not(:disabled):hover .anticon,
+  #app-mount-point .northstar-terminal-action--terminate:not(:disabled):hover svg {
+    color: var(--ns-on-action) !important;
+  }
+}
+#app-mount-point .northstar-terminal-action--restart:not(:disabled):active,
+#app-mount-point .northstar-terminal-action--terminate:not(:disabled):active {
+  transform: scale(.98);
 }

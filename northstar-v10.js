@@ -8,10 +8,10 @@
   const accents = ["cyan", "vermillion", "lotus", "gold"];
   const icons = {
     overview: '<path d="M4 19V10M10 19V5M16 19v-7M22 19H2"/>',
-    instance: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h.01M11 9h6M7 14h.01M11 14h6"/>',
+    instance: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
     market: '<path d="M4 9h16l-1 11H5L4 9Z"/><path d="M8 9V7a4 4 0 0 1 8 0v2"/>',
-    user: '<circle cx="12" cy="8" r="3"/><path d="M5 21a7 7 0 0 1 14 0"/>',
-    node: '<rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/>',
+    user: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20a6 6 0 0 1 12 0M14 15.5a5 5 0 0 1 7 4.5"/>',
+    node: '<rect x="9" y="3" width="6" height="5" rx="1.5"/><rect x="3" y="16" width="6" height="5" rx="1.5"/><rect x="15" y="16" width="6" height="5" rx="1.5"/><path d="M12 8v4M6 16v-4h12v4"/>',
     file: '<path d="M3 7h7l2 2h9v10H3z"/><path d="M3 7V5h7l2 2"/>',
     terminal: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/>',
     quickstart: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
@@ -90,6 +90,72 @@
       };
       return gradient;
     };
+  };
+
+  const installTerminalFontBridge = () => {
+    if (window.__northstarTerminalFontBridge) return;
+    window.__northstarTerminalFontBridge = true;
+    const originalGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (type, ...args) {
+      // MCSM's terminal selects WebGL when available, but that renderer owns
+      // its font atlas and ignores CSS. Keep ordinary 2D charts untouched and
+      // make the terminal use xterm's Canvas renderer instead.
+      if (type === "webgl2" && /\/(?:terminal|console)(?:[/?]|$)/i.test(location.hash)) return null;
+      return originalGetContext.call(this, type, ...args);
+    };
+    const prototype = window.CanvasRenderingContext2D?.prototype;
+    const descriptor = prototype && Object.getOwnPropertyDescriptor(prototype, "font");
+    if (!descriptor?.get || !descriptor.set) return;
+    Object.defineProperty(prototype, "font", {
+      configurable: descriptor.configurable,
+      enumerable: descriptor.enumerable,
+      get: descriptor.get,
+      set(value) {
+        const canvas = this.canvas;
+        const isTerminalRoute = /\/(?:terminal|console)(?:[/?]|$)/i.test(location.hash);
+        const isTerminal = isTerminalRoute || (canvas instanceof Element && Boolean(canvas.closest(".xterm, .terminal-container")));
+        const font = isTerminal && typeof value === "string"
+          ? value.replace(/(\d+(?:\.\d+)?px(?:\/\S+)?\s+).+$/i, '$1"Maple Mono", monospace')
+          : value;
+        descriptor.set.call(this, font);
+      }
+    });
+  };
+
+  const installThemeTooltip = (trigger) => {
+    if (trigger.dataset.northstarTooltipReady === "true") return;
+    trigger.dataset.northstarTooltipReady = "true";
+    let tooltip;
+    let hideTimer;
+    const hide = () => {
+      window.clearTimeout(hideTimer);
+      hideTimer = window.setTimeout(() => {
+        tooltip?.remove();
+        tooltip = undefined;
+      }, 80);
+    };
+    const show = () => {
+      window.clearTimeout(hideTimer);
+      if (!tooltip) {
+        tooltip = document.createElement("div");
+        const styleHash = [...document.querySelectorAll("[class]")]
+          .flatMap((element) => [...element.classList])
+          .find((className) => /^css-[a-z0-9]+$/i.test(className));
+        tooltip.className = ["ant-tooltip", styleHash, "ant-tooltip-placement-bottom", "northstar-v10-tooltip"].filter(Boolean).join(" ");
+        tooltip.setAttribute("role", "tooltip");
+        tooltip.innerHTML = '<div class="ant-tooltip-content"><div class="ant-tooltip-arrow"><span class="ant-tooltip-arrow-content"></span></div><div class="ant-tooltip-inner" role="tooltip"><span>主题色</span></div></div>';
+        document.body.appendChild(tooltip);
+      }
+      const rect = trigger.getBoundingClientRect();
+      tooltip.style.left = `${window.scrollX + rect.left + rect.width / 2}px`;
+      tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
+      requestAnimationFrame(() => tooltip?.classList.add("northstar-v10-tooltip--visible"));
+    };
+    trigger.addEventListener("pointerenter", show);
+    trigger.addEventListener("pointerleave", hide);
+    trigger.addEventListener("focus", show);
+    trigger.addEventListener("blur", hide);
+    trigger.addEventListener("click", hide);
   };
 
   const installBackgroundConfigBridge = () => {
@@ -270,7 +336,7 @@
         ${svg('<path d="M20.4 15.4A8.5 8.5 0 0 1 8.6 3.6 8.5 8.5 0 1 0 20.4 15.4Z"/>', "northstar-v10-mode__icon northstar-v10-mode__moon")}
       </button>
       <div class="northstar-v10-picker">
-        <button class="northstar-v10-button" type="button" aria-label="选择主题色" data-tooltip="主题色" aria-expanded="false">${svg('<path d="M12 3a9 9 0 1 0 0 18h1.5a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h4a5 5 0 0 0 0-10h-4Z"/><circle cx="7.5" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="14" cy="6.5" r="1" fill="currentColor" stroke="none"/>')}</button>
+        <button class="northstar-v10-button" type="button" aria-label="选择主题色" aria-expanded="false">${svg('<path d="M12 3a9 9 0 1 0 0 18h1.5a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h4a5 5 0 0 0 0-10h-4Z"/><circle cx="7.5" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="14" cy="6.5" r="1" fill="currentColor" stroke="none"/>')}</button>
         <div class="northstar-v10-menu" hidden role="radiogroup" aria-label="主题色">
           <button class="northstar-v10-choice" type="button" role="radio" data-accent="cyan" style="--swatch:#5086a1"><i></i>霁青</button>
           <button class="northstar-v10-choice" type="button" role="radio" data-accent="vermillion" style="--swatch:#ad4506"><i></i>陶朱</button>
@@ -284,6 +350,7 @@
     const trigger = picker.querySelector(":scope > button");
     const menu = picker.querySelector(".northstar-v10-menu");
     const mode = tools.querySelector(".northstar-v10-mode");
+    installThemeTooltip(trigger);
     const sync = () => {
       mode.setAttribute("aria-pressed", String(root.dataset.nsTheme === "dark"));
       picker.querySelectorAll("[data-accent]").forEach((button) => button.setAttribute("aria-checked", String(button.dataset.accent === root.dataset.nsAccent)));
@@ -476,6 +543,14 @@
       icon.innerHTML = svg(instanceNodeIcon);
       instanceSelector.insertBefore(icon, instanceSelector.firstChild);
     }
+
+    if (/\/instances\/terminal(?:[/?]|$)/i.test(currentRoute())) {
+      document.querySelectorAll("#app-mount-point button.ant-btn").forEach((button) => {
+        const label = button.textContent.trim();
+        button.classList.toggle("northstar-terminal-action--restart", /重启|restart/i.test(label));
+        button.classList.toggle("northstar-terminal-action--terminate", /终止|中止|terminate|kill/i.test(label));
+      });
+    }
   };
 
   const decorateMetricCards = () => {
@@ -583,7 +658,7 @@
   const reconcile = () => {
     if (scheduled) return;
     scheduled = true;
-    requestAnimationFrame(() => {
+    window.setTimeout(() => {
       scheduled = false;
       try {
         window.__northstarSidebarDebug = "theme";
@@ -601,10 +676,11 @@
         window.__northstarSidebarDebug = `error: ${error?.stack || error}`;
         console.error("Northstar reconcile failed", error);
       }
-    });
+    }, 0);
   };
 
   installChartColorBridge();
+  installTerminalFontBridge();
   installBackgroundConfigBridge();
   applyTheme();
   const start = () => {
@@ -617,6 +693,5 @@
     });
     window.addEventListener("hashchange", reconcile);
   };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
-  else start();
+  start();
 })();
