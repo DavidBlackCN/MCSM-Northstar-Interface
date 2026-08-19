@@ -444,19 +444,22 @@
       if (!id || id === "ALL_DAEMON_MODE" || options.some((item) => item.id === id)) return;
       options.push({ id, label: (label || id).trim() });
     };
-    document.querySelectorAll(".app-header-content .ant-dropdown-menu-item[data-uuid]").forEach((item) => {
-      add(item.getAttribute("data-uuid"), item.textContent);
-    });
-    if (options.length) return options;
-    const trigger = [...document.querySelectorAll("button.ant-dropdown-trigger")]
-      .find((button) => /节点|node|localhost/i.test(button.textContent || ""));
-    if (!trigger) return options;
-    trigger.click();
-    await new Promise((resolve) => window.setTimeout(resolve, 80));
     document.querySelectorAll(".ant-dropdown-menu-item[data-uuid]").forEach((item) => {
       add(item.getAttribute("data-uuid"), item.textContent);
     });
+    if (options.length) return options;
+    const trigger = [...document.querySelectorAll(".between-menus-container button.ant-dropdown-trigger, .app-header-content button.ant-dropdown-trigger")]
+      .find((button) => !button.closest(".northstar-image-node-menu") && !/主题|theme|color/i.test(button.textContent || ""));
+    if (!trigger) return options;
     trigger.click();
+    for (let attempt = 0; attempt < 12 && !options.length; attempt += 1) {
+      await new Promise((resolve) => window.setTimeout(resolve, 50));
+      document.querySelectorAll(".ant-dropdown-menu-item[data-uuid]").forEach((item) => {
+        add(item.getAttribute("data-uuid"), item.textContent);
+      });
+    }
+    const expanded = trigger.getAttribute("aria-expanded");
+    if (expanded === "true") trigger.click();
     return options;
   };
 
@@ -640,10 +643,15 @@
       const existing = document.querySelector(".northstar-image-node-menu");
       if (existing) {
         existing.remove();
+        switchButton.setAttribute("aria-expanded", "false");
         return;
       }
       const options = await imageManagerNodeOptions();
-      if (!options.length) return;
+      if (!options.length) {
+        switchButton.setAttribute("aria-busy", "true");
+        window.setTimeout(() => switchButton.removeAttribute("aria-busy"), 700);
+        return;
+      }
       const menu = document.createElement("div");
       menu.className = "northstar-image-node-menu";
       options.forEach(({ id, label }) => {
@@ -660,17 +668,21 @@
         menu.appendChild(item);
       });
       document.body.appendChild(menu);
+      switchButton.setAttribute("aria-expanded", "true");
       const buttonRect = switchButton.getBoundingClientRect();
       menu.style.left = `${Math.max(12, buttonRect.left)}px`;
       menu.style.top = `${buttonRect.bottom + 8}px`;
       const close = (event) => {
         if (!menu.contains(event.target) && event.target !== switchButton) {
           menu.remove();
+          switchButton.setAttribute("aria-expanded", "false");
           document.removeEventListener("pointerdown", close, true);
         }
       };
       document.addEventListener("pointerdown", close, true);
     });
+    switchButton.setAttribute("aria-haspopup", "menu");
+    switchButton.setAttribute("aria-expanded", "false");
     anchor.appendChild(switchButton);
   };
 
