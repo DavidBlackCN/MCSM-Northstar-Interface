@@ -30,6 +30,30 @@
   --ns-warning: #d5b56d; --ns-warning-soft: rgba(178,133,50,.15); --ns-danger: #e58e93; --ns-danger-soft: rgba(194,74,82,.15);
   --ns-shadow-float: 0 18px 46px rgba(0,0,0,.34);
 }
+
+/* Bridge paint-sensitive values during the short theme state transition. */
+body,
+#app-mount-point,
+#app-mount-point .global-app-container,
+#app-mount-point .main-content,
+#app-mount-point .app-header-wrapper,
+#app-mount-point .card-panel,
+#app-mount-point .ant-card,
+#app-mount-point .ant-modal-content,
+#app-mount-point .ant-drawer-content,
+#app-mount-point .ant-popover-inner,
+#app-mount-point .ant-input,
+#app-mount-point .ant-input-affix-wrapper,
+#app-mount-point .ant-select-selector,
+#app-mount-point .ant-btn,
+#app-mount-point .ant-menu-item,
+#app-mount-point .ant-breadcrumb,
+#app-mount-point .anticon,
+#app-mount-point svg {
+  transition-property: color, background-color, border-color, box-shadow, fill, stroke;
+  transition-duration: 180ms;
+  transition-timing-function: var(--ns-ease);
+}
 :root[data-ns-accent="vermillion"] { --ns-accent:#ad4506; --ns-accent-ink:#833706; --ns-accent-soft:#f7e9df; --ns-accent-soft-strong:#efd7c6; --ns-action:#913803; }
 :root[data-ns-accent="lotus"] { --ns-accent:#b06d88; --ns-accent-ink:#824860; --ns-accent-soft:#f4e8ed; --ns-accent-soft-strong:#ead6df; --ns-action:#8c4c66; }
 :root[data-ns-accent="gold"] { --ns-accent:#9b811d; --ns-accent-ink:#756211; --ns-accent-soft:#f8f1cf; --ns-accent-soft-strong:#efe3a7; --ns-action:#806a16; }
@@ -90,6 +114,11 @@ a { color: var(--ns-accent); }
 #app-mount-point .main-content > * > .main-layout-container { width: min(var(--ns-page-max), calc(100% - 64px)); margin-inline: auto; padding-top: 28px; padding-bottom: 32px; }
 #app-mount-point .main-content .breadcrumbs { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 18px 32px 12px !important; }
 #app-mount-point .main-content .breadcrumbs > .ant-breadcrumb { width: min(var(--ns-page-max), 100%); max-width: var(--ns-page-max); margin-inline: auto; color: var(--ns-text-muted); }
+#app-mount-point .main-content .breadcrumbs .ant-breadcrumb li,
+#app-mount-point .main-content .breadcrumbs .ant-breadcrumb-link,
+#app-mount-point .main-content .breadcrumbs .ant-breadcrumb-link > span {
+  color: var(--ns-text-muted) !important;
+}
 #app-mount-point .main-content .breadcrumbs .ant-breadcrumb a { color: var(--ns-accent); }
 #app-mount-point .main-content .breadcrumbs .ant-breadcrumb-separator { color: var(--ns-text-faint); }
 body.northstar-shell-ready #app-mount-point .global-app-container { padding-left: var(--ns-sidebar); }
@@ -644,10 +673,54 @@ body.northstar-shell-ready #app-mount-point .app-header-wrapper { left: var(--ns
 
 /* Instance page refinements: wider cards, larger type, square icon actions. */
 #app-mount-point .instance-card {
+  position: relative;
   height: 244px !important;
   min-height: 244px !important;
+  background-color: var(--ns-surface) !important;
+  border-color: var(--ns-border) !important;
   border-radius: var(--ns-card-radius) !important;
   overflow: visible;
+  box-shadow: none !important;
+  transition:
+    background-color 150ms var(--ns-ease),
+    border-color 150ms var(--ns-ease),
+    box-shadow 150ms var(--ns-ease),
+    transform 150ms var(--ns-ease) !important;
+}
+/* Batch selection is persistent and deliberately stronger than pointer hover. */
+#app-mount-point .instance-card.selected {
+  background-color: color-mix(in srgb, var(--ns-surface) 82%, var(--ns-accent-soft)) !important;
+  border: 2px solid var(--ns-accent) !important;
+  box-shadow:
+    inset 4px 0 0 var(--ns-accent),
+    0 8px 22px color-mix(in srgb, var(--ns-accent) 13%, transparent) !important;
+  transform: translateY(-1px);
+}
+#app-mount-point .instance-card .inner-card-wrapper,
+#app-mount-point .instance-card .inner-card-wrapper:hover {
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-border) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+#app-mount-point .instance-card.selected .inner-card-wrapper,
+#app-mount-point .instance-card.selected .inner-card-wrapper:hover {
+  background: color-mix(in srgb, var(--ns-surface) 82%, var(--ns-accent-soft)) !important;
+  border-color: transparent !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .instance-card:not(.selected):hover {
+    border-color: color-mix(in srgb, var(--ns-accent) 72%, var(--ns-border-strong)) !important;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--ns-accent) 10%, transparent) !important;
+    transform: translateY(-2px);
+  }
+  #app-mount-point .instance-card.selected:hover {
+    border-color: var(--ns-accent-ink) !important;
+    box-shadow:
+      inset 4px 0 0 var(--ns-accent-ink),
+      0 10px 24px color-mix(in srgb, var(--ns-accent) 16%, transparent) !important;
+    transform: translateY(-2px);
+  }
 }
 #app-mount-point .ant-col:has(> .instance-card) {
   flex: 0 0 33.333333% !important;
@@ -766,6 +839,14 @@ body.northstar-shell-ready #app-mount-point .app-header-wrapper { left: var(--ns
   #app-mount-point .ant-col:has(> .instance-card) {
     flex-basis: 100% !important;
     max-width: 100% !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #app-mount-point .instance-card,
+  #app-mount-point .instance-card:hover,
+  #app-mount-point .instance-card.selected,
+  #app-mount-point .instance-card.selected:hover {
+    transform: none !important;
   }
 }
 
@@ -918,6 +999,187 @@ body.northstar-shell-ready #app-mount-point .app-header-wrapper { left: var(--ns
 }
 .ant-modal-root .ant-modal-confirm .ant-modal-confirm-btns .ant-btn-primary:hover,
 .ant-modal-root .ant-modal-footer .ant-btn-primary:hover, .ant-popover .ant-btn-primary:hover { filter: brightness(.94); }
+
+/* Portal buttons do not inherit the #app-mount-point button rules. Cover every
+   Ant button variant and interaction state used by dialogs and secondary UI. */
+.ant-modal-root .ant-btn,
+.ant-drawer .ant-btn,
+.ant-popover .ant-btn,
+.ant-dropdown .ant-btn {
+  min-height: 38px;
+  color: var(--ns-text) !important;
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-border-strong) !important;
+  border-radius: var(--ns-radius) !important;
+  box-shadow: none !important;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), box-shadow 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+.ant-modal-root .ant-btn:not(:disabled):hover,
+.ant-drawer .ant-btn:not(:disabled):hover,
+.ant-popover .ant-btn:not(:disabled):hover,
+.ant-dropdown .ant-btn:not(:disabled):hover {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+  transform: translateY(-1px);
+}
+.ant-modal-root .ant-btn:not(:disabled):active,
+.ant-drawer .ant-btn:not(:disabled):active,
+.ant-popover .ant-btn:not(:disabled):active,
+.ant-dropdown .ant-btn:not(:disabled):active {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft-strong) !important;
+  border-color: var(--ns-accent-ink) !important;
+  transform: scale(.985);
+}
+.ant-modal-root .ant-btn:focus-visible,
+.ant-drawer .ant-btn:focus-visible,
+.ant-popover .ant-btn:focus-visible,
+.ant-dropdown .ant-btn:focus-visible {
+  color: var(--ns-accent-ink) !important;
+  border-color: var(--ns-accent) !important;
+  box-shadow: 0 0 0 2px var(--ns-accent-soft-strong) !important;
+  outline: 0;
+}
+.ant-modal-root .ant-btn:focus,
+.ant-drawer .ant-btn:focus,
+.ant-popover .ant-btn:focus,
+.ant-dropdown .ant-btn:focus {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+}
+.ant-modal-root .ant-btn-primary,
+.ant-drawer .ant-btn-primary,
+.ant-popover .ant-btn-primary,
+.ant-dropdown .ant-btn-primary {
+  color: var(--ns-on-action) !important;
+  background: var(--ns-action) !important;
+  border-color: var(--ns-action) !important;
+}
+.ant-modal-root .ant-btn-primary:not(:disabled):hover,
+.ant-drawer .ant-btn-primary:not(:disabled):hover,
+.ant-popover .ant-btn-primary:not(:disabled):hover,
+.ant-dropdown .ant-btn-primary:not(:disabled):hover {
+  color: var(--ns-on-action) !important;
+  background: var(--ns-accent) !important;
+  border-color: var(--ns-accent) !important;
+  filter: none;
+}
+.ant-modal-root .ant-btn-primary:not(:disabled):active,
+.ant-drawer .ant-btn-primary:not(:disabled):active,
+.ant-popover .ant-btn-primary:not(:disabled):active,
+.ant-dropdown .ant-btn-primary:not(:disabled):active {
+  color: var(--ns-on-action) !important;
+  background: var(--ns-accent-ink) !important;
+  border-color: var(--ns-accent-ink) !important;
+}
+.ant-modal-root .ant-btn-dangerous,
+.ant-drawer .ant-btn-dangerous,
+.ant-popover .ant-btn-dangerous,
+.ant-dropdown .ant-btn-dangerous {
+  color: var(--ns-danger) !important;
+  background: transparent !important;
+  border-color: var(--ns-danger) !important;
+}
+.ant-modal-root .ant-btn-dangerous:not(:disabled):hover,
+.ant-drawer .ant-btn-dangerous:not(:disabled):hover,
+.ant-popover .ant-btn-dangerous:not(:disabled):hover,
+.ant-dropdown .ant-btn-dangerous:not(:disabled):hover {
+  color: var(--ns-danger) !important;
+  background: var(--ns-danger-soft) !important;
+  border-color: var(--ns-danger) !important;
+}
+.ant-modal-root .ant-btn-text,
+.ant-modal-root .ant-btn-link,
+.ant-drawer .ant-btn-text,
+.ant-drawer .ant-btn-link,
+.ant-popover .ant-btn-text,
+.ant-popover .ant-btn-link,
+.ant-dropdown .ant-btn-text,
+.ant-dropdown .ant-btn-link {
+  color: var(--ns-accent) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+.ant-modal-root .ant-btn-text:not(:disabled):hover,
+.ant-modal-root .ant-btn-link:not(:disabled):hover,
+.ant-drawer .ant-btn-text:not(:disabled):hover,
+.ant-drawer .ant-btn-link:not(:disabled):hover,
+.ant-popover .ant-btn-text:not(:disabled):hover,
+.ant-popover .ant-btn-link:not(:disabled):hover,
+.ant-dropdown .ant-btn-text:not(:disabled):hover,
+.ant-dropdown .ant-btn-link:not(:disabled):hover {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: transparent !important;
+}
+.ant-modal-root .ant-btn .anticon,
+.ant-drawer .ant-btn .anticon,
+.ant-popover .ant-btn .anticon,
+.ant-dropdown .ant-btn .anticon {
+  color: currentColor !important;
+}
+
+/* Source-map audit fallbacks for component-scoped native blue declarations. */
+#app-mount-point .language-card-active {
+  background: color-mix(in srgb, var(--ns-surface) 82%, var(--ns-accent-soft)) !important;
+  border-color: var(--ns-accent) !important;
+}
+#app-mount-point .language-card-active .language-check {
+  background: var(--ns-accent) !important;
+  border-color: var(--ns-accent) !important;
+}
+#app-mount-point .language-card-active .language-label {
+  color: var(--ns-accent-ink) !important;
+}
+#app-mount-point .java-card-selected {
+  background: color-mix(in srgb, var(--ns-surface) 82%, var(--ns-accent-soft)) !important;
+  border-color: var(--ns-accent) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .java-card:hover {
+    border-color: var(--ns-accent) !important;
+  }
+  #app-mount-point .file-name:hover {
+    color: var(--ns-accent) !important;
+  }
+}
+
+/* Remaining component-local blues found through the MCSM source maps. */
+#app-mount-point .logging .login-panel {
+  border-color: var(--ns-accent-soft-strong) !important;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--ns-accent) 26%, transparent) !important;
+}
+#app-mount-point .command-input .history .ant-tag {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+}
+#app-mount-point .url-task-indicator {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: color-mix(in srgb, var(--ns-accent) 34%, var(--ns-border)) !important;
+}
+#app-mount-point .url-task-icon,
+#app-mount-point .url-task-icon-inner,
+#app-mount-point .url-task-text,
+#app-mount-point .task-status-progress,
+#app-mount-point .frosted-float-button .anticon {
+  color: var(--ns-accent) !important;
+}
+#app-mount-point .frosted-float-button {
+  background: color-mix(in srgb, var(--ns-surface-raised) 88%, var(--ns-accent-soft)) !important;
+  border-color: color-mix(in srgb, var(--ns-accent) 28%, var(--ns-border-strong)) !important;
+  box-shadow: var(--ns-shadow-float) !important;
+}
+#app-mount-point .task-progress .ant-progress-bg,
+#app-mount-point .task-progress [style*="#3b82f6"],
+#app-mount-point .task-progress [style*="#60a5fa"] {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent) !important;
+  border-color: var(--ns-accent) !important;
+}
 .ant-dropdown-menu-item:hover, .ant-dropdown-menu-submenu-title:hover,
 .ant-select-item-option-active, .ant-select-item-option-selected,
 .ant-popover .ant-menu-item:hover { color: var(--ns-accent-ink) !important; background: var(--ns-accent-soft) !important; }
@@ -931,6 +1193,126 @@ body.northstar-shell-ready #app-mount-point .app-header-wrapper { left: var(--ns
 .ant-select-focused .ant-select-selector, .ant-picker-focused, .ant-btn:focus-visible,
 .ant-modal-root button:focus-visible, .ant-dropdown-menu-item:focus-visible {
   border-color: var(--ns-accent) !important; box-shadow: 0 0 0 2px var(--ns-accent-soft-strong) !important;
+}
+
+/* First-use market tour. Ant Design Vue mounts Tour directly under body. */
+.ant-tour {
+  --ant-tour-bg: var(--ns-surface-raised);
+  --ant-tour-color: var(--ns-text);
+  --ant-tour-description-color: var(--ns-text-muted);
+  --ant-tour-border-radius: var(--ns-card-radius);
+  --ant-tour-footer-margin-top: 20px;
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: var(--ns-card-radius) !important;
+  box-shadow: var(--ns-shadow-float) !important;
+  overflow: hidden;
+  transition: color 180ms var(--ns-ease), background-color 180ms var(--ns-ease), border-color 180ms var(--ns-ease), box-shadow 180ms var(--ns-ease) !important;
+}
+.ant-tour .ant-tour-content,
+.ant-tour .ant-tour-inner {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+}
+.ant-tour .ant-tour-inner { padding: 20px 22px 18px !important; }
+.ant-tour .ant-tour-title {
+  margin-right: 30px;
+  color: var(--ns-text) !important;
+  font: 600 19px/1.35 "Maple Mono", ui-monospace, monospace !important;
+}
+.ant-tour .ant-tour-description {
+  margin-top: 12px;
+  color: var(--ns-text-muted) !important;
+  font: 400 15px/1.65 ui-sans-serif, system-ui, sans-serif;
+}
+.ant-tour .ant-tour-close {
+  display: grid !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  place-items: center;
+  color: var(--ns-text-muted) !important;
+  border-radius: 6px;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+.ant-tour .ant-tour-close:hover {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  transform: scale(1.04);
+}
+.ant-tour .ant-tour-footer {
+  align-items: center;
+  gap: 12px;
+  color: var(--ns-text-muted) !important;
+}
+.ant-tour .ant-tour-indicators {
+  gap: 8px;
+}
+.ant-tour .ant-tour-indicator {
+  width: 9px !important;
+  height: 9px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: var(--ns-border-strong) !important;
+  border-radius: 50%;
+  transition: background-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+.ant-tour .ant-tour-indicator-active {
+  width: 10px !important;
+  height: 10px !important;
+  background: var(--ns-accent) !important;
+  transform: scale(1.05);
+}
+.ant-tour .ant-tour-prev-btn,
+.ant-tour .ant-tour-next-btn,
+.ant-tour .ant-tour-finish-btn {
+  min-width: 74px;
+  min-height: 38px !important;
+  padding-inline: 15px !important;
+  border-radius: var(--ns-radius) !important;
+  font-size: 14px;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+.ant-tour .ant-tour-prev-btn {
+  color: var(--ns-text) !important;
+  background: transparent !important;
+  border: 1px solid var(--ns-border-strong) !important;
+}
+.ant-tour .ant-tour-prev-btn:hover {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+}
+.ant-tour .ant-tour-next-btn,
+.ant-tour .ant-tour-finish-btn {
+  color: var(--ns-on-action) !important;
+  background: var(--ns-action) !important;
+  border-color: var(--ns-action) !important;
+}
+.ant-tour .ant-tour-next-btn:hover,
+.ant-tour .ant-tour-finish-btn:hover {
+  color: var(--ns-on-action) !important;
+  background: var(--ns-accent) !important;
+  border-color: var(--ns-accent) !important;
+  transform: translateY(-1px);
+}
+.ant-tour .ant-tour-arrow::before {
+  background: var(--ns-surface-raised) !important;
+  box-shadow: 1px -1px 0 var(--ns-border-strong) !important;
+}
+/* Keep the highlighted target readable without the native blue ring. */
+.ant-tour-target {
+  outline: 2px solid var(--ns-accent) !important;
+  outline-offset: 3px;
+  border-radius: var(--ns-radius);
+}
+@media (max-width: 700px) {
+  .ant-tour { max-width: calc(100vw - 28px) !important; }
+  .ant-tour .ant-tour-inner { padding: 18px !important; }
+  .ant-tour .ant-tour-title { font-size: 17px !important; }
+  .ant-tour .ant-tour-description { font-size: 14px !important; }
+  .ant-tour .ant-tour-footer { flex-wrap: wrap; }
 }
 
 /* Compiled MCSM primary utility classes and icon wrappers. */
@@ -957,6 +1339,14 @@ body.northstar-shell-ready #app-mount-point .app-header-wrapper { left: var(--ns
 svg[style*="rgb(24, 144, 255)"], svg[style*="rgb(22, 119, 255)"],
 svg[style*="#1890ff"], svg[style*="#1677ff"],
 [stroke="#1890ff"], [stroke="#1677ff"], [fill="#1890ff"], [fill="#1677ff"] {
+  stroke: var(--ns-accent) !important;
+  fill: currentColor !important;
+}
+[style*="#49b3ff"], [style*="#3b82f6"], [style*="#60a5fa"], [style*="#108ee9"],
+[stroke="#49b3ff"], [stroke="#3b82f6"], [stroke="#60a5fa"], [stroke="#108ee9"],
+[fill="#49b3ff"], [fill="#3b82f6"], [fill="#60a5fa"], [fill="#108ee9"] {
+  color: var(--ns-accent) !important;
+  border-color: var(--ns-accent) !important;
   stroke: var(--ns-accent) !important;
   fill: currentColor !important;
 }
@@ -1051,7 +1441,7 @@ svg[style*="#1890ff"], svg[style*="#1677ff"],
   margin: 0 0 4px;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 10px;
 }
 #before-app-mounted .loading-bars span {
   display: block;
@@ -1060,10 +1450,10 @@ svg[style*="#1890ff"], svg[style*="#1677ff"],
   border-radius: 5px;
   background: var(--ns-accent, #5086a1);
   transform-origin: center;
-  animation: ns-loading-bars 760ms ease-in-out infinite;
+  animation: ns-loading-bars 980ms ease-in-out infinite;
 }
-#before-app-mounted .loading-bars span:nth-child(2) { height: 56px; animation-delay: 100ms; }
-#before-app-mounted .loading-bars span:nth-child(3) { height: 32px; animation-delay: 200ms; }
+#before-app-mounted .loading-bars span:nth-child(2) { height: 56px; animation-delay: 140ms; }
+#before-app-mounted .loading-bars span:nth-child(3) { height: 32px; animation-delay: 280ms; }
 @keyframes ns-loading-bars {
   0%, 100% { transform: translateY(10px); opacity: .58; }
   50% { transform: translateY(-10px); opacity: 1; }
@@ -1093,4 +1483,298 @@ svg[style*="#1890ff"], svg[style*="#1677ff"],
 #before-app-mounted .error-button:active { transform: scale(.98); }
 @media (prefers-reduced-motion: reduce) {
   #before-app-mounted .loading-bars span { animation: none; transform: none; opacity: 1; }
+}
+
+/* Replace every native circular LoadingOutlined / Ant Spin indicator with the
+   same three-bar Northstar rhythm. The inherited font size scales it for full
+   page, card, dialog and compact button contexts. */
+.anticon-loading,
+.anticon-loading.anticon-spin,
+.ant-spin .anticon-loading,
+.ant-btn-loading-icon .anticon-loading {
+  position: relative !important;
+  display: inline-flex !important;
+  width: 1em !important;
+  min-width: 1em !important;
+  height: 1em !important;
+  align-items: center;
+  justify-content: center;
+  overflow: visible !important;
+  color: var(--ns-accent) !important;
+  animation: none !important;
+  transform: none !important;
+  vertical-align: -.125em;
+}
+.anticon-loading > svg {
+  display: block !important;
+  width: .14em !important;
+  height: .72em !important;
+  min-width: 3px;
+  min-height: 10px;
+  overflow: hidden;
+  color: transparent !important;
+  background: var(--ns-accent) !important;
+  border-radius: 999px;
+  animation: ns-loading-bars 980ms ease-in-out infinite 140ms !important;
+}
+.anticon.anticon-loading::before,
+.anticon.anticon-loading::after {
+  position: absolute !important;
+  top: 50% !important;
+  display: block !important;
+  width: .14em !important;
+  min-width: 3px !important;
+  content: "" !important;
+  background: var(--ns-accent) !important;
+  border-radius: 999px !important;
+  transform: translateY(-50%);
+  animation: ns-loading-bars-centered 980ms ease-in-out infinite !important;
+}
+.anticon.anticon-loading::before {
+  left: .17em !important;
+  height: .54em !important;
+}
+.anticon.anticon-loading::after {
+  right: .17em !important;
+  height: .4em !important;
+  animation-delay: 280ms !important;
+}
+@keyframes ns-loading-bars-centered {
+  0%, 100% { transform: translateY(calc(-50% + 8px)); opacity: .58; }
+  50% { transform: translateY(calc(-50% - 8px)); opacity: 1; }
+}
+
+/* Ant Spin without a custom indicator renders four rotating dots. */
+.ant-spin .ant-spin-dot {
+  display: inline-flex !important;
+  width: 42px !important;
+  height: 42px !important;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--ns-accent) !important;
+  animation: none !important;
+  transform: none !important;
+}
+.ant-spin .ant-spin-dot .ant-spin-dot-item {
+  position: static !important;
+  display: block !important;
+  width: 6px !important;
+  height: 26px !important;
+  margin: 0 !important;
+  background: var(--ns-accent) !important;
+  border-radius: 999px !important;
+  opacity: 1;
+  transform: none !important;
+  animation: ns-loading-bars 980ms ease-in-out infinite !important;
+}
+.ant-spin .ant-spin-dot .ant-spin-dot-item:nth-child(2) {
+  height: 34px !important;
+  animation-delay: 140ms !important;
+}
+.ant-spin .ant-spin-dot .ant-spin-dot-item:nth-child(3) {
+  height: 20px !important;
+  animation-delay: 280ms !important;
+}
+.ant-spin .ant-spin-dot .ant-spin-dot-item:nth-child(4) { display: none !important; }
+.ant-spin-sm .ant-spin-dot {
+  width: 24px !important;
+  height: 24px !important;
+  gap: 4px;
+}
+.ant-spin-sm .ant-spin-dot .ant-spin-dot-item {
+  width: 3px !important;
+  height: 13px !important;
+}
+.ant-spin-sm .ant-spin-dot .ant-spin-dot-item:nth-child(2) { height: 18px !important; }
+.ant-spin-sm .ant-spin-dot .ant-spin-dot-item:nth-child(3) { height: 10px !important; }
+/* Login and task dialogs use a 60px indicator; retain an airy presentation. */
+.logging-icon.anticon-loading,
+.ant-modal-root .anticon-loading[style*="60px"],
+.ant-spin .anticon-loading[style*="48px"] {
+  font-size: 56px !important;
+}
+/* Compact controls keep stable button dimensions while sharing the motif. */
+.ant-btn-loading-icon .anticon-loading {
+  font-size: 18px !important;
+}
+.ant-btn-loading-icon .anticon-loading > svg,
+.ant-btn-loading-icon .anticon-loading::before,
+.ant-btn-loading-icon .anticon-loading::after {
+  min-width: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .anticon-loading > svg,
+  .anticon-loading::before,
+  .anticon-loading::after,
+  .ant-spin .ant-spin-dot .ant-spin-dot-item {
+    animation: none !important;
+    opacity: 1;
+  }
+  .anticon.anticon-loading::before,
+  .anticon.anticon-loading::after { transform: translateY(-50%); }
+  .anticon-loading > svg { transform: none; }
+}
+
+/* Quick Start uses its own action-card component rather than Ant buttons. */
+#app-mount-point .manual-install-options .install-option-button {
+  height: 130px;
+  padding: 1px;
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  background-image: none !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: var(--ns-card-radius) !important;
+  box-shadow: none !important;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+#app-mount-point .manual-install-options .install-option-button .button-inner {
+  gap: 14px;
+  padding: 16px 18px;
+  color: var(--ns-text) !important;
+  background: var(--ns-surface) !important;
+  border-radius: calc(var(--ns-card-radius) - 1px) !important;
+}
+#app-mount-point .manual-install-options .install-option-button .button-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  place-items: center;
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border: 1px solid color-mix(in srgb, var(--ns-accent) 28%, var(--ns-border)) !important;
+  border-radius: var(--ns-radius) !important;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease) !important;
+}
+#app-mount-point .manual-install-options .install-option-button .button-icon .anticon,
+#app-mount-point .manual-install-options .install-option-button .button-icon svg {
+  color: var(--ns-accent) !important;
+  fill: currentColor !important;
+}
+#app-mount-point .manual-install-options .install-option-button .button-label {
+  color: var(--ns-text) !important;
+  font: 600 15px/1.4 "Maple Mono", ui-monospace, monospace;
+}
+#app-mount-point .manual-install-options .install-option-button .button-desc {
+  color: var(--ns-text-muted) !important;
+  font-size: 13px;
+  line-height: 1.45;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .manual-install-options .install-option-button:hover {
+    color: var(--ns-text) !important;
+    background: var(--ns-accent) !important;
+    background-image: none !important;
+    border-color: var(--ns-accent) !important;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--ns-accent) 14%, transparent) !important;
+    transform: translateY(-1px) !important;
+  }
+  #app-mount-point .manual-install-options .install-option-button:hover .button-inner {
+    background: var(--ns-surface) !important;
+  }
+  #app-mount-point .manual-install-options .install-option-button:hover .button-icon {
+    color: var(--ns-accent-ink) !important;
+    background: var(--ns-accent-soft-strong) !important;
+    border-color: var(--ns-accent) !important;
+  }
+  #app-mount-point .manual-install-options .install-option-button:hover .button-icon .anticon,
+  #app-mount-point .manual-install-options .install-option-button:hover .button-icon svg {
+    color: var(--ns-accent-ink) !important;
+  }
+}
+#app-mount-point .manual-install-options .install-option-button:active {
+  transform: scale(.99) !important;
+  box-shadow: none !important;
+}
+#app-mount-point .manual-install-options .install-option-button:focus-visible {
+  border-color: var(--ns-accent) !important;
+  box-shadow: 0 0 0 2px var(--ns-accent-soft-strong) !important;
+  outline: 0;
+}
+
+#app-mount-point .actions-button {
+  width: 100%;
+}
+#app-mount-point .actions-button .action-btn-item {
+  min-height: 58px;
+  padding: 12px 14px;
+  align-items: center;
+  gap: 12px;
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: var(--ns-radius) !important;
+  cursor: pointer;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+#app-mount-point .actions-button .action-btn-item > div:first-child {
+  display: inline-grid;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border: 1px solid color-mix(in srgb, var(--ns-accent) 34%, var(--ns-border)) !important;
+  border-radius: 8px;
+}
+#app-mount-point .actions-button .action-btn-item > div:first-child .anticon,
+#app-mount-point .actions-button .action-btn-item > div:first-child svg {
+  color: var(--ns-accent) !important;
+  font-size: 18px;
+}
+#app-mount-point .actions-button .action-btn-item > div:last-child {
+  min-width: 0;
+  margin-left: 0 !important;
+  color: var(--ns-text) !important;
+  font: 600 14px/1.4 "Maple Mono", ui-monospace, monospace;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .actions-button .action-btn-item:hover {
+    color: var(--ns-accent-ink) !important;
+    background: color-mix(in srgb, var(--ns-surface) 80%, var(--ns-accent-soft)) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+  #app-mount-point .actions-button .action-btn-item:hover > div:first-child {
+    background: var(--ns-accent-soft-strong) !important;
+  }
+}
+#app-mount-point .actions-button .action-btn-item:active {
+  transform: scale(.985);
+}
+#app-mount-point .actions-button .action-btn-item:focus-visible {
+  border-color: var(--ns-accent) !important;
+  box-shadow: 0 0 0 2px var(--ns-accent-soft-strong) !important;
+  outline: 0;
+}
+
+/* PanelOverview title glyphs are semantic accents; values and labels remain neutral. */
+#app-mount-point .panel-overview .title > .title-icon,
+#app-mount-point .panel-overview .overview-item__title > .overview-item__icon,
+#app-mount-point .panel-overview .title > .title-icon.anticon,
+#app-mount-point .panel-overview .overview-item__title > .overview-item__icon.anticon {
+  color: var(--ns-accent) !important;
+  opacity: 1 !important;
+}
+#app-mount-point .panel-overview .title > .title-icon svg,
+#app-mount-point .panel-overview .overview-item__title > .overview-item__icon svg {
+  color: var(--ns-accent) !important;
+  fill: currentColor !important;
+}
+
+/* Solid action buttons need an on-action icon, including Settings > Basic > Edit. */
+#app-mount-point .ant-btn-primary,
+#app-mount-point .ant-btn-primary:hover,
+#app-mount-point .ant-btn-primary:focus {
+  color: var(--ns-on-action) !important;
+}
+#app-mount-point .ant-btn-primary > .anticon,
+#app-mount-point .ant-btn-primary > .anticon svg,
+#app-mount-point .ant-btn-primary > .anticon-edit,
+#app-mount-point .ant-btn-primary > .anticon-edit svg {
+  color: var(--ns-on-action) !important;
+  fill: currentColor !important;
+  opacity: 1 !important;
 }

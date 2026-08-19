@@ -31,7 +31,7 @@ foreach ($relative in $files) {
 }
 
 $html = Get-Content -LiteralPath $indexPath -Raw
-$version = "20260819-15"
+$version = "20260819-32"
 $cssTag = '<link rel="stylesheet" href="./northstar-v10.css?v=' + $version + '">'
 $jsTag = '<script src="./northstar-v10.js?v=' + $version + '"></script>'
 
