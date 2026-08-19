@@ -553,6 +553,34 @@
     }
   };
 
+  const decorateRunningBadges = () => {
+    document.querySelectorAll("#app-mount-point .ant-tag").forEach((tag) => {
+      const label = tag.textContent.trim();
+      const running = /^(?:运行中|running)$/i.test(label);
+      const idle = /^(?:未运行|idle|not running)$/i.test(label);
+      const stopped = /^(?:已停止|stopped)$/i.test(label);
+      tag.classList.toggle("northstar-running-badge", running);
+      tag.classList.toggle("northstar-idle-badge", idle);
+      tag.classList.toggle("northstar-stopped-badge", stopped);
+      const state = running ? "success" : idle ? "idle" : stopped ? "stopped" : "";
+      if (state) {
+        tag.style.setProperty("color", `var(--ns-${state})`, "important");
+        tag.style.setProperty("background", `var(--ns-${state}-soft)`, "important");
+        tag.style.setProperty("opacity", "1", "important");
+        tag.style.setProperty("transition", "none", "important");
+        tag.style.setProperty("border-color", state === "success"
+          ? "color-mix(in srgb, var(--ns-success) 42%, var(--ns-border))"
+          : `var(--ns-${state}-border)`, "important");
+      } else {
+        tag.style.removeProperty("color");
+        tag.style.removeProperty("background");
+        tag.style.removeProperty("opacity");
+        tag.style.removeProperty("transition");
+        tag.style.removeProperty("border-color");
+      }
+    });
+  };
+
   const decorateMetricCards = () => {
     const convertStatusResourceRings = (card) => {
       const items = [...card.querySelectorAll(".status-bars > .status-bar-item")].slice(0, 2);
@@ -670,6 +698,7 @@
         window.__northstarSidebarDebug = "redirect";
         redirectAfterLogin();
         decorateInstanceControls();
+        decorateRunningBadges();
         decorateMetricCards();
         window.__northstarSidebarDebug = "ready";
       } catch (error) {
