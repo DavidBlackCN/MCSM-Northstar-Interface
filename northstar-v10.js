@@ -31,6 +31,15 @@
   let loginObserved = /#\/login(?:$|[?&])/.test(location.hash);
   let redirectedAfterLogin = false;
 
+  const decorateStartupLoader = () => {
+    const loader = document.querySelector("#before-app-mounted .loading");
+    if (!loader || loader.classList.contains("loading-bars")) return;
+    loader.classList.add("loading-bars");
+    loader.replaceChildren(...Array.from({ length: 3 }, () => document.createElement("span")));
+  };
+
+  decorateStartupLoader();
+
   const currentPalette = () => {
     const style = getComputedStyle(root);
     const accent = style.getPropertyValue("--ns-accent").trim() || "#5086a1";

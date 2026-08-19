@@ -1750,30 +1750,35 @@ svg[style*="#1890ff"], svg[style*="#1677ff"],
   color: var(--ns-text, #292b2f) !important;
   transition: background-color 180ms var(--ns-ease), color 180ms var(--ns-ease);
 }
-#before-app-mounted .loading-box { gap: 14px; }
+#before-app-mounted .loading-box { gap: 18px; }
 #before-app-mounted .loading-bars {
   display: flex;
   width: 64px;
-  height: 64px;
-  margin: 0 0 4px;
+  height: 68px;
+  margin: 0;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  animation: none !important;
 }
 #before-app-mounted .loading-bars span {
   display: block;
   width: 8px;
-  height: 42px;
-  border-radius: 5px;
+  height: 38px;
+  flex: 0 0 8px;
+  border-radius: 999px;
   background: var(--ns-accent, #5086a1);
   transform-origin: center;
-  animation: ns-loading-bars 980ms ease-in-out infinite;
+  animation: ns-loading-bars 1180ms ease-in-out infinite;
 }
-#before-app-mounted .loading-bars span:nth-child(2) { height: 56px; animation-delay: 140ms; }
-#before-app-mounted .loading-bars span:nth-child(3) { height: 32px; animation-delay: 280ms; }
+#before-app-mounted .loading-bars span:nth-child(2) { height: 50px; animation-delay: 170ms; }
+#before-app-mounted .loading-bars span:nth-child(3) { height: 30px; animation-delay: 340ms; }
 @keyframes ns-loading-bars {
-  0%, 100% { transform: translateY(10px); opacity: .58; }
-  50% { transform: translateY(-10px); opacity: 1; }
+  0%, 100% { transform: translateY(6px); opacity: .62; }
+  50% { transform: translateY(-6px); opacity: 1; }
 }
 #before-app-mounted .loading-title {
   margin: 0 0 2px;
@@ -1806,58 +1811,24 @@ svg[style*="#1890ff"], svg[style*="#1677ff"],
 }
 #before-app-mounted .error-button:active { transform: scale(.98); }
 
-/* MCSM 10.18.0 still ships the startup fallback as one circular `.loading`
-   element. The themed three-bar markup is used by newer packaged indexes, but
-   this fallback keeps README-only installs visually consistent as well. */
+/* Static fallback before northstar-v10.js converts MCSM's single `.loading`
+   element into three real bars. Keep the circle hidden instead of animating
+   the whole container, which would shift the bars toward the title. */
 #before-app-mounted .loading:not(.loading-bars) {
-  position: relative;
-  display: block;
+  display: flex;
   width: 64px;
-  height: 64px;
-  margin: 0 0 4px;
+  height: 68px;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
   border: 0 !important;
   border-radius: 0;
   background: transparent !important;
   animation: none !important;
 }
-#before-app-mounted .loading:not(.loading-bars)::before,
-#before-app-mounted .loading:not(.loading-bars)::after {
-  position: absolute;
-  top: 50%;
-  display: block;
-  width: 8px;
-  border-radius: 5px;
-  background: var(--ns-accent, #5086a1);
-  content: "";
-  transform: translateY(-50%);
-  animation: ns-loading-bars 980ms ease-in-out infinite;
-}
-#before-app-mounted .loading:not(.loading-bars)::before {
-  left: 14px;
-  height: 42px;
-}
-#before-app-mounted .loading:not(.loading-bars)::after {
-  right: 14px;
-  height: 32px;
-  animation-delay: 280ms;
-}
-#before-app-mounted .loading:not(.loading-bars) {
-  box-shadow: inset 0 0 0 0 transparent;
-}
-#before-app-mounted .loading:not(.loading-bars)::marker { display: none; }
-@supports (background: color-mix(in srgb, black 10%, white)) {
-  #before-app-mounted .loading:not(.loading-bars) {
-    background:
-      linear-gradient(var(--ns-accent, #5086a1), var(--ns-accent, #5086a1))
-      center / 8px 56px no-repeat !important;
-    animation: ns-loading-bars 980ms ease-in-out infinite !important;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   #before-app-mounted .loading-bars span,
-  #before-app-mounted .loading:not(.loading-bars),
-  #before-app-mounted .loading:not(.loading-bars)::before,
-  #before-app-mounted .loading:not(.loading-bars)::after {
+  #before-app-mounted .loading:not(.loading-bars) {
     animation: none !important;
     transform: none;
     opacity: 1;
