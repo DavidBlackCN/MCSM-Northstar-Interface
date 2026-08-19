@@ -1,21 +1,20 @@
 # MCSManager Northstar public
 
-这是已经整理好的 MCSManager 10.18.0 Web `public` 目录，包含官方前端资源和 Northstar 主题覆盖层。
+这是面向 MCSManager 10.18.0 的 Northstar 主题覆盖层。仓库不复制 MCSM 官方 `assets/`、Vue、Ant Design 或业务 bundle，避免主题锁定某个 MCSM 构建版本。
 
 ## 直接部署
 
 1. 停止 MCSManager Web 服务并备份原来的 `web/public`。
-2. 将本目录中的全部内容复制到 MCSManager 的 `web/public` 目录，覆盖同名文件。
+2. 在 PowerShell 中运行：
+
+   ```powershell
+   .\install-theme.ps1 -PublicPath 'D:\path\to\MCSManager\web\public'
+   ```
+
+   脚本只复制 `northstar-v10.css`、`northstar-v10.js`、Maple Mono 字体和 `img/logo.png`，并在目标版本现有的 `index.html` 中注入资源引用；不会复制或修改官方 `assets/`、`static/`、语言包和业务 bundle。
 3. 启动服务后使用 `Ctrl+F5` 强制刷新浏览器缓存。
 
-本目录的 `index.html` 已经加载：
-
-```html
-./northstar-v10.css?v=20260819-15
-./northstar-v10.js?v=20260819-15
-```
-
-不需要额外安装 Node.js、npm、插件或 CDN 依赖。主题不替换 MCSM 官方 `assets/`、Vue、Ant Design 或业务 bundle，因此 10.18.0 的自定义布局入口和内置卡片仍由官方前端负责。
+不需要额外安装 Node.js、npm、插件或 CDN 依赖。主题只覆盖 `northstar-v10.css`、`northstar-v10.js`、入口中的 Northstar 引用和必要的主题资源，因此 MCSM 更新后可以继续使用新版本自带的官方 bundle。
 
 ## 主题功能
 
@@ -47,6 +46,6 @@
 
 ## 目录说明
 
-这是发布目录，不是独立构建项目。根目录中的 `index.html`、`assets/`、`static/`、`fonts/` 和其他官方资源都是 MCSM 10.18.0 运行所需内容；`northstar-v10.css` 和 `northstar-v10.js` 是主题覆盖层。
+这是主题覆盖目录，不是完整的 MCSM 构建产物。`northstar-v10.css` 和 `northstar-v10.js` 是主题覆盖层；`fonts/MapleMono-*.woff2`、`img/logo.png` 和 `cards/` 是主题附加资源。MCSM 官方 `index.html`、`assets/`、`static/`、Vue、Ant Design、官方字体、语言包、favicon、manifest、robots 和业务 bundle 必须由目标版本自己的 `web/public` 提供。
 
-不要删除或替换 `assets/` 中的官方文件，也不要把旧版 MCSM 主题的 `app.js`、`vendor.js` 或 `app.css` 覆盖到本目录。
+不要删除或替换目标 MCSM 版本的官方 `assets/`，也不要把旧版 MCSM 主题的 `app.js`、`vendor.js` 或 `app.css` 覆盖到目标目录。
