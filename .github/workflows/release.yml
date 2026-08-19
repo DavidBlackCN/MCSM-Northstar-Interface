@@ -1,0 +1,58 @@
+name: Release ZIP
+
+"on":
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build package
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          short_sha="${GITHUB_SHA::7}"
+          tag="build-${GITHUB_RUN_NUMBER}"
+          archive="MCSM-Northstar-Interface-${tag}-${short_sha}.zip"
+
+          mkdir -p dist/package
+          cp northstar-v10.css northstar-v10.js README.md dist/package/
+          cp -R fonts img cards dist/package/
+
+          (
+            cd dist/package
+            zip -r "../${archive}" .
+          )
+
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "archive=${archive}" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.package.outputs.tag }}
+          ARCHIVE: ${{ steps.package.outputs.archive }}
+          SHORT_SHA: ${{ steps.package.outputs.short_sha }}
+        shell: bash
+        run: |
+          gh release create "$TAG" "dist/$ARCHIVE" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Northstar $TAG" \
+            --notes "自动构建自提交 $SHORT_SHA。下载 ZIP 后按 README 安装。"

@@ -7,3 +7,6 @@ Thumbs.db
 preview.html
 preview.ps1
 preview.cmd
+
+# Local MCSM deployment helper
+install-theme.ps1
