@@ -309,6 +309,74 @@
   align-items: center;
   border-radius: 8px !important;
 }
+
+/* User management renders its pager inside Ant Table rather than the shared
+   title toolbar. Apply the same 40px outlined controls used by instances. */
+#app-mount-point .ant-table-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#app-mount-point .ant-table-pagination .ant-pagination-item {
+  min-width: 40px;
+  height: 40px;
+  margin: 0 !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  line-height: 38px;
+}
+#app-mount-point .ant-table-pagination .ant-pagination-item a {
+  height: 38px;
+  color: var(--ns-text-muted) !important;
+  font-size: 15px;
+  line-height: 38px;
+}
+#app-mount-point .ant-table-pagination .ant-pagination-item-active {
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-accent) !important;
+}
+#app-mount-point .ant-table-pagination .ant-pagination-item-active a {
+  color: var(--ns-accent) !important;
+  font-weight: 600;
+}
+#app-mount-point .ant-table-pagination :is(.ant-pagination-prev, .ant-pagination-next) {
+  width: 40px;
+  height: 40px;
+  margin: 0 !important;
+}
+#app-mount-point .ant-table-pagination :is(.ant-pagination-prev, .ant-pagination-next) .ant-pagination-item-link {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  place-items: center;
+}
+#app-mount-point .ant-table-pagination .ant-pagination-options,
+#app-mount-point .ant-table-pagination .ant-pagination-options .ant-select-selector {
+  height: 40px !important;
+}
+#app-mount-point .ant-table-pagination .ant-pagination-options .ant-select-selector {
+  align-items: center;
+  border-radius: 8px !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .ant-table-pagination .ant-pagination-item:not(.ant-pagination-item-active):hover,
+  #app-mount-point .ant-table-pagination :is(.ant-pagination-prev, .ant-pagination-next):not(.ant-pagination-disabled) .ant-pagination-item-link:hover {
+    color: var(--ns-accent) !important;
+    background: var(--ns-accent-soft) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+}
+#app-mount-point .ant-table-pagination :is(.ant-pagination-prev, .ant-pagination-next).ant-pagination-disabled .ant-pagination-item-link {
+  color: var(--ns-text-faint) !important;
+  opacity: .72;
+}
 @media (max-width: 1199px) {
   #app-mount-point .ant-col:has(> .instance-card) {
     flex-basis: 50% !important;
@@ -329,4 +397,3 @@
     transform: none !important;
   }
 }
-

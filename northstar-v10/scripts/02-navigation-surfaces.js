@@ -56,6 +56,26 @@
       if (!id || id === "ALL_DAEMON_MODE" || options.some((item) => item.id === id)) return;
       options.push({ id, label: (label || id).trim() });
     };
+    try {
+      const selected = JSON.parse(localStorage.getItem("pageSelectedRemote") || "null");
+      add(selected?.uuid, selected?.remarks || selected?.nickname || selected?.name || selected?.ip || selected?.uuid);
+    } catch {}
+    imageManagerCandidates().forEach((id) => add(id, id));
+    try {
+      const appEntry = [...document.scripts].find((script) => script.type === "module" && /\/assets\/index-[^/]+\.js(?:\?|$)/.test(script.src))?.src;
+      if (appEntry) {
+        const appApi = await import(appEntry);
+        const remoteServices = appApi.d?.();
+        if (remoteServices?.execute) {
+          await remoteServices.execute();
+          (remoteServices.state?.value || []).forEach((service) => {
+            const id = service?.uuid || service?.daemonId || service?.id;
+            const label = service?.remarks || service?.remark || service?.nickname || service?.name || service?.ip || id;
+            add(id, label);
+          });
+        }
+      }
+    } catch {}
     document.querySelectorAll(".ant-dropdown-menu-item[data-uuid]").forEach((item) => {
       add(item.getAttribute("data-uuid"), item.textContent);
     });
@@ -73,6 +93,49 @@
     const expanded = trigger.getAttribute("aria-expanded");
     if (expanded === "true") trigger.click();
     return options;
+  };
+
+  const showImageNodeMenu = async (switchButton) => {
+    const existing = document.querySelector(".northstar-image-node-menu");
+    if (existing) {
+      existing.remove();
+      switchButton.setAttribute("aria-expanded", "false");
+      return;
+    }
+    const options = await imageManagerNodeOptions();
+    if (!options.length) {
+      switchButton.setAttribute("aria-busy", "true");
+      window.setTimeout(() => switchButton.removeAttribute("aria-busy"), 700);
+      return;
+    }
+    const menu = document.createElement("div");
+    menu.className = "northstar-image-node-menu";
+    options.forEach(({ id, label }) => {
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "northstar-image-node-menu__item";
+      item.dataset.daemonId = id;
+      item.textContent = label;
+      item.addEventListener("click", () => {
+        localStorage.setItem("pageSelectedRemote", JSON.stringify({ uuid: id }));
+        location.hash = `/node/image?${new URLSearchParams({ daemonId: id }).toString()}`;
+        menu.remove();
+      });
+      menu.appendChild(item);
+    });
+    document.body.appendChild(menu);
+    switchButton.setAttribute("aria-expanded", "true");
+    const buttonRect = switchButton.getBoundingClientRect();
+    menu.style.left = `${Math.max(12, buttonRect.left)}px`;
+    menu.style.top = `${buttonRect.bottom + 8}px`;
+    const close = (event) => {
+      if (!menu.contains(event.target) && event.target !== switchButton) {
+        menu.remove();
+        switchButton.setAttribute("aria-expanded", "false");
+        document.removeEventListener("pointerdown", close, true);
+      }
+    };
+    document.addEventListener("pointerdown", close, true);
   };
 
   const canReadImageManager = async (daemonId) => {
@@ -242,7 +305,12 @@
       const scope = pagination.closest(".ant-table-wrapper") || pagination.parentElement;
       scope?.classList.add("northstar-image-table");
     });
-    if (!toolbar || toolbar.querySelector(".northstar-image-node-switch")) return;
+    if (!toolbar) return;
+    const existingSwitch = toolbar.querySelector(".northstar-image-node-switch");
+    if (existingSwitch) {
+      existingSwitch.onclick = () => showImageNodeMenu(existingSwitch);
+      return;
+    }
     const title = [...toolbar.querySelectorAll("h1, h2, h3, h4, h5, .ant-typography")]
       .find((element) => /镜像|image/i.test(element.textContent || ""));
     const anchor = title?.parentElement || toolbar.querySelector(".menus-item-left") || toolbar;
@@ -251,48 +319,7 @@
     switchButton.className = "northstar-image-node-switch ant-btn ant-btn-default";
     switchButton.title = "切换节点";
     switchButton.innerHTML = `${svg(icons.node)}<span>切换节点</span>`;
-    switchButton.addEventListener("click", async () => {
-      const existing = document.querySelector(".northstar-image-node-menu");
-      if (existing) {
-        existing.remove();
-        switchButton.setAttribute("aria-expanded", "false");
-        return;
-      }
-      const options = await imageManagerNodeOptions();
-      if (!options.length) {
-        switchButton.setAttribute("aria-busy", "true");
-        window.setTimeout(() => switchButton.removeAttribute("aria-busy"), 700);
-        return;
-      }
-      const menu = document.createElement("div");
-      menu.className = "northstar-image-node-menu";
-      options.forEach(({ id, label }) => {
-        const item = document.createElement("button");
-        item.type = "button";
-        item.className = "northstar-image-node-menu__item";
-        item.dataset.daemonId = id;
-        item.textContent = label;
-        item.addEventListener("click", () => {
-          localStorage.setItem("pageSelectedRemote", JSON.stringify({ uuid: id }));
-          location.hash = `/node/image?${new URLSearchParams({ daemonId: id }).toString()}`;
-          menu.remove();
-        });
-        menu.appendChild(item);
-      });
-      document.body.appendChild(menu);
-      switchButton.setAttribute("aria-expanded", "true");
-      const buttonRect = switchButton.getBoundingClientRect();
-      menu.style.left = `${Math.max(12, buttonRect.left)}px`;
-      menu.style.top = `${buttonRect.bottom + 8}px`;
-      const close = (event) => {
-        if (!menu.contains(event.target) && event.target !== switchButton) {
-          menu.remove();
-          switchButton.setAttribute("aria-expanded", "false");
-          document.removeEventListener("pointerdown", close, true);
-        }
-      };
-      document.addEventListener("pointerdown", close, true);
-    });
+    switchButton.onclick = () => showImageNodeMenu(switchButton);
     switchButton.setAttribute("aria-haspopup", "menu");
     switchButton.setAttribute("aria-expanded", "false");
     anchor.appendChild(switchButton);
