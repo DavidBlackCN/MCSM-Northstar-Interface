@@ -53,8 +53,25 @@
   const imageManagerNodeOptions = async () => {
     const options = [];
     const add = (id, label) => {
-      if (!id || id === "ALL_DAEMON_MODE" || options.some((item) => item.id === id)) return;
-      options.push({ id, label: (label || id).trim() });
+      if (!id || id === "ALL_DAEMON_MODE") return;
+      const resolvedLabel = String(label || id).trim();
+      const existing = options.find((item) => item.id === id);
+      if (existing) {
+        if (existing.label === id && resolvedLabel !== id) existing.label = resolvedLabel;
+        return;
+      }
+      options.push({ id, label: resolvedLabel });
+    };
+    const persistActiveLabel = () => {
+      const routeDaemonId = new URLSearchParams(location.hash.split("?")[1] || "").get("daemonId");
+      const activeId = routeDaemonId || selectedDaemonId();
+      const activeOption = options.find((item) => item.id === activeId);
+      if (!activeOption || activeOption.label === activeOption.id) return;
+      try {
+        const selected = JSON.parse(localStorage.getItem("pageSelectedRemote") || "null");
+        if (selected?.uuid === activeId && selected.remarks === activeOption.label) return;
+        localStorage.setItem("pageSelectedRemote", JSON.stringify({ ...(selected || {}), uuid: activeId, remarks: activeOption.label }));
+      } catch {}
     };
     try {
       const selected = JSON.parse(localStorage.getItem("pageSelectedRemote") || "null");
@@ -79,7 +96,10 @@
     document.querySelectorAll(".ant-dropdown-menu-item[data-uuid]").forEach((item) => {
       add(item.getAttribute("data-uuid"), item.textContent);
     });
-    if (options.length) return options;
+    if (options.length) {
+      persistActiveLabel();
+      return options;
+    }
     const trigger = [...document.querySelectorAll(".between-menus-container button.ant-dropdown-trigger, .app-header-content button.ant-dropdown-trigger")]
       .find((button) => !button.closest(".northstar-image-node-menu") && !/主题|theme|color/i.test(button.textContent || ""));
     if (!trigger) return options;
@@ -92,6 +112,7 @@
     }
     const expanded = trigger.getAttribute("aria-expanded");
     if (expanded === "true") trigger.click();
+    persistActiveLabel();
     return options;
   };
 
@@ -110,14 +131,19 @@
     }
     const menu = document.createElement("div");
     menu.className = "northstar-image-node-menu";
+    const routeDaemonId = new URLSearchParams(location.hash.split("?")[1] || "").get("daemonId");
+    const selectedId = routeDaemonId || selectedDaemonId();
     options.forEach(({ id, label }) => {
       const item = document.createElement("button");
       item.type = "button";
       item.className = "northstar-image-node-menu__item";
       item.dataset.daemonId = id;
       item.textContent = label;
+      item.setAttribute("role", "menuitemradio");
+      item.setAttribute("aria-checked", String(id === selectedId));
+      item.classList.toggle("is-selected", id === selectedId);
       item.addEventListener("click", () => {
-        localStorage.setItem("pageSelectedRemote", JSON.stringify({ uuid: id }));
+        localStorage.setItem("pageSelectedRemote", JSON.stringify({ uuid: id, remarks: label }));
         location.hash = `/node/image?${new URLSearchParams({ daemonId: id }).toString()}`;
         menu.remove();
       });

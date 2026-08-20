@@ -189,6 +189,13 @@
   background: var(--ns-accent-soft);
   outline: none;
 }
+.northstar-image-node-menu__item.is-selected {
+  padding: 0 9px;
+  color: var(--ns-accent-ink);
+  background: var(--ns-accent-soft);
+  border: 2px solid var(--ns-accent);
+  font-weight: 600;
+}
 .between-menus-container .menus-item-right .ant-pagination-item-active {
   min-width: 40px;
   height: 40px;
