@@ -32,7 +32,12 @@ jobs:
 
           mkdir -p dist/package
           cp northstar-v10.css northstar-v10.js README.md dist/package/
-          cp -R fonts img cards dist/package/
+          cp -R fonts img cards northstar-v10 dist/package/
+
+          test -f dist/package/northstar-v10/00-tokens-foundation.css
+          test -f dist/package/northstar-v10/scripts/00-runtime-bridges.js
+          test -f dist/package/northstar-v10/scripts/01-shell-controls.js
+          test -f dist/package/northstar-v10/scripts/02-navigation-surfaces.js
 
           (
             cd dist/package
