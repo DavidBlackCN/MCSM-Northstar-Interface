@@ -1,0 +1,274 @@
+/* The native clock uses a masked number wheel inside a flex-centered wrapper.
+   Give the card enough breathing room while keeping the wheel viewport itself
+   clipped, so its neighboring digits never escape into the card. */
+#app-mount-point .card-panel:has(.time-container) {
+  min-height: 360px !important;
+  height: 360px !important;
+}
+#app-mount-point .card-panel:has(.time-container) .card-panel-content {
+  min-height: 290px !important;
+  height: 290px !important;
+  overflow: visible !important;
+}
+#app-mount-point .card-panel:has(.time-container) .time-wrapper {
+  min-height: 258px !important;
+  height: 258px !important;
+  overflow: hidden !important;
+  align-items: center;
+}
+#app-mount-point .card-panel:has(.time-container) .time-container {
+  --size: 90px !important;
+  height: var(--size) !important;
+  font-size: 60px !important;
+  line-height: 90px !important;
+  overflow: hidden !important;
+}
+#app-mount-point .card-panel:has(.time-container) .time-container .h,
+#app-mount-point .card-panel:has(.time-container) .time-container .m,
+#app-mount-point .card-panel:has(.time-container) .time-container .s {
+  line-height: 90px !important;
+}
+#app-mount-point .card-panel:has(.time-container) .time-container .h .left,
+#app-mount-point .card-panel:has(.time-container) .time-container .h .right,
+#app-mount-point .card-panel:has(.time-container) .time-container .m .left,
+#app-mount-point .card-panel:has(.time-container) .time-container .m .right,
+#app-mount-point .card-panel:has(.time-container) .time-container .s .left,
+#app-mount-point .card-panel:has(.time-container) .time-container .s .right {
+  transform: translateY(calc(var(--n) * -90px)) !important;
+}
+#app-mount-point .card-panel:has(.time-container) .time-container .h span,
+#app-mount-point .card-panel:has(.time-container) .time-container .m span,
+#app-mount-point .card-panel:has(.time-container) .time-container .s span {
+  height: 90px !important;
+  line-height: 90px !important;
+}
+#app-mount-point .card-panel:has(.time-container) .card-panel-content > .time-wrapper + div {
+  display: none !important;
+}
+
+/* Northstar startup surface. The inline fallback in index.html keeps the
+   loading page usable before the theme stylesheet has finished loading. */
+#before-app-mounted {
+  --loading-bg-color: var(--ns-bg, #fffcf5) !important;
+  --loading-color: var(--ns-text, #292b2f) !important;
+  --loading-subtitle-color: var(--ns-text-muted, #5c6166) !important;
+  background: var(--ns-bg, #fffcf5) !important;
+  color: var(--ns-text, #292b2f) !important;
+  transition: background-color 180ms var(--ns-ease), color 180ms var(--ns-ease);
+}
+#before-app-mounted .loading-box { gap: 18px; }
+#before-app-mounted .loading-bars {
+  display: flex;
+  width: 64px;
+  height: 68px;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  animation: none !important;
+}
+#before-app-mounted .loading-bars span {
+  display: block;
+  width: 8px;
+  height: 38px;
+  flex: 0 0 8px;
+  border-radius: 999px;
+  background: var(--ns-accent, #5086a1);
+  transform-origin: center;
+  animation: ns-loading-bars 1180ms ease-in-out infinite;
+}
+#before-app-mounted .loading-bars span:nth-child(2) { height: 50px; animation-delay: 170ms; }
+#before-app-mounted .loading-bars span:nth-child(3) { height: 30px; animation-delay: 340ms; }
+@keyframes ns-loading-bars {
+  0%, 100% { transform: translateY(6px); opacity: .62; }
+  50% { transform: translateY(-6px); opacity: 1; }
+}
+#before-app-mounted .loading-title {
+  margin: 0 0 2px;
+  font-size: 0 !important;
+  color: var(--ns-text-muted, #5c6166) !important;
+  font-family: "Maple Mono", ui-monospace, monospace;
+  font-weight: 500;
+  line-height: 1.4;
+}
+#before-app-mounted .loading-title::after {
+  content: "正在加载页面...";
+  font-size: 18px;
+}
+#before-app-mounted .error-title {
+  color: var(--ns-text, #292b2f) !important;
+  font: 600 20px/1.35 "Maple Mono", ui-monospace, monospace;
+}
+#before-app-mounted .error-message { color: var(--ns-text-muted, #5c6166) !important; }
+#before-app-mounted .error-button {
+  color: var(--ns-on-action, #fff) !important;
+  background: var(--ns-action, #3f728d) !important;
+  border: 1px solid var(--ns-action, #3f728d) !important;
+  border-radius: 8px;
+  transition: background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease);
+}
+#before-app-mounted .error-button:hover {
+  background: var(--ns-accent, #5086a1) !important;
+  border-color: var(--ns-accent, #5086a1) !important;
+  transform: translateY(-1px);
+}
+#before-app-mounted .error-button:active { transform: scale(.98); }
+
+/* Static fallback before northstar-v10.js converts MCSM's single `.loading`
+   element into three real bars. Keep the circle hidden instead of animating
+   the whole container, which would shift the bars toward the title. */
+#before-app-mounted .loading:not(.loading-bars) {
+  display: flex;
+  width: 64px;
+  height: 68px;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  #before-app-mounted .loading-bars span,
+  #before-app-mounted .loading:not(.loading-bars) {
+    animation: none !important;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Replace every native circular LoadingOutlined / Ant Spin indicator with the
+   same three-bar Northstar rhythm. The inherited font size scales it for full
+   page, card, dialog and compact button contexts. */
+.anticon-loading,
+.anticon-loading.anticon-spin,
+.ant-spin .anticon-loading,
+.ant-btn-loading-icon .anticon-loading {
+  position: relative !important;
+  display: inline-flex !important;
+  width: 1em !important;
+  min-width: 1em !important;
+  height: 1em !important;
+  align-items: center;
+  justify-content: center;
+  overflow: visible !important;
+  color: var(--ns-accent) !important;
+  animation: none !important;
+  transform: none !important;
+  vertical-align: -.125em;
+}
+.anticon-loading > svg {
+  display: block !important;
+  width: .14em !important;
+  height: .72em !important;
+  min-width: 3px;
+  min-height: 10px;
+  overflow: hidden;
+  color: transparent !important;
+  background: var(--ns-accent) !important;
+  border-radius: 999px;
+  animation: ns-loading-bars 980ms ease-in-out infinite 140ms !important;
+}
+.anticon.anticon-loading::before,
+.anticon.anticon-loading::after {
+  position: absolute !important;
+  top: 50% !important;
+  display: block !important;
+  width: .14em !important;
+  min-width: 3px !important;
+  content: "" !important;
+  background: var(--ns-accent) !important;
+  border-radius: 999px !important;
+  transform: translateY(-50%);
+  animation: ns-loading-bars-centered 980ms ease-in-out infinite !important;
+}
+.anticon.anticon-loading::before {
+  left: .17em !important;
+  height: .54em !important;
+}
+.anticon.anticon-loading::after {
+  right: .17em !important;
+  height: .4em !important;
+  animation-delay: 280ms !important;
+}
+@keyframes ns-loading-bars-centered {
+  0%, 100% { transform: translateY(calc(-50% + 8px)); opacity: .58; }
+  50% { transform: translateY(calc(-50% - 8px)); opacity: 1; }
+}
+
+/* Ant Spin without a custom indicator renders four rotating dots. */
+.ant-spin .ant-spin-dot {
+  display: inline-flex !important;
+  width: 42px !important;
+  height: 42px !important;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--ns-accent) !important;
+  animation: none !important;
+  transform: none !important;
+}
+.ant-spin .ant-spin-dot .ant-spin-dot-item {
+  position: static !important;
+  display: block !important;
+  width: 6px !important;
+  height: 26px !important;
+  margin: 0 !important;
+  background: var(--ns-accent) !important;
+  border-radius: 999px !important;
+  opacity: 1;
+  transform: none !important;
+  animation: ns-loading-bars 980ms ease-in-out infinite !important;
+}
+.ant-spin .ant-spin-dot .ant-spin-dot-item:nth-child(2) {
+  height: 34px !important;
+  animation-delay: 140ms !important;
+}
+.ant-spin .ant-spin-dot .ant-spin-dot-item:nth-child(3) {
+  height: 20px !important;
+  animation-delay: 280ms !important;
+}
+.ant-spin .ant-spin-dot .ant-spin-dot-item:nth-child(4) { display: none !important; }
+.ant-spin-sm .ant-spin-dot {
+  width: 24px !important;
+  height: 24px !important;
+  gap: 4px;
+}
+.ant-spin-sm .ant-spin-dot .ant-spin-dot-item {
+  width: 3px !important;
+  height: 13px !important;
+}
+.ant-spin-sm .ant-spin-dot .ant-spin-dot-item:nth-child(2) { height: 18px !important; }
+.ant-spin-sm .ant-spin-dot .ant-spin-dot-item:nth-child(3) { height: 10px !important; }
+/* Login and task dialogs use a 60px indicator; retain an airy presentation. */
+.logging-icon.anticon-loading,
+.ant-modal-root .anticon-loading[style*="60px"],
+.ant-spin .anticon-loading[style*="48px"] {
+  font-size: 56px !important;
+}
+/* Compact controls keep stable button dimensions while sharing the motif. */
+.ant-btn-loading-icon .anticon-loading {
+  font-size: 18px !important;
+}
+.ant-btn-loading-icon .anticon-loading > svg,
+.ant-btn-loading-icon .anticon-loading::before,
+.ant-btn-loading-icon .anticon-loading::after {
+  min-width: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .anticon-loading > svg,
+  .anticon-loading::before,
+  .anticon-loading::after,
+  .ant-spin .ant-spin-dot .ant-spin-dot-item {
+    animation: none !important;
+    opacity: 1;
+  }
+  .anticon.anticon-loading::before,
+  .anticon.anticon-loading::after { transform: translateY(-50%); }
+  .anticon-loading > svg { transform: none; }
+}
+

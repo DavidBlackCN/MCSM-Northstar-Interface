@@ -1,0 +1,365 @@
+/* Running-instance actions: warning for restart, danger for termination. */
+#app-mount-point .northstar-terminal-action--restart {
+  color: var(--ns-warning) !important;
+  background: var(--ns-warning-soft) !important;
+  border-color: color-mix(in srgb, var(--ns-warning) 58%, var(--ns-border-strong)) !important;
+}
+#app-mount-point .northstar-terminal-action--terminate {
+  color: var(--ns-danger) !important;
+  background: var(--ns-danger-soft) !important;
+  border-color: color-mix(in srgb, var(--ns-danger) 58%, var(--ns-border-strong)) !important;
+}
+#app-mount-point .northstar-terminal-action--restart .anticon,
+#app-mount-point .northstar-terminal-action--restart svg {
+  color: var(--ns-warning) !important;
+}
+#app-mount-point .northstar-terminal-action--terminate .anticon,
+#app-mount-point .northstar-terminal-action--terminate svg {
+  color: var(--ns-danger) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .northstar-terminal-action--restart:not(:disabled):hover {
+    color: var(--ns-on-action) !important;
+    background: color-mix(in srgb, var(--ns-warning) 78%, #4b3a18) !important;
+    border-color: var(--ns-warning) !important;
+    transform: translateY(-1px);
+  }
+  #app-mount-point .northstar-terminal-action--terminate:not(:disabled):hover {
+    color: var(--ns-on-action) !important;
+    background: color-mix(in srgb, var(--ns-danger) 62%, #651419) !important;
+    border-color: var(--ns-danger) !important;
+    transform: translateY(-1px);
+  }
+  #app-mount-point .northstar-terminal-action--restart:not(:disabled):hover .anticon,
+  #app-mount-point .northstar-terminal-action--restart:not(:disabled):hover svg,
+  #app-mount-point .northstar-terminal-action--terminate:not(:disabled):hover .anticon,
+  #app-mount-point .northstar-terminal-action--terminate:not(:disabled):hover svg {
+    color: var(--ns-on-action) !important;
+  }
+}
+#app-mount-point .northstar-terminal-action--restart:not(:disabled):active,
+#app-mount-point .northstar-terminal-action--terminate:not(:disabled):active {
+  transform: scale(.98);
+}
+
+/* File and server-config editors use CodeMirror 6. Keep every text-bearing
+   layer on Maple Mono so measurements, selections, and visible glyphs agree. */
+.northstar-code-editor,
+.northstar-code-editor .cm-scroller,
+.northstar-code-editor .cm-content,
+.northstar-code-editor .cm-line,
+.northstar-code-editor .cm-gutters,
+.northstar-code-editor .cm-gutter,
+.northstar-code-editor .cm-tooltip,
+.northstar-code-editor .cm-panels,
+.northstar-code-editor textarea {
+  font-family: "Maple Mono", monospace !important;
+}
+.northstar-code-editor {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+.northstar-code-editor.cm-focused {
+  border-color: var(--ns-accent) !important;
+  box-shadow: 0 0 0 2px var(--ns-accent-soft-strong) !important;
+  outline: none !important;
+}
+.northstar-code-editor .cm-scroller,
+.northstar-code-editor .cm-content {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  caret-color: var(--ns-accent) !important;
+}
+.northstar-code-editor .cm-content {
+  padding-block: 6px 18px !important;
+  line-height: 1.55;
+}
+.northstar-code-editor .cm-gutters {
+  color: var(--ns-text-faint) !important;
+  background: var(--ns-surface-soft) !important;
+  border-right: 1px solid var(--ns-border) !important;
+}
+.northstar-code-editor .cm-activeLine,
+.northstar-code-editor .cm-activeLineGutter {
+  background: var(--ns-editor-active-line) !important;
+}
+.northstar-code-editor .cm-activeLineGutter {
+  color: var(--ns-accent-ink) !important;
+  font-weight: 600;
+}
+.northstar-code-editor .cm-selectionLayer .cm-selectionBackground,
+.northstar-code-editor.cm-focused .cm-selectionLayer .cm-selectionBackground,
+.northstar-code-editor .cm-selectionBackground {
+  background-color: var(--ns-editor-selection) !important;
+  border: 1px solid var(--ns-editor-selection-edge) !important;
+  border-radius: 2px;
+  opacity: 1 !important;
+}
+.northstar-code-editor .cm-content ::selection {
+  color: inherit !important;
+  background: var(--ns-editor-selection) !important;
+}
+.northstar-code-editor .cm-selectionMatch {
+  color: inherit !important;
+  background: var(--ns-editor-match) !important;
+  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--ns-accent) 58%, transparent) !important;
+}
+.northstar-code-editor .cm-cursor,
+.northstar-code-editor .cm-dropCursor {
+  border-left: 2px solid var(--ns-accent) !important;
+}
+.northstar-code-editor .cm-panels,
+.northstar-code-editor .cm-tooltip,
+.northstar-code-editor .cm-tooltip-autocomplete > ul {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  border-color: var(--ns-border-strong) !important;
+}
+.northstar-code-editor .cm-tooltip-autocomplete > ul > li[aria-selected] {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+}
+
+/* File names are navigation affordances, not framed actions. */
+#app-mount-point .northstar-file-table .file-name,
+#app-mount-point .northstar-file-table .file-name.ant-btn,
+#app-mount-point .northstar-file-table .file-name.ant-btn-link {
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 2px 0 !important;
+  color: var(--ns-text) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+#app-mount-point .northstar-file-table .file-name:focus,
+#app-mount-point .northstar-file-table .file-name:focus-visible {
+  color: var(--ns-accent) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 2px solid var(--ns-accent-soft-strong) !important;
+  outline-offset: 3px;
+}
+
+/* Stable square actions for file and mod/plugin tables. */
+#app-mount-point .northstar-file-table tbody td:last-child .ant-space .ant-btn,
+#app-mount-point .northstar-mod-table tbody td:last-child .ant-space .ant-btn {
+  display: inline-grid !important;
+  width: 38px !important;
+  min-width: 38px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  place-items: center;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+#app-mount-point .northstar-file-table tbody td:last-child .ant-space .ant-btn .anticon,
+#app-mount-point .northstar-mod-table tbody td:last-child .ant-space .ant-btn .anticon {
+  margin: 0 !important;
+  color: currentColor !important;
+  font-size: 17px !important;
+}
+#app-mount-point .northstar-file-table tbody td:last-child .ant-space .ant-btn-dangerous,
+#app-mount-point .northstar-mod-table tbody td:last-child .ant-space .ant-btn-dangerous {
+  color: var(--ns-danger) !important;
+  background: var(--ns-danger-soft) !important;
+  border-color: color-mix(in srgb, var(--ns-danger) 46%, var(--ns-border)) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .northstar-file-table .file-name:hover {
+    color: var(--ns-accent) !important;
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+  #app-mount-point .northstar-file-table tbody td:last-child .ant-space .ant-btn:not(:disabled):hover,
+  #app-mount-point .northstar-mod-table tbody td:last-child .ant-space .ant-btn:not(:disabled):hover {
+    color: var(--ns-accent) !important;
+    background: var(--ns-accent-soft) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+  #app-mount-point .northstar-file-table tbody td:last-child .ant-space .ant-btn-dangerous:not(:disabled):hover,
+  #app-mount-point .northstar-mod-table tbody td:last-child .ant-space .ant-btn-dangerous:not(:disabled):hover {
+    color: var(--ns-danger) !important;
+    background: var(--ns-danger-soft) !important;
+    border-color: var(--ns-danger) !important;
+  }
+}
+#app-mount-point .northstar-file-table tbody td:last-child .ant-space .ant-btn:not(:disabled):active,
+#app-mount-point .northstar-mod-table tbody td:last-child .ant-space .ant-btn:not(:disabled):active {
+  transform: scale(.97);
+}
+
+/* Enabled/disabled mod state uses the same semantic badges as instance state. */
+#app-mount-point .northstar-enabled-badge {
+  color: var(--ns-success) !important;
+  background: var(--ns-success-soft) !important;
+  border-color: color-mix(in srgb, var(--ns-success) 42%, var(--ns-border)) !important;
+}
+#app-mount-point .northstar-disabled-badge {
+  color: var(--ns-stopped) !important;
+  background: var(--ns-stopped-soft) !important;
+  border-color: var(--ns-stopped-border) !important;
+}
+
+/* Table pagination matches the instance/node pager: neutral tiles and an
+   accent outline for the current page, never a solid accent strip. */
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-item {
+  min-width: 40px;
+  height: 40px;
+  margin: 0 !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  line-height: 38px;
+}
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-item a {
+  height: 38px;
+  color: var(--ns-text-muted) !important;
+  font-size: 15px;
+  line-height: 38px;
+}
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-item-active {
+  color: var(--ns-accent) !important;
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-accent) !important;
+}
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-item-active a {
+  color: var(--ns-accent) !important;
+  font-weight: 600;
+}
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-prev,
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-next {
+  width: 40px;
+  height: 40px;
+  margin: 0 !important;
+}
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-prev .ant-pagination-item-link,
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-next .ant-pagination-item-link {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  place-items: center;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease);
+}
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-options {
+  height: 40px;
+  margin-left: 8px;
+}
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-options .ant-select-selector {
+  height: 40px !important;
+  align-items: center;
+  border-radius: 8px !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-item:not(.ant-pagination-item-active):hover,
+  #app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-prev:not(.ant-pagination-disabled) .ant-pagination-item-link:hover,
+  #app-mount-point :is(.northstar-file-table, .northstar-mod-table) .ant-pagination-next:not(.ant-pagination-disabled) .ant-pagination-item-link:hover {
+    color: var(--ns-accent) !important;
+    background: var(--ns-accent-soft) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+}
+#app-mount-point :is(.northstar-file-table, .northstar-mod-table) :is(.ant-pagination-prev, .ant-pagination-next).ant-pagination-disabled .ant-pagination-item-link {
+  color: var(--ns-text-faint) !important;
+  opacity: .72;
+}
+
+/* Image management has two independent Ant tables. Keep both pagers aligned
+   with the instance, node, file, and mod management pagers. */
+#app-mount-point .northstar-image-table .ant-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#app-mount-point .northstar-image-table .ant-pagination-item {
+  min-width: 40px;
+  height: 40px;
+  margin: 0 !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  line-height: 38px;
+}
+#app-mount-point .northstar-image-table .ant-pagination-item a {
+  height: 38px;
+  color: var(--ns-text-muted) !important;
+  font-size: 15px;
+  line-height: 38px;
+}
+#app-mount-point .northstar-image-table .ant-pagination-item-active {
+  color: var(--ns-accent) !important;
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-accent) !important;
+}
+#app-mount-point .northstar-image-table .ant-pagination-item-active a {
+  color: var(--ns-accent) !important;
+  font-weight: 600;
+}
+#app-mount-point .northstar-image-table .ant-pagination-prev,
+#app-mount-point .northstar-image-table .ant-pagination-next {
+  width: 40px;
+  height: 40px;
+  margin: 0 !important;
+}
+#app-mount-point .northstar-image-table .ant-pagination-prev .ant-pagination-item-link,
+#app-mount-point .northstar-image-table .ant-pagination-next .ant-pagination-item-link {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  place-items: center;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease);
+}
+#app-mount-point .northstar-image-table .ant-pagination-options {
+  height: 40px;
+  margin-left: 8px;
+}
+#app-mount-point .northstar-image-table .ant-pagination-options .ant-select-selector {
+  height: 40px !important;
+  align-items: center;
+  border-radius: 8px !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .northstar-image-table .ant-pagination-item:not(.ant-pagination-item-active):hover,
+  #app-mount-point .northstar-image-table .ant-pagination-prev:not(.ant-pagination-disabled) .ant-pagination-item-link:hover,
+  #app-mount-point .northstar-image-table .ant-pagination-next:not(.ant-pagination-disabled) .ant-pagination-item-link:hover {
+    color: var(--ns-accent) !important;
+    background: var(--ns-accent-soft) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+}
+#app-mount-point .northstar-image-table :is(.ant-pagination-prev, .ant-pagination-next).ant-pagination-disabled .ant-pagination-item-link {
+  color: var(--ns-text-faint) !important;
+  opacity: .72;
+}

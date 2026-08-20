@@ -1,0 +1,100 @@
+@font-face { font-family: "Maple Mono"; src: url("./fonts/MapleMono-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Maple Mono"; src: url("./fonts/MapleMono-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+
+:root {
+  color-scheme: light;
+  --ns-sidebar: 244px; --ns-header: 64px; --ns-page-max: 1500px;
+  --ns-bg: #fffcf5; --ns-surface: #fffdfa; --ns-surface-raised: #fffefb; --ns-surface-soft: #f5f1e8;
+  --ns-text: #292b2f; --ns-text-muted: #5c6166; --ns-text-faint: #70767b;
+  --ns-border: rgba(48,49,54,.16); --ns-border-strong: rgba(48,49,54,.24);
+  --ns-accent: #5086a1; --ns-accent-ink: #285a70; --ns-accent-soft: #e8f2f4; --ns-accent-soft-strong: #d9eaee;
+  --ns-action: #3f728d; --ns-on-action: #fff; --ns-success: #4f8065; --ns-success-soft: #e8f3ed;
+  --ns-warning: #8b6a2d; --ns-warning-soft: #f8f1df; --ns-danger: #b64f55; --ns-danger-soft: #faecec;
+  --ns-idle: #80629c; --ns-idle-soft: #f1eafa; --ns-idle-border: #d7c5ea;
+  --ns-stopped: #b45b63; --ns-stopped-soft: #fbedee; --ns-stopped-border: #e5bfc3;
+  --ns-editor-active-line: color-mix(in srgb, var(--ns-accent) 7%, var(--ns-surface-raised));
+  --ns-editor-selection: color-mix(in srgb, var(--ns-accent) 42%, var(--ns-surface-raised));
+  --ns-editor-selection-edge: color-mix(in srgb, var(--ns-accent) 74%, var(--ns-border-strong));
+  --ns-editor-match: color-mix(in srgb, var(--ns-accent) 12%, var(--ns-surface-raised));
+  --ns-shadow-float: 0 16px 40px rgba(28,35,39,.14); --ns-radius: 8px; --ns-card-radius: 10px; --ns-ease: cubic-bezier(.23,1,.32,1);
+  --color-primary: var(--ns-accent) !important;
+  --el-color-primary: var(--ns-accent) !important;
+  --el-color-primary-light-3: var(--ns-accent) !important;
+  --el-color-primary-light-5: var(--ns-accent-soft-strong) !important;
+  --el-color-primary-light-7: var(--ns-accent-soft) !important;
+  --el-color-primary-light-8: var(--ns-accent-soft) !important;
+  --el-color-primary-light-9: var(--ns-accent-soft) !important;
+  --el-color-primary-dark-2: var(--ns-accent-ink) !important;
+}
+:root[data-ns-theme="dark"] {
+  color-scheme: dark;
+  --ns-bg: #1b1c1f; --ns-surface: #202226; --ns-surface-raised: #25272c; --ns-surface-soft: #27292e;
+  --ns-text: #e7e8e9; --ns-text-muted: #c0c4c9; --ns-text-faint: #a5abb2;
+  --ns-border: rgba(235,238,240,.1); --ns-border-strong: rgba(235,238,240,.18);
+  --ns-accent: #76a9bc; --ns-accent-ink: #9bc5d3; --ns-accent-soft: rgba(92,153,176,.17); --ns-accent-soft-strong: rgba(92,153,176,.26);
+  --ns-action: #76a9bc; --ns-on-action: #182126; --ns-success: #86b69a; --ns-success-soft: rgba(72,143,109,.16);
+  --ns-warning: #d5b56d; --ns-warning-soft: rgba(178,133,50,.15); --ns-danger: #e58e93; --ns-danger-soft: rgba(194,74,82,.15);
+  --ns-idle: #c3a3dc; --ns-idle-soft: rgba(145,101,178,.17); --ns-idle-border: rgba(195,163,220,.42);
+  --ns-stopped: #e58e93; --ns-stopped-soft: rgba(194,74,82,.15); --ns-stopped-border: rgba(229,142,147,.42);
+  --ns-editor-active-line: color-mix(in srgb, var(--ns-accent) 9%, var(--ns-surface-raised));
+  --ns-editor-selection: color-mix(in srgb, var(--ns-accent) 56%, var(--ns-surface-raised));
+  --ns-editor-selection-edge: color-mix(in srgb, var(--ns-accent) 86%, var(--ns-border-strong));
+  --ns-editor-match: color-mix(in srgb, var(--ns-accent) 17%, var(--ns-surface-raised));
+  --ns-shadow-float: 0 18px 46px rgba(0,0,0,.34);
+}
+
+/* Bridge paint-sensitive values during the short theme state transition. */
+body,
+#app-mount-point,
+#app-mount-point .global-app-container,
+#app-mount-point .main-content,
+#app-mount-point .app-header-wrapper,
+#app-mount-point .card-panel,
+#app-mount-point .ant-card,
+#app-mount-point .ant-modal-content,
+#app-mount-point .ant-drawer-content,
+#app-mount-point .ant-popover-inner,
+#app-mount-point .ant-input,
+#app-mount-point .ant-input-affix-wrapper,
+#app-mount-point .ant-select-selector,
+#app-mount-point .ant-btn,
+#app-mount-point .ant-menu-item,
+#app-mount-point .ant-breadcrumb,
+#app-mount-point .anticon,
+#app-mount-point svg {
+  transition-property: color, background-color, border-color, box-shadow, fill, stroke;
+  transition-duration: 180ms;
+  transition-timing-function: var(--ns-ease);
+}
+:root[data-ns-accent="vermillion"] { --ns-accent:#ad4506; --ns-accent-ink:#833706; --ns-accent-soft:#f7e9df; --ns-accent-soft-strong:#efd7c6; --ns-action:#913803; }
+:root[data-ns-accent="lotus"] { --ns-accent:#b06d88; --ns-accent-ink:#824860; --ns-accent-soft:#f4e8ed; --ns-accent-soft-strong:#ead6df; --ns-action:#8c4c66; }
+:root[data-ns-accent="gold"] { --ns-accent:#9b811d; --ns-accent-ink:#756211; --ns-accent-soft:#f8f1cf; --ns-accent-soft-strong:#efe3a7; --ns-action:#806a16; }
+:root[data-ns-theme="dark"][data-ns-accent="vermillion"] { --ns-accent:#de7b43; --ns-accent-ink:#efaa83; --ns-accent-soft:rgba(190,91,35,.18); --ns-accent-soft-strong:rgba(190,91,35,.28); --ns-action:#de7b43; --ns-on-action:#28180f; }
+:root[data-ns-theme="dark"][data-ns-accent="lotus"] { --ns-accent:#cf89a4; --ns-accent-ink:#e2a6c1; --ns-accent-soft:rgba(190,91,139,.17); --ns-accent-soft-strong:rgba(190,91,139,.27); --ns-action:#cf89a4; --ns-on-action:#281820; }
+:root[data-ns-theme="dark"][data-ns-accent="gold"] { --ns-accent:#d1b958; --ns-accent-ink:#e2cb70; --ns-accent-soft:rgba(184,141,50,.18); --ns-accent-soft-strong:rgba(184,141,50,.28); --ns-action:#d1b958; --ns-on-action:#29210f; }
+
+/* MCSM declares these tokens on body.app-*-theme, which otherwise wins over
+   inherited :root values and keeps cards on the native blue palette. */
+body.app-dark-theme,
+body.app-light-theme,
+body.app-dark-base-color,
+body.app-light-base-color {
+  --color-primary: var(--ns-accent) !important;
+  --color-blue-1: var(--ns-accent-soft) !important;
+  --color-blue-2: var(--ns-accent-soft) !important;
+  --color-blue-3: var(--ns-accent-soft-strong) !important;
+  --color-blue-4: var(--ns-accent-soft-strong) !important;
+  --color-blue-5: var(--ns-accent) !important;
+  --color-blue-6: var(--ns-action) !important;
+  --color-blue-7: var(--ns-accent-ink) !important;
+  --color-blue-8: var(--ns-accent-ink) !important;
+  --color-blue-9: var(--ns-accent-ink) !important;
+  --color-blue-10: var(--ns-accent-ink) !important;
+}
+
+* { box-sizing: border-box; }
+html, body, #app-mount-point { min-height: 100%; background-color: var(--ns-bg) !important; }
+body { margin: 0; color: var(--ns-text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 16px; line-height: 1.5; }
+button, input, textarea, select { font: inherit; }
+a { color: var(--ns-accent); }
+

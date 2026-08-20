@@ -1,0 +1,177 @@
+/* Quick Start uses its own action-card component rather than Ant buttons. */
+#app-mount-point .manual-install-options .install-option-button {
+  height: 130px;
+  padding: 1px;
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  background-image: none !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: var(--ns-card-radius) !important;
+  box-shadow: none !important;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+#app-mount-point .manual-install-options .install-option-button .button-inner {
+  gap: 14px;
+  padding: 16px 18px;
+  color: var(--ns-text) !important;
+  background: var(--ns-surface) !important;
+  border-radius: calc(var(--ns-card-radius) - 1px) !important;
+}
+#app-mount-point .manual-install-options .install-option-button .button-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  place-items: center;
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border: 1px solid color-mix(in srgb, var(--ns-accent) 28%, var(--ns-border)) !important;
+  border-radius: var(--ns-radius) !important;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease) !important;
+}
+#app-mount-point .manual-install-options .install-option-button .button-icon .anticon,
+#app-mount-point .manual-install-options .install-option-button .button-icon svg {
+  color: var(--ns-accent) !important;
+  fill: currentColor !important;
+}
+#app-mount-point .manual-install-options .install-option-button .button-label {
+  color: var(--ns-text) !important;
+  font: 600 15px/1.4 "Maple Mono", ui-monospace, monospace;
+}
+#app-mount-point .manual-install-options .install-option-button .button-desc {
+  color: var(--ns-text-muted) !important;
+  font-size: 13px;
+  line-height: 1.45;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .manual-install-options .install-option-button:hover {
+    color: var(--ns-text) !important;
+    background: var(--ns-accent) !important;
+    background-image: none !important;
+    border-color: var(--ns-accent) !important;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--ns-accent) 14%, transparent) !important;
+    transform: translateY(-1px) !important;
+  }
+  #app-mount-point .manual-install-options .install-option-button:hover .button-inner {
+    background: var(--ns-surface) !important;
+  }
+  #app-mount-point .manual-install-options .install-option-button:hover .button-icon {
+    color: var(--ns-accent-ink) !important;
+    background: var(--ns-accent-soft-strong) !important;
+    border-color: var(--ns-accent) !important;
+  }
+  #app-mount-point .manual-install-options .install-option-button:hover .button-icon .anticon,
+  #app-mount-point .manual-install-options .install-option-button:hover .button-icon svg {
+    color: var(--ns-accent-ink) !important;
+  }
+}
+#app-mount-point .manual-install-options .install-option-button:active {
+  transform: scale(.99) !important;
+  box-shadow: none !important;
+}
+#app-mount-point .manual-install-options .install-option-button:focus-visible {
+  border-color: var(--ns-accent) !important;
+  box-shadow: 0 0 0 2px var(--ns-accent-soft-strong) !important;
+  outline: 0;
+}
+
+#app-mount-point .actions-button {
+  width: 100%;
+}
+#app-mount-point .actions-button .action-btn-item {
+  min-height: 58px;
+  padding: 12px 14px;
+  align-items: center;
+  gap: 12px;
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: var(--ns-radius) !important;
+  cursor: pointer;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+#app-mount-point .actions-button .action-btn-item > div:first-child {
+  display: inline-grid;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border: 1px solid color-mix(in srgb, var(--ns-accent) 34%, var(--ns-border)) !important;
+  border-radius: 8px;
+}
+#app-mount-point .actions-button .action-btn-item > div:first-child .anticon,
+#app-mount-point .actions-button .action-btn-item > div:first-child svg {
+  color: var(--ns-accent) !important;
+  font-size: 18px;
+}
+#app-mount-point .actions-button .action-btn-item > div:last-child {
+  min-width: 0;
+  margin-left: 0 !important;
+  color: var(--ns-text) !important;
+  font: 600 14px/1.4 "Maple Mono", ui-monospace, monospace;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .actions-button .action-btn-item:hover {
+    color: var(--ns-accent-ink) !important;
+    background: color-mix(in srgb, var(--ns-surface) 80%, var(--ns-accent-soft)) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+  #app-mount-point .actions-button .action-btn-item:hover > div:first-child {
+    background: var(--ns-accent-soft-strong) !important;
+  }
+}
+#app-mount-point .actions-button .action-btn-item:active {
+  transform: scale(.985);
+}
+#app-mount-point .actions-button .action-btn-item:focus-visible {
+  border-color: var(--ns-accent) !important;
+  box-shadow: 0 0 0 2px var(--ns-accent-soft-strong) !important;
+  outline: 0;
+}
+
+/* PanelOverview title glyphs are semantic accents; values and labels remain neutral. */
+#app-mount-point .panel-overview .title > .title-icon,
+#app-mount-point .panel-overview .overview-item__title > .overview-item__icon,
+#app-mount-point .panel-overview .title > .title-icon.anticon,
+#app-mount-point .panel-overview .overview-item__title > .overview-item__icon.anticon {
+  color: var(--ns-accent) !important;
+  opacity: 1 !important;
+}
+#app-mount-point .panel-overview .title > .title-icon svg,
+#app-mount-point .panel-overview .overview-item__title > .overview-item__icon svg {
+  color: var(--ns-accent) !important;
+  fill: currentColor !important;
+}
+
+/* Solid action buttons need an on-action icon, including Settings > Basic > Edit. */
+#app-mount-point .ant-btn-primary,
+#app-mount-point .ant-btn-primary:hover,
+#app-mount-point .ant-btn-primary:focus {
+  color: var(--ns-on-action) !important;
+}
+#app-mount-point .ant-btn-primary > .anticon,
+#app-mount-point .ant-btn-primary > .anticon svg,
+#app-mount-point .ant-btn-primary > .anticon-edit,
+#app-mount-point .ant-btn-primary > .anticon-edit svg {
+  color: var(--ns-on-action) !important;
+  fill: currentColor !important;
+  opacity: 1 !important;
+}
+
+/* The instance console must use Maple Mono across xterm's DOM and input layers. */
+#app-mount-point .terminal-container,
+#app-mount-point .terminal-container .xterm,
+#app-mount-point .terminal-container .xterm-screen,
+#app-mount-point .terminal-container .xterm-rows,
+#app-mount-point .terminal-container .xterm-helpers,
+#app-mount-point .terminal-container .xterm-helper-textarea,
+#app-mount-point .terminal-container .xterm-char-measure-element,
+#app-mount-point .terminal-container .xterm-accessibility,
+#app-mount-point .terminal-container .xterm-accessibility-tree,
+#app-mount-point .terminal-container .xterm-accessibility-tree * {
+  font-family: "Maple Mono", monospace !important;
+}
+

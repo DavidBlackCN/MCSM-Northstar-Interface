@@ -1,0 +1,332 @@
+/* Instance page refinements: wider cards, larger type, square icon actions. */
+#app-mount-point .instance-card {
+  position: relative;
+  height: auto !important;
+  min-height: 244px !important;
+  background-color: var(--ns-surface) !important;
+  border-color: var(--ns-border) !important;
+  border-radius: var(--ns-card-radius) !important;
+  overflow: visible;
+  box-shadow: none !important;
+  transition:
+    background-color 150ms var(--ns-ease),
+    border-color 150ms var(--ns-ease),
+    box-shadow 150ms var(--ns-ease),
+    transform 150ms var(--ns-ease) !important;
+}
+#app-mount-point .instance-card > .card-panel,
+#app-mount-point .instance-card .instance-card-body {
+  height: auto !important;
+  min-height: 100%;
+}
+#app-mount-point .instance-card .card-panel-content {
+  overflow: visible !important;
+}
+#app-mount-point .instance-card .instance-card-body > .ant-typography {
+  flex: 1 0 auto;
+  margin-bottom: 14px;
+}
+#app-mount-point .instance-card .instance-card-body > .ant-space {
+  flex: 0 0 auto;
+  margin-top: auto;
+}
+/* Batch selection is persistent and deliberately stronger than pointer hover. */
+#app-mount-point .instance-card.selected {
+  background-color: color-mix(in srgb, var(--ns-surface) 82%, var(--ns-accent-soft)) !important;
+  border: 2px solid var(--ns-accent) !important;
+  box-shadow:
+    inset 4px 0 0 var(--ns-accent),
+    0 8px 22px color-mix(in srgb, var(--ns-accent) 13%, transparent) !important;
+  transform: translateY(-1px);
+}
+#app-mount-point .instance-card .inner-card-wrapper,
+#app-mount-point .instance-card .inner-card-wrapper:hover {
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-border) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+#app-mount-point .instance-card.selected .inner-card-wrapper,
+#app-mount-point .instance-card.selected .inner-card-wrapper:hover {
+  background: color-mix(in srgb, var(--ns-surface) 82%, var(--ns-accent-soft)) !important;
+  border-color: transparent !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .instance-card:not(.selected):hover {
+    border-color: color-mix(in srgb, var(--ns-accent) 72%, var(--ns-border-strong)) !important;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--ns-accent) 10%, transparent) !important;
+    transform: translateY(-2px);
+  }
+  #app-mount-point .instance-card.selected:hover {
+    border-color: var(--ns-accent-ink) !important;
+    box-shadow:
+      inset 4px 0 0 var(--ns-accent-ink),
+      0 10px 24px color-mix(in srgb, var(--ns-accent) 16%, transparent) !important;
+    transform: translateY(-2px);
+  }
+}
+#app-mount-point .ant-col:has(> .instance-card) {
+  flex: 0 0 33.333333% !important;
+  max-width: 33.333333% !important;
+}
+#app-mount-point .instance-card .card-panel-title h5 {
+  color: var(--ns-text) !important;
+  font-size: 19px !important;
+  line-height: 1.35;
+  font-weight: 600;
+}
+#app-mount-point .instance-card .instance-card-body,
+#app-mount-point .instance-card .instance-info-line,
+#app-mount-point .instance-card .instance-info-line .title,
+#app-mount-point .instance-card .instance-info-line .value {
+  font-size: 15px;
+  line-height: 1.45;
+}
+#app-mount-point .instance-card .ant-tag { font-size: 13px; }
+#app-mount-point .instance-card .card-panel-content { padding: 16px 18px !important; }
+#app-mount-point .instance-card .ant-btn {
+  display: inline-grid;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  margin-inline-start: 8px;
+  padding: 0;
+  border-radius: 8px !important;
+  place-items: center;
+}
+#app-mount-point .instance-card .ant-btn:first-child { margin-inline-start: 0; }
+#app-mount-point .instance-card .ant-btn .anticon { font-size: 18px !important; }
+#app-mount-point .instance-card .ant-btn:hover { transform: translateY(-1px); }
+#app-mount-point .instance-card .ant-btn:active { transform: scale(.97); }
+.between-menus-container .menus-item-right button.ant-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+.northstar-instance-node-icon {
+  display: inline-grid;
+  width: 18px;
+  height: 18px;
+  margin-inline-end: 9px;
+  flex: 0 0 18px;
+  color: var(--ns-accent) !important;
+  place-items: center;
+  vertical-align: middle;
+}
+.northstar-instance-node-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.northstar-image-node-switch {
+  display: inline-flex !important;
+  min-height: 38px;
+  margin-inline-start: 12px;
+  padding: 0 12px !important;
+  align-items: center;
+  gap: 8px;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  font: 600 13px/1 "Maple Mono", ui-monospace, monospace !important;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+.northstar-image-node-switch svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.northstar-image-node-switch:hover {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+  transform: translateY(-1px);
+}
+.northstar-image-node-switch:active { transform: scale(.97); }
+.northstar-image-node-switch[aria-busy="true"] { opacity: .68; cursor: wait; }
+.northstar-image-node-menu {
+  position: fixed;
+  z-index: 1200;
+  display: grid;
+  min-width: 190px;
+  max-width: min(320px, calc(100vw - 24px));
+  padding: 6px;
+  gap: 3px;
+  background: var(--ns-surface-raised) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px;
+  box-shadow: var(--ns-shadow-float);
+}
+.northstar-image-node-menu__item {
+  min-height: 38px;
+  padding: 0 11px;
+  overflow: hidden;
+  color: var(--ns-text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  font: 500 13px/1.3 "Maple Mono", ui-monospace, monospace;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 140ms var(--ns-ease), background-color 140ms var(--ns-ease);
+}
+.northstar-image-node-menu__item:hover,
+.northstar-image-node-menu__item:focus-visible {
+  color: var(--ns-accent-ink);
+  background: var(--ns-accent-soft);
+  outline: none;
+}
+.between-menus-container .menus-item-right .ant-pagination-item-active {
+  min-width: 40px;
+  height: 40px;
+  margin: 0 2px;
+  border-radius: 8px !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-accent) !important;
+  line-height: 38px;
+}
+.between-menus-container .menus-item-right .ant-pagination-item-active a {
+  display: block;
+  height: 38px;
+  color: var(--ns-accent) !important;
+  line-height: 38px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.between-menus-container .menus-item-right .ant-pagination-prev,
+.between-menus-container .menus-item-right .ant-pagination-next {
+  width: 40px;
+  height: 40px;
+  margin: 0 2px;
+}
+.between-menus-container .menus-item-right .ant-pagination-prev .ant-pagination-item-link,
+.between-menus-container .menus-item-right .ant-pagination-next .ant-pagination-item-link {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  place-items: center;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease);
+}
+.between-menus-container .menus-item-right .ant-pagination-prev:not(.ant-pagination-disabled) .ant-pagination-item-link:hover,
+.between-menus-container .menus-item-right .ant-pagination-next:not(.ant-pagination-disabled) .ant-pagination-item-link:hover {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+  transform: translateY(-1px);
+}
+.between-menus-container .menus-item-right .ant-pagination-prev.ant-pagination-disabled .ant-pagination-item-link,
+.between-menus-container .menus-item-right .ant-pagination-next.ant-pagination-disabled .ant-pagination-item-link {
+  color: var(--ns-text-faint) !important;
+  opacity: .72;
+}
+
+/* NodeList renders pagination below its description instead of in
+   BetweenMenus. Keep it visually identical to the instance list pager. */
+#app-mount-point .desc .pagination .ant-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#app-mount-point .desc .pagination .ant-pagination-item {
+  min-width: 40px;
+  height: 40px;
+  margin: 0 !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  line-height: 38px;
+}
+#app-mount-point .desc .pagination .ant-pagination-item a {
+  height: 38px;
+  color: var(--ns-text-muted) !important;
+  line-height: 38px;
+  font-size: 15px;
+}
+#app-mount-point .desc .pagination .ant-pagination-item-active {
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-accent) !important;
+}
+#app-mount-point .desc .pagination .ant-pagination-item-active a {
+  color: var(--ns-accent) !important;
+  font-weight: 600;
+}
+#app-mount-point .desc .pagination .ant-pagination-prev,
+#app-mount-point .desc .pagination .ant-pagination-next {
+  width: 40px;
+  height: 40px;
+  margin: 0 !important;
+}
+#app-mount-point .desc .pagination .ant-pagination-prev .ant-pagination-item-link,
+#app-mount-point .desc .pagination .ant-pagination-next .ant-pagination-item-link {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: 8px !important;
+  place-items: center;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease);
+}
+#app-mount-point .desc .pagination .ant-pagination-prev:not(.ant-pagination-disabled) .ant-pagination-item-link:hover,
+#app-mount-point .desc .pagination .ant-pagination-next:not(.ant-pagination-disabled) .ant-pagination-item-link:hover,
+#app-mount-point .desc .pagination .ant-pagination-item:not(.ant-pagination-item-active):hover {
+  color: var(--ns-accent) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+  transform: translateY(-1px);
+}
+#app-mount-point .desc .pagination .ant-pagination-prev.ant-pagination-disabled .ant-pagination-item-link,
+#app-mount-point .desc .pagination .ant-pagination-next.ant-pagination-disabled .ant-pagination-item-link {
+  color: var(--ns-text-faint) !important;
+  opacity: .72;
+}
+#app-mount-point .desc .pagination .ant-pagination-options {
+  height: 40px;
+  margin-left: 8px;
+}
+#app-mount-point .desc .pagination .ant-pagination-options .ant-select-selector {
+  height: 40px !important;
+  align-items: center;
+  border-radius: 8px !important;
+}
+@media (max-width: 1199px) {
+  #app-mount-point .ant-col:has(> .instance-card) {
+    flex-basis: 50% !important;
+    max-width: 50% !important;
+  }
+}
+@media (max-width: 575px) {
+  #app-mount-point .ant-col:has(> .instance-card) {
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #app-mount-point .instance-card,
+  #app-mount-point .instance-card:hover,
+  #app-mount-point .instance-card.selected,
+  #app-mount-point .instance-card.selected:hover {
+    transform: none !important;
+  }
+}
+

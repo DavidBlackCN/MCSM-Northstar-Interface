@@ -1,0 +1,290 @@
+/* Northstar dashboard cards: calm surfaces, one border and no resting shadow. */
+#app-mount-point .layout-card-container,
+#app-mount-point .card-wrapper,
+#app-mount-point .CardWrapper,
+#app-mount-point .panel-overview,
+#app-mount-point .card-panel,
+#app-mount-point .ant-card {
+  min-width: 0;
+}
+#app-mount-point .card-panel,
+#app-mount-point .ant-card,
+#app-mount-point .inner-card-wrapper,
+#app-mount-point .global-card-container-shadow {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface) !important;
+  background-image: none !important;
+  border: 1px solid var(--ns-border) !important;
+  border-radius: var(--ns-card-radius) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+#app-mount-point .card-panel,
+#app-mount-point .ant-card,
+#app-mount-point .inner-card-wrapper {
+  transition: border-color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), transform 150ms var(--ns-ease) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .card-panel:hover,
+  #app-mount-point .ant-card-hoverable:hover { border-color: var(--ns-border-strong) !important; }
+  #app-mount-point .inner-card-wrapper:hover,
+  #app-mount-point .ant-card-hoverable:hover {
+    background: color-mix(in srgb, var(--ns-surface) 84%, var(--ns-accent-soft)) !important;
+    border-color: var(--ns-border-strong) !important;
+    box-shadow: none !important;
+  }
+}
+#app-mount-point .card-panel .card-panel-title,
+#app-mount-point .ant-card-head {
+  min-height: 54px;
+  margin: 0 !important;
+  padding: 14px 18px !important;
+  color: var(--ns-text) !important;
+  background: transparent !important;
+  border-bottom: 1px solid var(--ns-border) !important;
+  font: 600 16px/1.35 "Maple Mono", ui-monospace, monospace;
+}
+#app-mount-point .card-panel .card-panel-content,
+#app-mount-point .ant-card-body {
+  min-width: 0;
+  padding: 16px 18px !important;
+  color: var(--ns-text-muted) !important;
+}
+#app-mount-point .card-panel:has(.full-card-body-container) .card-panel-content { overflow: hidden; }
+#app-mount-point .card-panel-content > .full-card-body-container { inset: 0; padding: 14px 18px 18px; }
+
+/* Overview KPI row: move decorative glyphs into a darker title corner. */
+#app-mount-point .northstar-metric-card {
+  position: relative;
+  overflow: hidden;
+  height: 172px !important;
+  min-height: 0 !important;
+  align-self: start;
+}
+#app-mount-point .main-layout-container > .ant-row > .layout-card-col:nth-child(-n + 4) > .layout-card-container:has(.northstar-metric-card) {
+  width: 100%;
+  margin-inline: auto;
+}
+#app-mount-point .northstar-metric-card > .northstar-metric-icon {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 3;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  color: var(--ns-accent) !important;
+  background: color-mix(in srgb, var(--ns-bg) 70%, var(--ns-surface-soft)) !important;
+  border: 1px solid var(--ns-border) !important;
+  border-radius: 9px;
+  place-items: center;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease);
+}
+#app-mount-point .northstar-metric-card:hover > .northstar-metric-icon {
+  background: color-mix(in srgb, var(--ns-bg) 70%, var(--ns-surface-soft)) !important;
+  border-color: var(--ns-border) !important;
+  color: var(--ns-accent) !important;
+  transform: none;
+}
+#app-mount-point .northstar-metric-card > .northstar-metric-icon svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#app-mount-point .northstar-metric-card .card-panel-title,
+#app-mount-point .northstar-metric-card .ant-card-head {
+  position: relative;
+  z-index: 2;
+  min-height: 42px;
+  padding: 11px 14px !important;
+  padding-right: 62px !important;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+#app-mount-point .northstar-metric-card .card-panel-title h5,
+#app-mount-point .northstar-metric-card .ant-card-head-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#app-mount-point .northstar-metric-card .card-panel-content,
+#app-mount-point .northstar-metric-card .ant-card-body {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  padding: 12px 14px !important;
+  flex-direction: column;
+}
+#app-mount-point .northstar-metric-card .status-text {
+  order: 1;
+  margin: 0 !important;
+  color: var(--ns-text) !important;
+  font: 700 30px/1.1 "Maple Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+#app-mount-point .northstar-metric-card .status-text__highlight {
+  color: var(--ns-accent) !important;
+}
+#app-mount-point .northstar-metric-card .status-header {
+  order: 2;
+  margin-top: auto;
+  width: 100%;
+  min-height: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ns-text-faint) !important;
+  font: 400 13px/1.35 var(--font-body), ui-sans-serif, sans-serif;
+}
+#app-mount-point .northstar-metric-card .status-header__title {
+  color: inherit !important;
+  font-size: inherit;
+}
+#app-mount-point .northstar-metric-card > .northstar-metric-icon {
+  top: 10px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+}
+#app-mount-point .northstar-metric-card > .northstar-metric-icon svg {
+  width: 17px;
+  height: 17px;
+}
+#app-mount-point .northstar-metric-card .ant-progress {
+  display: none !important;
+}
+#app-mount-point .northstar-metric-card .northstar-metric-icon-hidden {
+  display: none !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .northstar-metric-card > .northstar-metric-icon:hover {
+    background: var(--ns-accent-soft) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+}
+
+/* Keep the design-mode grid row compact with the metric cards. */
+#app-mount-point .layout-card-col:has(.northstar-metric-card),
+#app-mount-point .layout-card-container:has(.northstar-metric-card) {
+  height: 172px !important;
+  min-height: 0 !important;
+}
+
+/* CPU and memory become compact paired rings in the resource card. */
+#app-mount-point .northstar-metric-card--resources .card-panel-content,
+#app-mount-point .northstar-metric-card--resources .ant-card-body {
+  display: grid;
+  align-content: center;
+}
+#app-mount-point .northstar-status-rings .status-bars {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px !important;
+  align-items: start;
+}
+#app-mount-point .northstar-status-rings .card-panel-content {
+  justify-content: center;
+}
+#app-mount-point .northstar-status-rings .status-bars {
+  order: 1;
+}
+#app-mount-point .northstar-status-rings .status-header {
+  display: none !important;
+}
+#app-mount-point .northstar-status-rings .status-bar-item {
+  display: grid !important;
+  justify-items: center;
+  gap: 5px;
+  align-content: start;
+  min-width: 0;
+  text-align: center;
+}
+#app-mount-point .northstar-status-rings .status-bar-label {
+  width: 100%;
+  justify-content: center;
+  white-space: nowrap;
+  color: var(--ns-text-faint) !important;
+  font-size: 13px;
+}
+#app-mount-point .northstar-status-rings .status-bar-value {
+  display: none !important;
+}
+#app-mount-point .northstar-status-rings .northstar-resource-ring {
+  order: 2;
+}
+#app-mount-point .northstar-status-rings .ant-progress {
+  display: none !important;
+}
+#app-mount-point .northstar-metric-card--resources .card-panel-content > .ant-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px !important;
+  align-items: center;
+}
+#app-mount-point .northstar-metric-card--resources .overview-item--progress {
+  display: grid !important;
+  justify-items: center;
+  gap: 8px;
+  min-width: 0;
+  text-align: center;
+}
+#app-mount-point .northstar-metric-card--resources .overview-item--progress .overview-item__title {
+  justify-content: center;
+  margin: 0;
+  color: var(--ns-text-muted) !important;
+  font-size: 13px;
+}
+#app-mount-point .northstar-metric-card--resources .northstar-resource-ring-item {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  min-width: 0;
+  text-align: center;
+}
+#app-mount-point .northstar-metric-card--resources .northstar-resource-ring-item .overview-item__title {
+  justify-content: center;
+  margin: 0;
+  color: var(--ns-text-muted) !important;
+  font-size: 13px;
+}
+#app-mount-point .northstar-metric-card--resources .northstar-resource-ring-item .overview-item__icon {
+  display: none;
+}
+#app-mount-point .northstar-resource-ring {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  padding: 8px;
+  border-radius: 50%;
+  background: conic-gradient(var(--ns-accent) var(--northstar-ring-value), var(--ns-surface-soft) 0);
+  place-items: center;
+  font: 600 14px/1 "Maple Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+#app-mount-point .northstar-resource-ring::before {
+  width: 100%;
+  height: 100%;
+  content: "";
+  background: var(--ns-surface);
+  border-radius: 50%;
+  grid-area: 1 / 1;
+}
+#app-mount-point .northstar-resource-ring > span {
+  z-index: 1;
+  grid-area: 1 / 1;
+  color: var(--ns-text) !important;
+}
+#app-mount-point .northstar-resource-native-hidden { display: none !important; }
+@media (max-width: 900px) {
+  #app-mount-point .northstar-metric-card,
+  #app-mount-point .layout-card-col:has(.northstar-metric-card),
+  #app-mount-point .layout-card-container:has(.northstar-metric-card) { height: 172px !important; }
+}
+

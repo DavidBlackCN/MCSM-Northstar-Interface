@@ -1,0 +1,267 @@
+/* Overview values follow the Maple-heavy technical hierarchy. */
+#app-mount-point .panel-overview .container,
+#app-mount-point .panel-overview .overview-item { min-width: 0; }
+#app-mount-point .panel-overview .title,
+#app-mount-point .panel-overview .overview-item__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+  color: var(--ns-text-faint) !important;
+  font: 600 13px/1.4 "Maple Mono", ui-monospace, monospace;
+}
+#app-mount-point .panel-overview .content,
+#app-mount-point .panel-overview .overview-item__value {
+  color: var(--ns-text) !important;
+  font: 400 14px/1.45 "Maple Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+#app-mount-point .panel-overview .title-icon,
+#app-mount-point .panel-overview .overview-item__icon { color: var(--ns-accent) !important; }
+
+/* Activity timeline mirrors the reference dashboard's restrained activity list. */
+#app-mount-point .time-line .ant-timeline { margin: 0; padding: 2px 0 0; }
+#app-mount-point .time-line .ant-timeline-item { padding-bottom: 14px; }
+#app-mount-point .time-line .ant-timeline-item-tail {
+  inset-inline-start: 5px;
+  border-inline-start: 1px solid color-mix(in srgb, var(--ns-accent) 40%, var(--ns-border)) !important;
+}
+#app-mount-point .time-line .ant-timeline-item-head {
+  width: 11px;
+  height: 11px;
+  color: var(--ns-accent) !important;
+  background: var(--ns-surface) !important;
+  border: 2px solid var(--ns-accent) !important;
+}
+#app-mount-point .time-line .ant-timeline-item-content { inset-block-start: -6px; margin-inline-start: 28px; }
+#app-mount-point .time-line .log-item {
+  margin: 0 !important;
+  padding: 12px 14px !important;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface-soft) !important;
+  border: 1px solid var(--ns-border) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  transition: background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease) !important;
+}
+#app-mount-point .time-line .log-item:hover { background: var(--ns-accent-soft) !important; border-color: var(--ns-border-strong) !important; }
+#app-mount-point .time-line .log-content { color: var(--ns-text) !important; font: 400 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+#app-mount-point .time-line .log-time { color: var(--ns-text-faint) !important; font: 400 11px/1.5 "Maple Mono", ui-monospace, monospace; opacity: 1 !important; }
+
+/* Node table uses the same compact, scan-friendly table treatment. */
+#app-mount-point .NodeOverview__wrap .ant-table-wrapper,
+#app-mount-point .NodeOverview__wrap .ant-table,
+#app-mount-point .NodeOverview__wrap .ant-table-container { border-radius: 8px !important; overflow: hidden; }
+#app-mount-point .NodeOverview__wrap .ant-table-thead > tr > th {
+  padding: 12px 14px !important;
+  color: var(--ns-text-faint) !important;
+  background: var(--ns-surface-soft) !important;
+  border-bottom: 1px solid var(--ns-border) !important;
+  font: 600 12px/1.35 "Maple Mono", ui-monospace, monospace;
+}
+#app-mount-point .NodeOverview__wrap .ant-table-tbody > tr > td {
+  padding: 12px 14px !important;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface) !important;
+  border-bottom: 1px solid var(--ns-border) !important;
+  font: 400 13px/1.45 "Maple Mono", ui-monospace, monospace;
+}
+#app-mount-point .NodeOverview__wrap .ant-table-tbody > tr:last-child > td { border-bottom: 0 !important; }
+#app-mount-point .NodeOverview__wrap .ant-table-tbody > tr:hover > td { background: color-mix(in srgb, var(--ns-accent-soft) 55%, var(--ns-surface)) !important; }
+
+/* ECharts canvases are recolored in JS; the surrounding plot stays quiet. */
+#app-mount-point .CardWrapper canvas,
+#app-mount-point .node-chart-container canvas { border-radius: 6px; }
+
+/* Portal components: confirmation dialogs, profile, dropdowns and drawers. */
+.ant-modal-root .ant-modal-mask, .ant-drawer-mask { background: rgba(20, 22, 25, .48) !important; }
+.ant-modal-root .ant-modal, .ant-drawer { color: var(--ns-text); }
+.ant-modal-root .ant-modal-content, .ant-drawer .ant-drawer-content,
+.ant-drawer .ant-drawer-header, .ant-drawer .ant-drawer-body,
+.ant-popover .ant-popover-inner, .ant-dropdown .ant-dropdown-menu,
+.ant-select-dropdown, .ant-tooltip .ant-tooltip-inner {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  border-color: var(--ns-border-strong) !important;
+  box-shadow: var(--ns-shadow-float) !important;
+}
+.ant-modal-root .ant-modal-header, .ant-drawer .ant-drawer-header { background: transparent !important; border-bottom-color: var(--ns-border) !important; }
+.ant-modal-root .ant-modal-title, .ant-drawer .ant-drawer-title,
+.ant-modal-root .ant-modal-confirm-title, .ant-popover .ant-popover-title { color: var(--ns-text) !important; font-weight: 600; }
+.ant-modal-root .ant-modal-confirm-content, .ant-drawer .ant-drawer-body,
+.ant-popover .ant-popover-inner-content, .ant-dropdown-menu-item,
+.ant-form-item-label > label, .ant-descriptions-item-label { color: var(--ns-text-muted) !important; }
+.ant-popover.ant-popconfirm .ant-popover-inner,
+.ant-popover.ant-popconfirm .ant-popover-inner-content,
+.ant-popover.ant-popconfirm .ant-popconfirm-message,
+.ant-popover.ant-popconfirm .ant-popconfirm-description,
+.ant-popover.ant-popconfirm .ant-popconfirm-title {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+}
+.ant-popover.ant-popconfirm .ant-popconfirm-description { color: var(--ns-text-muted) !important; }
+.ant-popover.ant-popconfirm .ant-btn { color: var(--ns-text) !important; background: var(--ns-surface) !important; border-color: var(--ns-border-strong) !important; }
+.ant-popover.ant-popconfirm .ant-btn-primary { color: var(--ns-on-action) !important; background: var(--ns-action) !important; border-color: var(--ns-action) !important; }
+.ant-modal-root .ant-modal-content,
+.ant-modal-root .ant-modal-content h1,
+.ant-modal-root .ant-modal-content h2,
+.ant-modal-root .ant-modal-content h3,
+.ant-modal-root .ant-modal-content h4,
+.ant-modal-root .ant-modal-content h5,
+.ant-modal-root .ant-modal-content strong { color: var(--ns-text) !important; }
+.ant-modal-root .ant-modal-content .ant-typography,
+.ant-modal-root .ant-modal-content .ant-form-item-label > label,
+.ant-modal-root .ant-modal-content .ant-form-item-extra,
+.ant-modal-root .ant-modal-content .ant-form-item-explain,
+.ant-modal-root .ant-modal-content .ant-tabs-tab,
+.ant-modal-root .ant-modal-content .ant-tabs-tab-btn,
+.ant-modal-root .ant-modal-content p,
+.ant-modal-root .ant-modal-content small { color: var(--ns-text-muted) !important; }
+.ant-modal-root .ant-modal-content .ant-tabs-tab-active .ant-tabs-tab-btn { color: var(--ns-accent) !important; }
+.ant-modal-root .ant-modal-content .ant-input,
+.ant-modal-root .ant-modal-content .ant-input-affix-wrapper,
+.ant-modal-root .ant-modal-content .ant-select-selector,
+.ant-modal-root .ant-modal-content .ant-picker,
+.ant-modal-root .ant-modal-content textarea {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface) !important;
+  border-color: var(--ns-border-strong) !important;
+}
+.ant-modal-root .ant-modal-content .ant-input::placeholder,
+.ant-modal-root .ant-modal-content textarea::placeholder { color: var(--ns-text-faint) !important; }
+.ant-modal-root .ant-modal-content .ant-select-selection-item,
+.ant-modal-root .ant-modal-content .ant-picker-input > input { color: var(--ns-text) !important; }
+.ant-modal-root .ant-modal-content .anticon { color: var(--ns-text-muted) !important; }
+.ant-modal-root .ant-modal-content .ant-modal-close:hover,
+.ant-modal-root .ant-modal-content .anticon:hover { color: var(--ns-accent) !important; }
+.ant-modal-root .ant-modal-close, .ant-drawer .ant-drawer-close,
+.ant-popover .ant-popover-close { color: var(--ns-text-muted) !important; }
+.ant-modal-root .ant-modal-close:hover, .ant-drawer .ant-drawer-close:hover,
+.ant-popover .ant-popover-close:hover { color: var(--ns-accent) !important; background: var(--ns-accent-soft) !important; }
+.ant-modal-root .ant-modal-confirm .ant-modal-confirm-btns .ant-btn,
+.ant-modal-root .ant-modal-footer .ant-btn, .ant-drawer .ant-drawer-footer,
+.ant-popover .ant-btn { border-radius: var(--ns-radius); }
+.ant-modal-root .ant-modal-confirm .ant-modal-confirm-btns .ant-btn-primary,
+.ant-modal-root .ant-modal-footer .ant-btn-primary, .ant-popover .ant-btn-primary {
+  color: var(--ns-on-action) !important; background: var(--ns-action) !important; border-color: var(--ns-action) !important;
+}
+.ant-modal-root .ant-modal-confirm .ant-modal-confirm-btns .ant-btn-primary:hover,
+.ant-modal-root .ant-modal-footer .ant-btn-primary:hover, .ant-popover .ant-btn-primary:hover { filter: brightness(.94); }
+
+/* Layout design mode and its card picker. */
+.ant-modal-root .ant-modal-confirm-warning .ant-modal-confirm-title,
+.ant-modal-root .ant-modal-confirm-info .ant-modal-confirm-title {
+  color: var(--ns-text) !important;
+}
+.ant-modal-root .ant-modal-confirm-warning .ant-modal-confirm-content,
+.ant-modal-root .ant-modal-confirm-info .ant-modal-confirm-content {
+  color: var(--ns-text-muted) !important;
+}
+.ant-modal-root .ant-modal-confirm-warning .ant-modal-confirm-body > .anticon,
+.ant-modal-root .ant-modal-confirm-info .ant-modal-confirm-body > .anticon {
+  color: var(--ns-accent) !important;
+}
+.ant-modal-root .ant-modal-confirm-warning .ant-modal-confirm-btns .ant-btn,
+.ant-modal-root .ant-modal-confirm-info .ant-modal-confirm-btns .ant-btn {
+  min-width: 84px;
+}
+
+#app-mount-point .new-card-list-container {
+  color: var(--ns-text) !important;
+  background: color-mix(in srgb, var(--ns-bg) 86%, transparent) !important;
+  backdrop-filter: saturate(120%) blur(14px);
+}
+#app-mount-point .new-card-list-container .new-card-list {
+  width: min(1320px, 100%);
+  max-width: 1320px;
+  margin-inline: auto;
+}
+#app-mount-point .new-card-list-container .ant-radio-group {
+  display: inline-flex;
+  gap: 0;
+  overflow: hidden;
+  background: var(--ns-surface-raised);
+  border: 1px solid var(--ns-border-strong);
+  border-radius: var(--ns-radius);
+  box-shadow: none;
+}
+#app-mount-point .new-card-list-container .ant-radio-button-wrapper {
+  height: 42px;
+  padding-inline: 18px;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface-raised) !important;
+  border: 0 !important;
+  border-inline-start: 1px solid var(--ns-border) !important;
+  line-height: 40px;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), box-shadow 150ms var(--ns-ease) !important;
+}
+#app-mount-point .new-card-list-container .ant-radio-button-wrapper:first-child {
+  border-inline-start: 0 !important;
+}
+#app-mount-point .new-card-list-container .ant-radio-button-wrapper:hover {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+}
+#app-mount-point .new-card-list-container .ant-radio-button-wrapper-checked {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+  box-shadow: inset 0 -2px 0 var(--ns-accent) !important;
+}
+#app-mount-point .new-card-list-container .ant-radio-button-wrapper-checked::before {
+  display: none !important;
+}
+#app-mount-point .new-card-list-container .ant-radio-button-wrapper:focus-visible,
+#app-mount-point .new-card-list-container .ant-radio-button-wrapper-checked:focus-visible {
+  z-index: 1;
+  outline: 2px solid var(--ns-accent) !important;
+  outline-offset: -2px;
+}
+#app-mount-point .new-card-list-container .new-card-list > .mb-24 .ant-btn {
+  margin-left: 10px;
+  color: var(--ns-text-muted) !important;
+  background: var(--ns-surface-raised) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: var(--ns-radius) !important;
+}
+#app-mount-point .new-card-list-container .new-card-list > .mb-24 .ant-btn:hover {
+  color: var(--ns-accent-ink) !important;
+  background: var(--ns-accent-soft) !important;
+  border-color: var(--ns-accent) !important;
+  transform: translateY(-1px);
+}
+#app-mount-point .new-card-list-container .card-container-wrapper {
+  padding: 14px;
+  background: color-mix(in srgb, var(--ns-surface) 86%, transparent) !important;
+  border: 1px dashed var(--ns-border-strong) !important;
+  border-radius: var(--ns-card-radius) !important;
+}
+#app-mount-point .new-card-list-container .card-list-container {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: var(--ns-card-radius) !important;
+  box-shadow: none !important;
+  transition: border-color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), transform 150ms var(--ns-ease), box-shadow 150ms var(--ns-ease) !important;
+}
+#app-mount-point .new-card-list-container .card-list-container:hover {
+  opacity: 1 !important;
+  background: color-mix(in srgb, var(--ns-surface-raised) 84%, var(--ns-accent-soft)) !important;
+  border-color: var(--ns-accent) !important;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--ns-accent) 10%, transparent) !important;
+  transform: translateY(-2px) !important;
+}
+#app-mount-point .new-card-list-container .card-alert .ant-alert {
+  color: var(--ns-warning) !important;
+  background: var(--ns-warning-soft) !important;
+  border: 1px solid color-mix(in srgb, var(--ns-warning) 35%, var(--ns-border)) !important;
+}
+#app-mount-point .new-card-list-container .card-alert .ant-alert-message,
+#app-mount-point .new-card-list-container .card-alert .ant-alert-icon {
+  color: var(--ns-warning) !important;
+}
+#app-mount-point .new-card-list-container .ant-tag { border-radius: 6px; }
+@media (max-width: 700px) {
+  #app-mount-point .new-card-list-container { padding: 16px !important; }
+  #app-mount-point .new-card-list-container .ant-radio-button-wrapper { padding-inline: 10px; }
+}
+

@@ -16,9 +16,12 @@
    ```html
    <link rel="stylesheet" href="./northstar-v10.css">
    ```
-5. 在 `</body>` 前加入：
+5. 在 `</body>` 前按以下顺序加入：
 
    ```html
+   <script src="./northstar-v10/scripts/00-runtime-bridges.js"></script>
+   <script src="./northstar-v10/scripts/01-shell-controls.js"></script>
+   <script src="./northstar-v10/scripts/02-navigation-surfaces.js"></script>
    <script src="./northstar-v10.js"></script>
    ```
 6. 重启 MCSManager Web 服务，并使用 `Ctrl+F5` 刷新页面。
@@ -33,8 +36,8 @@
 
 ## 文件
 
-- `northstar-v10.css`：主题样式
-- `northstar-v10.js`：主题交互
+- `northstar-v10.css`：主题样式入口，按顺序加载 `northstar-v10/` 下的分类样式模块
+- `northstar-v10.js`：主题交互启动入口，依赖 `northstar-v10/scripts/` 下的分类脚本模块
 - `fonts`：Maple Mono 字体
 - `img/logo.png`：侧边栏 Logo
 - `cards`：可选自定义卡片

@@ -1,0 +1,163 @@
+/* Ant Design renders overlays under body rather than inside #app-mount-point. */
+.ant-modal-root, .ant-popover, .ant-dropdown, .ant-select-dropdown, .ant-tooltip,
+.ant-notification, .ant-message, .ant-drawer, .ant-modal-wrap, .ant-modal-mask {
+  --ant-color-primary: var(--ns-accent);
+  --ant-color-primary-hover: var(--ns-accent-ink);
+  --ant-color-primary-active: var(--ns-accent-ink);
+  --ant-color-link: var(--ns-accent);
+  --ant-color-link-hover: var(--ns-accent-ink);
+  --ant-color-link-active: var(--ns-accent-ink);
+  --ant-color-bg-elevated: var(--ns-surface-raised);
+  --ant-color-bg-container: var(--ns-surface);
+  --ant-color-bg-layout: var(--ns-bg);
+  --ant-color-text: var(--ns-text);
+  --ant-color-text-secondary: var(--ns-text-muted);
+  --ant-color-border: var(--ns-border);
+  --ant-color-border-secondary: var(--ns-border);
+}
+
+/* Portals are mounted directly under body, so keep their neutral icons in
+   the same contrast system as icons rendered inside the application root. */
+.ant-modal-root .anticon,
+.ant-popover .anticon,
+.ant-dropdown .anticon,
+.ant-select-dropdown .anticon,
+.ant-drawer .anticon,
+.ant-tooltip .anticon {
+  color: var(--ns-text-muted) !important;
+}
+.ant-modal-root .anticon[class*="close"],
+.ant-modal-root .anticon[class*="edit"],
+.ant-popover .anticon[class*="copy"],
+.ant-dropdown .anticon[class*="copy"] {
+  color: var(--ns-accent) !important;
+}
+
+/* Text remains semantic: only links, active states and headings use the accent. */
+#app-mount-point .ant-card, #app-mount-point .ant-collapse, #app-mount-point .ant-descriptions-view, #app-mount-point .ant-list,
+#app-mount-point .ant-table, #app-mount-point .ant-table-container, #app-mount-point .ant-modal-content, #app-mount-point .ant-modal-header,
+#app-mount-point .ant-drawer-content, #app-mount-point .ant-drawer-header, #app-mount-point .ant-dropdown-menu, #app-mount-point .ant-select-dropdown { color: var(--ns-text); background: var(--ns-surface) !important; border-color: var(--ns-border) !important; }
+#app-mount-point .ant-card { border-radius: var(--ns-radius); box-shadow: none; }
+#app-mount-point .ant-card-head { min-height: 56px; color: var(--ns-text); background: transparent; border-bottom-color: var(--ns-border); }
+#app-mount-point .ant-card-head-title, #app-mount-point .ant-typography strong,
+#app-mount-point h1, #app-mount-point h2, #app-mount-point h3, #app-mount-point h4, #app-mount-point h5 { color: var(--ns-text); }
+#app-mount-point .ant-typography, #app-mount-point .ant-descriptions-item-label, #app-mount-point .ant-descriptions-item-content, #app-mount-point .ant-empty-description { color: var(--ns-text-muted); }
+#app-mount-point .ant-typography { line-height: 1.5; }
+#app-mount-point a, #app-mount-point .ant-typography a, #app-mount-point .link, #app-mount-point .pointer { color: var(--ns-accent); }
+#app-mount-point .ant-table-thead > tr > th { color: var(--ns-text-muted); background: var(--ns-surface-soft) !important; border-color: var(--ns-border); }
+#app-mount-point .ant-table-tbody > tr > td { color: var(--ns-text); background: var(--ns-surface) !important; border-color: var(--ns-border); }
+#app-mount-point .ant-table { font-size: 14px; }
+#app-mount-point .ant-table-thead > tr > th { font-size: 13px; }
+#app-mount-point .ant-table-tbody > tr:hover > td { background: var(--ns-accent-soft) !important; }
+#app-mount-point .ant-btn { min-height: 38px; color: var(--ns-text); background: var(--ns-surface); border-color: var(--ns-border-strong); border-radius: var(--ns-radius); box-shadow: none; font-size: 14px; }
+#app-mount-point .ant-btn:hover { color: var(--ns-accent); background: var(--ns-accent-soft); border-color: var(--ns-accent); }
+#app-mount-point .ant-btn-primary { color: var(--ns-on-action); background: var(--ns-action); border-color: var(--ns-action); }
+#app-mount-point .ant-btn-primary:hover { color: var(--ns-on-action); background: var(--ns-action); border-color: var(--ns-action); filter: brightness(.94); }
+#app-mount-point .button-color-success,
+#app-mount-point .ant-btn-success,
+#app-mount-point .ant-btn-success:hover,
+#app-mount-point .button-color-success:hover {
+  color: var(--ns-on-action) !important;
+  background: var(--ns-success) !important;
+  border-color: var(--ns-success) !important;
+}
+#app-mount-point .button-color-success:hover,
+#app-mount-point .ant-btn-success:hover { filter: brightness(.94); }
+#app-mount-point .button-color-success .anticon,
+#app-mount-point .button-color-success .anticon svg,
+#app-mount-point .ant-btn-success .anticon,
+#app-mount-point .ant-btn-success .anticon svg {
+  color: currentColor !important;
+  fill: currentColor !important;
+}
+#app-mount-point .ant-input, #app-mount-point .ant-input-affix-wrapper, #app-mount-point .ant-select-selector, #app-mount-point .ant-input-number, #app-mount-point textarea { color: var(--ns-text) !important; background: var(--ns-surface) !important; border-color: var(--ns-border-strong) !important; font-size: 15px; }
+#app-mount-point .ant-input::placeholder, #app-mount-point textarea::placeholder { color: var(--ns-text-faint); }
+#app-mount-point .ant-form-item-label > label,
+#app-mount-point .ant-descriptions-item-label,
+#app-mount-point .ant-descriptions-item-content,
+#app-mount-point .ant-tabs-tab,
+#app-mount-point .ant-menu-item,
+#app-mount-point .ant-select-item,
+#app-mount-point .ant-dropdown-menu-item,
+#app-mount-point .ant-breadcrumb { font-size: 14px; }
+#app-mount-point .ant-tag:not(.ant-tag-success):not(.ant-tag-warning):not(.ant-tag-error):not(.northstar-running-badge):not(.northstar-idle-badge):not(.northstar-stopped-badge) { color: var(--ns-text-muted); background: var(--ns-surface-soft); border-color: var(--ns-border); }
+#app-mount-point .ant-tag.northstar-running-badge {
+  color: var(--ns-success) !important;
+  background: var(--ns-success-soft) !important;
+  border-color: color-mix(in srgb, var(--ns-success) 42%, var(--ns-border)) !important;
+  opacity: 1 !important;
+  transition: none !important;
+  font-weight: 600;
+}
+#app-mount-point .ant-tag.northstar-running-badge .anticon,
+#app-mount-point .ant-tag.northstar-running-badge .anticon svg {
+  color: var(--ns-success) !important;
+  fill: currentColor;
+}
+#app-mount-point .ant-tag.northstar-idle-badge {
+  color: var(--ns-idle) !important;
+  background: var(--ns-idle-soft) !important;
+  border-color: var(--ns-idle-border) !important;
+  opacity: 1 !important;
+  transition: none !important;
+  font-weight: 600;
+}
+#app-mount-point .ant-tag.northstar-idle-badge .anticon,
+#app-mount-point .ant-tag.northstar-idle-badge .anticon svg {
+  color: var(--ns-idle) !important;
+  fill: currentColor;
+}
+#app-mount-point .ant-tag.northstar-stopped-badge {
+  color: var(--ns-stopped) !important;
+  background: var(--ns-stopped-soft) !important;
+  border-color: var(--ns-stopped-border) !important;
+  opacity: 1 !important;
+  transition: none !important;
+  font-weight: 600;
+}
+#app-mount-point .ant-tag.northstar-stopped-badge .anticon,
+#app-mount-point .ant-tag.northstar-stopped-badge .anticon svg {
+  color: var(--ns-stopped) !important;
+  fill: currentColor;
+}
+#app-mount-point .ant-progress-inner { background: var(--ns-surface-soft); } #app-mount-point .ant-progress-bg { background: var(--ns-accent) !important; }
+#app-mount-point .color-primary, #app-mount-point .layout-card-design-btn:hover, #app-mount-point .layout-card-design-btn:hover i { color: var(--ns-accent) !important; }
+#app-mount-point .selected { border-color: var(--ns-accent) !important; }
+#app-mount-point .ant-dropdown-menu-item:hover, #app-mount-point .ant-select-item-option-active, #app-mount-point .ant-select-item-option-selected { color: var(--ns-accent-ink); background: var(--ns-accent-soft) !important; }
+#app-mount-point .layout-card-col { min-width: 0; }
+
+/* Function shortcuts need a readable surface in both themes. */
+#app-mount-point .function-btns-container .inner-card-wrapper {
+  color: var(--ns-text) !important;
+  background: var(--ns-surface-raised) !important;
+  border: 1px solid var(--ns-border-strong) !important;
+  border-radius: var(--ns-radius) !important;
+  transition: color 150ms var(--ns-ease), background-color 150ms var(--ns-ease), border-color 150ms var(--ns-ease), transform 150ms var(--ns-ease);
+}
+#app-mount-point .function-btns-container .inner-card-wrapper strong {
+  color: var(--ns-text) !important;
+  font-size: 15px;
+  line-height: 1.35;
+}
+#app-mount-point .function-btns-container .inner-card-wrapper a,
+#app-mount-point .function-btns-container .inner-card-wrapper a .anticon {
+  color: var(--ns-accent) !important;
+  font-size: 14px;
+}
+#app-mount-point .function-btns-container .inner-card-wrapper .bg-icon,
+#app-mount-point .function-btns-container .inner-card-wrapper .bg-icon .anticon {
+  color: var(--ns-accent) !important;
+  opacity: .5 !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #app-mount-point .function-btns-container .inner-card-wrapper:hover {
+    background: var(--ns-accent-soft) !important;
+    border-color: var(--ns-accent) !important;
+    transform: translateY(-1px);
+  }
+  #app-mount-point .function-btns-container .inner-card-wrapper:hover .bg-icon,
+  #app-mount-point .function-btns-container .inner-card-wrapper:hover .bg-icon .anticon {
+    opacity: .72 !important;
+  }
+}
+
