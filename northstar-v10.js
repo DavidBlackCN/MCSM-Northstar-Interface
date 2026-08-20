@@ -35,7 +35,7 @@
     return;
   }
   const { decorateStartupLoader, refreshCharts, installChartColorBridge, installTerminalFontBridge, installBackgroundConfigBridge, installThemeTooltip } = modules.createRuntimeBridges({ root });
-  const { applyTheme, buildTools } = modules.createShellControls({ root, accents, refreshCharts, installThemeTooltip });
+  const { applyTheme, buildTools, getIconName } = modules.createShellControls({ root, accents, refreshCharts, installThemeTooltip, svg });
   const { buildSidebar, redirectAfterLogin, decorateInstanceControls, decorateImageManagerControls, decorateManagementSurfaces, decorateRunningBadges, decorateMetricCards } = modules.createNavigationSurfaces({ assetVersion, icons, instanceNodeIcon, metricIcons, repositoryUrl, svg });
 
   decorateStartupLoader();
@@ -105,4 +105,3 @@
   };
   start();
 })();
-

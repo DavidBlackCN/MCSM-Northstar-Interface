@@ -2,7 +2,7 @@
 (() => {
   window.__northstarV10Modules ||= {};
   window.__northstarV10Modules.createShellControls = (context) => {
-    const { root, accents, refreshCharts, installThemeTooltip } = context;
+    const { root, accents, refreshCharts, installThemeTooltip, svg } = context;
     const state = { syncToolState: () => {} };
   const readNativeMode = () => {
     const value = Number(localStorage.getItem("THEME_KEY"));
@@ -142,6 +142,6 @@
     sync();
     return tools;
   };
-    return { applyTheme, buildTools };
+    return { applyTheme, buildTools, getIconName };
   };
 })();
