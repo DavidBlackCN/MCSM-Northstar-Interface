@@ -90,7 +90,7 @@
   margin: 0 0 2px;
   font-size: 0 !important;
   color: var(--ns-text-muted, #5c6166) !important;
-  font-family: "Maple Mono", ui-monospace, monospace;
+  font-family: "Maple Mono", "MiSans", ui-monospace, monospace;
   font-weight: 500;
   line-height: 1.4;
 }
@@ -100,7 +100,7 @@
 }
 #before-app-mounted .error-title {
   color: var(--ns-text, #292b2f) !important;
-  font: 600 20px/1.35 "Maple Mono", ui-monospace, monospace;
+  font: 600 20px/1.35 "Maple Mono", "MiSans", ui-monospace, monospace;
 }
 #before-app-mounted .error-message { color: var(--ns-text-muted, #5c6166) !important; }
 #before-app-mounted .error-button {

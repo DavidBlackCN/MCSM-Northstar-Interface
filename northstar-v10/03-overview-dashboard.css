@@ -42,7 +42,7 @@
   color: var(--ns-text) !important;
   background: transparent !important;
   border-bottom: 1px solid var(--ns-border) !important;
-  font: 600 16px/1.35 "Maple Mono", ui-monospace, monospace;
+  font: 600 16px/1.35 "Maple Mono", "MiSans", ui-monospace, monospace;
 }
 #app-mount-point .card-panel .card-panel-content,
 #app-mount-point .ant-card-body {
@@ -124,7 +124,7 @@
   order: 1;
   margin: 0 !important;
   color: var(--ns-text) !important;
-  font: 700 30px/1.1 "Maple Mono", ui-monospace, monospace;
+  font: 700 30px/1.1 "Maple Mono", "MiSans", ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
 }
 #app-mount-point .northstar-metric-card .status-text__highlight {
@@ -265,7 +265,7 @@
   border-radius: 50%;
   background: conic-gradient(var(--ns-accent) var(--northstar-ring-value), var(--ns-surface-soft) 0);
   place-items: center;
-  font: 600 14px/1 "Maple Mono", ui-monospace, monospace;
+  font: 600 14px/1 "Maple Mono", "MiSans", ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
 }
 #app-mount-point .northstar-resource-ring::before {

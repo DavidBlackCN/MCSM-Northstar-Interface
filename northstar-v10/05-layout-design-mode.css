@@ -8,12 +8,12 @@
   gap: 8px;
   margin-bottom: 7px;
   color: var(--ns-text-faint) !important;
-  font: 600 13px/1.4 "Maple Mono", ui-monospace, monospace;
+  font: 600 13px/1.4 "Maple Mono", "MiSans", ui-monospace, monospace;
 }
 #app-mount-point .panel-overview .content,
 #app-mount-point .panel-overview .overview-item__value {
   color: var(--ns-text) !important;
-  font: 400 14px/1.45 "Maple Mono", ui-monospace, monospace;
+  font: 400 14px/1.45 "Maple Mono", "MiSans", ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
 }
 #app-mount-point .panel-overview .title-icon,
@@ -46,7 +46,7 @@
 }
 #app-mount-point .time-line .log-item:hover { background: var(--ns-accent-soft) !important; border-color: var(--ns-border-strong) !important; }
 #app-mount-point .time-line .log-content { color: var(--ns-text) !important; font: 400 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-#app-mount-point .time-line .log-time { color: var(--ns-text-faint) !important; font: 400 11px/1.5 "Maple Mono", ui-monospace, monospace; opacity: 1 !important; }
+#app-mount-point .time-line .log-time { color: var(--ns-text-faint) !important; font: 400 11px/1.5 "Maple Mono", "MiSans", ui-monospace, monospace; opacity: 1 !important; }
 
 /* Node table uses the same compact, scan-friendly table treatment. */
 #app-mount-point .NodeOverview__wrap .ant-table-wrapper,
@@ -57,14 +57,14 @@
   color: var(--ns-text-faint) !important;
   background: var(--ns-surface-soft) !important;
   border-bottom: 1px solid var(--ns-border) !important;
-  font: 600 12px/1.35 "Maple Mono", ui-monospace, monospace;
+  font: 600 12px/1.35 "Maple Mono", "MiSans", ui-monospace, monospace;
 }
 #app-mount-point .NodeOverview__wrap .ant-table-tbody > tr > td {
   padding: 12px 14px !important;
   color: var(--ns-text-muted) !important;
   background: var(--ns-surface) !important;
   border-bottom: 1px solid var(--ns-border) !important;
-  font: 400 13px/1.45 "Maple Mono", ui-monospace, monospace;
+  font: 400 13px/1.45 "Maple Mono", "MiSans", ui-monospace, monospace;
 }
 #app-mount-point .NodeOverview__wrap .ant-table-tbody > tr:last-child > td { border-bottom: 0 !important; }
 #app-mount-point .NodeOverview__wrap .ant-table-tbody > tr:hover > td { background: color-mix(in srgb, var(--ns-accent-soft) 55%, var(--ns-surface)) !important; }

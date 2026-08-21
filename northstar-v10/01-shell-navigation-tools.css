@@ -60,9 +60,9 @@ body.app-light-extend-theme #app-mount-point .main-content .breadcrumbs {
 }
 
 .northstar-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 30; display: flex; width: var(--ns-sidebar); min-width: 0; padding: 18px 14px; flex-direction: column; overflow: hidden; overflow-x: hidden; color: var(--ns-text); background: var(--ns-surface); border-right: 1px solid var(--ns-border); }
-.northstar-sidebar__brand { display: flex; min-height: 68px; padding: 0 8px; align-items: center; justify-content: center; gap: 10px; color: var(--ns-text); text-decoration: none; font: 600 14px/1 "Maple Mono", ui-monospace, monospace; }
+.northstar-sidebar__brand { display: flex; min-height: 68px; padding: 0 8px; align-items: center; justify-content: center; gap: 10px; color: var(--ns-text); text-decoration: none; font: 600 14px/1 "Maple Mono", "MiSans", ui-monospace, monospace; }
 .northstar-sidebar__brand img { display: block; width: 190px; max-width: 100%; height: auto; max-height: 48px; object-fit: contain; object-position: center; }
-.northstar-sidebar__label { margin: 16px 10px 7px; color: var(--ns-text-faint); font: 600 12px/1.2 "Maple Mono", ui-monospace, monospace; }
+.northstar-sidebar__label { margin: 16px 10px 7px; color: var(--ns-text-faint); font: 600 12px/1.2 "Maple Mono", "MiSans", ui-monospace, monospace; }
 .northstar-sidebar__nav > .northstar-sidebar__label:first-child { margin-top: 8px; }
 .northstar-sidebar__nav { display: grid; width: 100%; max-width: 100%; min-width: 0; gap: 3px; min-height: 0; overflow-x: hidden !important; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--ns-border-strong) transparent; }
 .northstar-sidebar__nav::-webkit-scrollbar { width: 6px; height: 0; }
@@ -74,7 +74,7 @@ body.app-light-extend-theme #app-mount-point .main-content .breadcrumbs {
 .northstar-sidebar__item:hover { color: var(--ns-text); background: var(--ns-surface-soft); transform: translateX(2px); }
 .northstar-sidebar__item:active { transform: translateX(1px) scale(.985); }
 .northstar-sidebar__item[aria-current="page"] { color: var(--ns-accent-ink); background: var(--ns-accent-soft); font-weight: 600; }
-.northstar-sidebar__footer { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--ns-border); color: var(--ns-text-faint); font: 12px/1.45 "Maple Mono", ui-monospace, monospace; }
+.northstar-sidebar__footer { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--ns-border); color: var(--ns-text-faint); font: 12px/1.45 "Maple Mono", "MiSans", ui-monospace, monospace; }
 .northstar-sidebar__footer a { display: flex; min-height: 36px; padding: 0 4px; align-items: center; justify-content: space-between; gap: 6px; color: var(--ns-text-faint); border-radius: var(--ns-radius); text-decoration: none; transition: color 140ms var(--ns-ease), background-color 140ms var(--ns-ease), transform 140ms var(--ns-ease); }
 .northstar-sidebar__footer a > svg { width: 14px; height: 14px; flex: 0 0 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .northstar-sidebar__footer a:hover { color: var(--ns-accent-ink); background: var(--ns-accent-soft); transform: translateY(-1px); }
@@ -224,7 +224,7 @@ body.app-light-extend-theme #app-mount-point .main-content .breadcrumbs {
 .northstar-v10-picker { position: relative; }
 .northstar-v10-menu { position: absolute; top: 48px; right: 0; z-index: 100; display: grid; gap: 4px; width: 176px; padding: 7px; color: var(--ns-text); background: var(--ns-surface-raised); border: 1px solid var(--ns-border-strong); border-radius: var(--ns-radius); box-shadow: var(--ns-shadow-float); }
 .northstar-v10-menu[hidden] { display: none; }
-.northstar-v10-menu::before { padding: 5px 9px 6px; content: "主题色"; color: var(--ns-text-faint); font: 600 11px/1.2 "Maple Mono", ui-monospace, monospace; }
+.northstar-v10-menu::before { padding: 5px 9px 6px; content: "主题色"; color: var(--ns-text-faint); font: 600 11px/1.2 "Maple Mono", "MiSans", ui-monospace, monospace; }
 .northstar-v10-choice { display: flex; min-height: 36px; padding: 0 9px; align-items: center; gap: 9px; color: var(--ns-text-muted); background: transparent; border: 0; border-radius: 6px; cursor: pointer; text-align: left; }
 .northstar-v10-choice:hover { color: var(--ns-text); background: var(--ns-surface-soft); }
 .northstar-v10-choice[aria-checked="true"] { color: var(--ns-accent-ink); background: var(--ns-accent-soft); font-weight: 600; }

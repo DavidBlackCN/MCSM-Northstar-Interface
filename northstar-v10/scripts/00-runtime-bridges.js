@@ -96,7 +96,7 @@
         const isTerminalRoute = /\/(?:terminal|console)(?:[/?]|$)/i.test(location.hash);
         const isTerminal = isTerminalRoute || (canvas instanceof Element && Boolean(canvas.closest(".xterm, .terminal-container")));
         const font = isTerminal && typeof value === "string"
-          ? value.replace(/(\d+(?:\.\d+)?px(?:\/\S+)?\s+).+$/i, '$1"Maple Mono", monospace')
+          ? value.replace(/(\d+(?:\.\d+)?px(?:\/\S+)?\s+).+$/i, '$1"Maple Mono", "Maple Mono CN", monospace')
           : value;
         descriptor.set.call(this, font);
       }

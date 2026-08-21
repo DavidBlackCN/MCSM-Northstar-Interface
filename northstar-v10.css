@@ -1,11 +1,11 @@
 /* Northstar v10 stylesheet entry point. Keep imports in source-order. */
-@import url("./northstar-v10/00-tokens-foundation.css?v=20260820-78");
-@import url("./northstar-v10/01-shell-navigation-tools.css?v=20260820-78");
-@import url("./northstar-v10/02-components-portals.css?v=20260820-78");
-@import url("./northstar-v10/03-overview-dashboard.css?v=20260820-78");
-@import url("./northstar-v10/04-instances-nodes.css?v=20260820-78");
-@import url("./northstar-v10/05-layout-design-mode.css?v=20260820-78");
-@import url("./northstar-v10/06-native-overrides.css?v=20260820-78");
-@import url("./northstar-v10/07-loading-indicators.css?v=20260820-78");
-@import url("./northstar-v10/08-quickstart-actions.css?v=20260820-78");
-@import url("./northstar-v10/09-console-files-tables.css?v=20260820-78");
+@import url("./northstar-v10/00-tokens-foundation.css?v=20260821-01");
+@import url("./northstar-v10/01-shell-navigation-tools.css?v=20260821-01");
+@import url("./northstar-v10/02-components-portals.css?v=20260821-01");
+@import url("./northstar-v10/03-overview-dashboard.css?v=20260821-01");
+@import url("./northstar-v10/04-instances-nodes.css?v=20260821-01");
+@import url("./northstar-v10/05-layout-design-mode.css?v=20260821-01");
+@import url("./northstar-v10/06-native-overrides.css?v=20260821-01");
+@import url("./northstar-v10/07-loading-indicators.css?v=20260821-01");
+@import url("./northstar-v10/08-quickstart-actions.css?v=20260821-01");
+@import url("./northstar-v10/09-console-files-tables.css?v=20260821-01");

@@ -43,7 +43,8 @@
 }
 
 /* File and server-config editors use CodeMirror 6. Keep every text-bearing
-   layer on Maple Mono so measurements, selections, and visible glyphs agree. */
+   layer on Maple Mono so measurements, selections, and visible glyphs agree;
+   the CN build supplies CJK glyphs for mixed-language source files. */
 .northstar-code-editor,
 .northstar-code-editor .cm-scroller,
 .northstar-code-editor .cm-content,
@@ -53,7 +54,7 @@
 .northstar-code-editor .cm-tooltip,
 .northstar-code-editor .cm-panels,
 .northstar-code-editor textarea {
-  font-family: "Maple Mono", monospace !important;
+  font-family: var(--ns-font-editor) !important;
 }
 .northstar-code-editor {
   color: var(--ns-text) !important;

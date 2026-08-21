@@ -217,7 +217,7 @@
 .ant-tour .ant-tour-title {
   margin-right: 30px;
   color: var(--ns-text) !important;
-  font: 600 19px/1.35 "Maple Mono", ui-monospace, monospace !important;
+  font: 600 19px/1.35 "Maple Mono", "MiSans", ui-monospace, monospace !important;
 }
 .ant-tour .ant-tour-description {
   margin-top: 12px;

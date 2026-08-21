@@ -36,7 +36,7 @@
 }
 #app-mount-point .manual-install-options .install-option-button .button-label {
   color: var(--ns-text) !important;
-  font: 600 15px/1.4 "Maple Mono", ui-monospace, monospace;
+  font: 600 15px/1.4 "Maple Mono", "MiSans", ui-monospace, monospace;
 }
 #app-mount-point .manual-install-options .install-option-button .button-desc {
   color: var(--ns-text-muted) !important;
@@ -110,7 +110,7 @@
   min-width: 0;
   margin-left: 0 !important;
   color: var(--ns-text) !important;
-  font: 600 14px/1.4 "Maple Mono", ui-monospace, monospace;
+  font: 600 14px/1.4 "Maple Mono", "MiSans", ui-monospace, monospace;
 }
 @media (hover: hover) and (pointer: fine) {
   #app-mount-point .actions-button .action-btn-item:hover {
@@ -161,7 +161,8 @@
   opacity: 1 !important;
 }
 
-/* The instance console must use Maple Mono across xterm's DOM and input layers. */
+/* The instance console must use Maple Mono across xterm's DOM and input layers.
+   The CN build supplies CJK glyphs so mixed logs keep monospace metrics. */
 #app-mount-point .terminal-container,
 #app-mount-point .terminal-container .xterm,
 #app-mount-point .terminal-container .xterm-screen,
@@ -172,6 +173,6 @@
 #app-mount-point .terminal-container .xterm-accessibility,
 #app-mount-point .terminal-container .xterm-accessibility-tree,
 #app-mount-point .terminal-container .xterm-accessibility-tree * {
-  font-family: "Maple Mono", monospace !important;
+  font-family: var(--ns-font-editor) !important;
 }
 

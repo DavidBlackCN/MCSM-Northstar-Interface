@@ -38,7 +38,7 @@
 
 - `northstar-v10.css`：主题样式入口，按顺序加载 `northstar-v10/` 下的分类样式模块
 - `northstar-v10.js`：主题交互启动入口，依赖 `northstar-v10/scripts/` 下的分类脚本模块
-- `fonts`：Maple Mono 字体
+- `fonts`：Maple Mono（含无中文的常规版与含中文的 CN 版）与 MiSans 字体
 - `img/logo.png`：侧边栏 Logo
 - `cards`：可选自定义卡片
 
