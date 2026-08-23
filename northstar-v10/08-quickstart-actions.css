@@ -78,6 +78,12 @@
 #app-mount-point .actions-button {
   width: 100%;
 }
+/* QuickStartFlow's action list is a 400px scroll viewport. Its first row sits
+   flush against the clipping edge, so the 1px hover lift loses its top edge.
+   Reserve only the movement allowance inside that specific list viewport. */
+#app-mount-point .card-wrapper .text-left > div:has(.actions-button) {
+  padding-top: 2px;
+}
 #app-mount-point .actions-button .action-btn-item {
   min-height: 58px;
   padding: 12px 14px;
@@ -175,4 +181,3 @@
 #app-mount-point .terminal-container .xterm-accessibility-tree * {
   font-family: var(--ns-font-editor) !important;
 }
-
