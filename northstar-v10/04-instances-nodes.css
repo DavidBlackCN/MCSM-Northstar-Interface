@@ -97,15 +97,17 @@
 }
 #app-mount-point .instance-card .ant-btn:first-child { margin-inline-start: 0; }
 #app-mount-point .instance-card .ant-btn .anticon { font-size: 18px !important; }
-/* Ant Design keeps the original action icon in the button while inserting a
-   loading icon. Take the loader out of the grid flow and hide the original
-   glyph so icon-only instance actions stay perfectly centered while busy. */
-#app-mount-point .instance-card .ant-btn.ant-btn-loading {
+/* These action glyphs are default-slot children rather than Ant's `icon`
+   prop, so LoadingIcon enters and leaves through a width transition. Anchor
+   the loader for its entire DOM lifetime (including the leave frame) and keep
+   the original glyph hidden until the transition node is actually removed. */
+#app-mount-point .instance-card .ant-btn:has(> .ant-btn-loading-icon),
+#app-mount-point .instance-card .ant-btn:has(> .anticon-loading) {
   position: relative;
 }
-#app-mount-point .instance-card .ant-btn.ant-btn-loading > .ant-btn-loading-icon,
-#app-mount-point .instance-card .ant-btn.ant-btn-loading > .ant-btn-icon:has(.anticon-loading),
-#app-mount-point .instance-card .ant-btn.ant-btn-loading > .anticon-loading {
+#app-mount-point .instance-card .ant-btn > .ant-btn-loading-icon,
+#app-mount-point .instance-card .ant-btn > .ant-btn-icon:has(.anticon-loading),
+#app-mount-point .instance-card .ant-btn > .anticon-loading {
   position: absolute !important;
   top: 50% !important;
   left: 50% !important;
@@ -113,19 +115,18 @@
   width: 18px !important;
   height: 18px !important;
   margin: 0 !important;
+  opacity: 1 !important;
   place-items: center;
   transform: translate(-50%, -50%) !important;
+  transition: none !important;
 }
-#app-mount-point .instance-card .ant-btn.ant-btn-loading > .anticon:not(.anticon-loading),
-#app-mount-point .instance-card .ant-btn.ant-btn-loading > .ant-btn-icon:not(.ant-btn-loading-icon):not(:has(.anticon-loading)) {
+#app-mount-point .instance-card .ant-btn:has(> .ant-btn-loading-icon) > .anticon:not(.anticon-loading),
+#app-mount-point .instance-card .ant-btn:has(> .ant-btn-loading-icon) > .ant-btn-icon:not(.ant-btn-loading-icon):not(:has(.anticon-loading)),
+#app-mount-point .instance-card .ant-btn:has(> .anticon-loading) > .anticon:not(.anticon-loading) {
   visibility: hidden !important;
 }
-/* Keep pointer feedback paint-only. Switching from the hover translation to
-   the active scale before `loading` is applied caused a one-frame jump. */
-#app-mount-point .instance-card .ant-btn:hover,
-#app-mount-point .instance-card .ant-btn:active {
-  transform: none !important;
-}
+#app-mount-point .instance-card .ant-btn:hover { transform: translateY(-1px); }
+#app-mount-point .instance-card .ant-btn:active { transform: scale(.97); }
 .between-menus-container .menus-item-right button.ant-dropdown-trigger {
   display: inline-flex;
   align-items: center;
