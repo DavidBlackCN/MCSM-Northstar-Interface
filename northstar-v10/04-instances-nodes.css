@@ -120,8 +120,12 @@
 #app-mount-point .instance-card .ant-btn.ant-btn-loading > .ant-btn-icon:not(.ant-btn-loading-icon):not(:has(.anticon-loading)) {
   visibility: hidden !important;
 }
-#app-mount-point .instance-card .ant-btn:hover { transform: translateY(-1px); }
-#app-mount-point .instance-card .ant-btn:active { transform: scale(.97); }
+/* Keep pointer feedback paint-only. Switching from the hover translation to
+   the active scale before `loading` is applied caused a one-frame jump. */
+#app-mount-point .instance-card .ant-btn:hover,
+#app-mount-point .instance-card .ant-btn:active {
+  transform: none !important;
+}
 .between-menus-container .menus-item-right button.ant-dropdown-trigger {
   display: inline-flex;
   align-items: center;
